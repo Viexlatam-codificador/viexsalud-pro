@@ -35,7 +35,7 @@ eleventyExcludeFromCollections: true
     <div class="blog-grid">
       {% for post in collections.blog | reverse %}
       <a class="blog-card" href="{{ post.url }}">
-        <div class="thumb"><span class="tag">{{ post.data.tag }}</span></div>
+        <div class="thumb">{% if post.data.cover %}<img src="{{ post.data.cover }}" alt="{{ post.data.title }}" loading="lazy">{% endif %}<span class="tag">{{ post.data.tag }}</span></div>
         <div class="body">
           <span class="meta">{{ post.data.tag }} · {{ post.templateContent | readingTime }}</span>
           <h3>{{ post.data.title }}</h3>

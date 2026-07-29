@@ -67,7 +67,7 @@
     {% set related = collections.blog | relatedPosts(page.url) %}
     {% for post in related %}
     <a class="blog-card" href="{{ post.url }}">
-      <div class="thumb"><span class="tag">{{ post.data.tag }}</span></div>
+      <div class="thumb">{% if post.data.cover %}<img src="{{ post.data.cover }}" alt="{{ post.data.title }}" loading="lazy">{% endif %}<span class="tag">{{ post.data.tag }}</span></div>
       <div class="body"><h3>{{ post.data.title }}</h3><span class="read-more">Leer →</span></div>
     </a>
     {% endfor %}
