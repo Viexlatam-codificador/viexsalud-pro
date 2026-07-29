@@ -37,6 +37,24 @@
       ]
     },
     {
+      "source": "/recursos-ejecutivos",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://mindicador.cl; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests"
+        }
+      ]
+    },
+    {
+      "source": "/recursos-ejecutivos/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://mindicador.cl; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests"
+        }
+      ]
+    },
+    {
       "source": "/api/callback",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },

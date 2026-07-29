@@ -1,0 +1,853 @@
+---
+permalink: "recursos-ejecutivos/index.html"
+title: "CalcuIsapre — Recursos para Ejecutivos | Novenos de Parto y 7% Legal"
+description: "CalcuIsapre: calcula gratis la cobertura por novenos de parto y la cotización legal de salud (7%) en Chile. Recurso de apoyo para ejecutivos y afiliados Isapre."
+canonical: "https://www.viexsalud.cl/recursos-ejecutivos/"
+ogType: "website"
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<style>
+  .isaprecalc {
+    --bg: #eef3f2;
+    --surface: #ffffff;
+    --surface-alt: #f6faf9;
+    --border: #d7e2e0;
+    --ink: #16262b;
+    --ink-soft: #55676c;
+    --ink-faint: #86979b;
+    --blue: #1f6f8b;
+    --blue-ink: #0f4a5e;
+    --blue-soft: #e6f1f5;
+    --green: #1c8a5a;
+    --green-ink: #0e5a3a;
+    --green-soft: #e5f6ec;
+    --danger: #b3392a;
+    --danger-soft: #fbeae7;
+    --focus: #2f8fb0;
+    --calc-shadow: 0 1px 2px rgba(20, 40, 45, 0.06), 0 8px 24px -12px rgba(20, 40, 45, 0.18);
+    --calc-radius: 14px;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --calc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .isaprecalc {
+      --bg: #0d1417;
+      --surface: #141d21;
+      --surface-alt: #182226;
+      --border: #263940;
+      --ink: #e7eef0;
+      --ink-soft: #9db0b5;
+      --ink-faint: #6c8085;
+      --blue: #67bcdd;
+      --blue-ink: #bfe6f4;
+      --blue-soft: #16313c;
+      --green: #56d69a;
+      --green-ink: #c3f3dd;
+      --green-soft: #10321f;
+      --danger: #ff7a68;
+      --danger-soft: #3a1f1c;
+      --calc-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px -12px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  .isaprecalc, .isaprecalc * { box-sizing: border-box; }
+  .isaprecalc {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--calc-sans);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    padding: 32px 0 24px;
+  }
+  .isaprecalc .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+  .isaprecalc a { color: var(--blue); }
+  .isaprecalc a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+
+  .isaprecalc header.top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .isaprecalc .mark {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(155deg, var(--blue), var(--green));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--calc-shadow);
+  }
+  .isaprecalc .mark svg { width: 24px; height: 24px; }
+  .isaprecalc header.top h1 {
+    font-size: 1.5rem;
+    margin: 0 0 2px;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .isaprecalc header.top p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  .isaprecalc .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .isaprecalc .grid { grid-template-columns: 1fr; }
+  }
+
+  .isaprecalc .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--calc-radius);
+    box-shadow: var(--calc-shadow);
+    overflow: hidden;
+  }
+  .isaprecalc .card__head {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .isaprecalc .card__head .dot {
+    width: 9px; height: 9px; border-radius: 50%; flex: none;
+  }
+  .isaprecalc .card--novenos .card__head .dot { background: var(--blue); }
+  .isaprecalc .card--siete .card__head .dot { background: var(--green); }
+  .isaprecalc .card__head h2 { font-size: 1.05rem; margin: 0; }
+  .isaprecalc .card__body { padding: 18px 20px 20px; }
+
+  .isaprecalc .segmented {
+    display: inline-flex;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
+    margin-bottom: 16px;
+  }
+  .isaprecalc .segmented input { position: absolute; opacity: 0; pointer-events: none; }
+  .isaprecalc .segmented label {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    user-select: none;
+  }
+  .isaprecalc .segmented input:checked + label {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    font-weight: 600;
+  }
+  .isaprecalc .segmented input:focus-visible + label {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+  }
+  .isaprecalc .segmented--wrap { flex-wrap: wrap; }
+
+  .isaprecalc .renta-mes-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .isaprecalc .renta-mes-row .renta-mes-tag {
+    flex: none;
+    width: 64px;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+  .isaprecalc .renta-mes-row input { flex: 1; }
+  .isaprecalc .renta-avg-preview {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .isaprecalc .renta-avg-preview strong { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--green-ink); }
+
+  .isaprecalc .field { margin-bottom: 14px; }
+  .isaprecalc .field label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  .isaprecalc .field .hint {
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+  .isaprecalc .field input[type="date"],
+  .isaprecalc .field input[type="number"],
+  .isaprecalc .field input[type="text"] {
+    width: 100%;
+    padding: 9px 11px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--ink);
+    font-size: 0.95rem;
+    font-family: var(--calc-sans);
+    font-variant-numeric: tabular-nums;
+  }
+  .isaprecalc .field input:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+    border-color: var(--focus);
+  }
+  .isaprecalc .field-row { display: flex; gap: 10px; }
+  .isaprecalc .field-row .field { flex: 1; }
+  .isaprecalc .input-with-btn { display: flex; gap: 8px; }
+  .isaprecalc .input-with-btn input { flex: 1; }
+
+  .isaprecalc .reset-link {
+    background: none; border: none; padding: 0;
+    color: var(--blue); font-size: 0.76rem; cursor: pointer;
+    text-decoration: underline; font-weight: 500;
+  }
+
+  .isaprecalc .btnrow { display: flex; gap: 10px; margin-top: 4px; }
+  .isaprecalc button.btn {
+    font-family: var(--calc-sans);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .isaprecalc .card--novenos .btn.primary { background: var(--blue); color: #fff; }
+  .isaprecalc .card--siete .btn.primary { background: var(--green); color: #fff; }
+  .isaprecalc .btn.primary:hover { filter: brightness(1.06); }
+  .isaprecalc .btn.ghost {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--ink-soft);
+  }
+  .isaprecalc .btn.ghost:hover { background: var(--surface-alt); }
+  .isaprecalc .btn.small { padding: 6px 11px; font-size: 0.78rem; }
+  .isaprecalc button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .isaprecalc .error {
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+    border-radius: 9px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    margin-top: 12px;
+    display: none;
+  }
+  .isaprecalc .error.show { display: block; }
+
+  .isaprecalc .result {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    display: none;
+  }
+  .isaprecalc .result.show { display: block; animation: isc-rise 0.35s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .isaprecalc .result.show { animation: none; }
+  }
+  @keyframes isc-rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .isaprecalc .big-number {
+    font-family: var(--mono);
+    font-size: 2.4rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .isaprecalc .card--novenos .big-number { color: var(--blue-ink); }
+  .isaprecalc .card--siete .big-number { color: var(--green-ink); }
+  .isaprecalc .big-number-label {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .isaprecalc .progress-track {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin: 14px 0 16px;
+  }
+  .isaprecalc .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    transition: width 0.5s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .isaprecalc .progress-fill { transition: none; }
+  }
+
+  .isaprecalc .breakdown {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+  .isaprecalc .breakdown .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.86rem;
+  }
+  .isaprecalc .breakdown .row span:first-child { color: var(--ink-soft); }
+  .isaprecalc .breakdown .row span:last-child {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .isaprecalc .explain {
+    background: var(--surface-alt);
+    border-radius: 9px;
+    padding: 11px 13px;
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+
+  .isaprecalc .resultbtns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .isaprecalc footer.legal {
+    margin-top: 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--calc-radius);
+    padding: 16px 20px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    box-shadow: var(--calc-shadow);
+  }
+  .isaprecalc footer.legal svg { flex: none; width: 20px; height: 20px; color: var(--ink-faint); margin-top: 2px; }
+  .isaprecalc footer.legal p { margin: 0; font-size: 0.8rem; color: var(--ink-faint); }
+  .isaprecalc footer.legal strong { color: var(--ink-soft); }
+
+  .isaprecalc .uf-note {
+    font-size: 0.76rem;
+    margin-top: 6px;
+    color: var(--ink-faint);
+  }
+  .isaprecalc .uf-note.ok { color: var(--green); }
+  .isaprecalc .uf-note.err { color: var(--danger); }
+
+  @media print {
+    .isaprecalc .btnrow, .isaprecalc .segmented, .isaprecalc .field,
+    .isaprecalc .input-with-btn button, .isaprecalc footer.legal { display: none !important; }
+    .isaprecalc .result { display: block !important; border-top: none; }
+    .isaprecalc .card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+    .isaprecalc { background: #fff; }
+  }
+</style>
+
+<div class="isaprecalc">
+  <div class="wrap">
+    <header class="top">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3v18M3 12h18" stroke="white" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p style="margin:0 0 4px; font-size:0.8rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint);">Recursos para Ejecutivos</p>
+        <h1>CalcuIsapre</h1>
+        <p>Cobertura por novenos de parto y cotización legal de salud (7%)</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- CARD 1: NOVENOS -->
+      <section class="card card--novenos">
+        <div class="card__head"><span class="dot"></span><h2>Cobertura por Novenos</h2></div>
+        <div class="card__body">
+          <div class="segmented" role="tablist" aria-label="Modo de cálculo de novenos">
+            <input type="radio" name="novenos-mode" id="mode-auto" checked>
+            <label for="mode-auto">Automático</label>
+            <input type="radio" name="novenos-mode" id="mode-manual">
+            <label for="mode-manual">Manual</label>
+          </div>
+
+          <div id="panel-auto">
+            <div class="field">
+              <label for="fecha-inicio">Fecha de inicio del contrato Isapre</label>
+              <input type="date" id="fecha-inicio">
+            </div>
+            <div class="field">
+              <label for="fecha-parto">Fecha probable de parto</label>
+              <input type="date" id="fecha-parto">
+            </div>
+          </div>
+
+          <div id="panel-manual" style="display:none">
+            <div class="field">
+              <label for="meses-manual">¿Cuántos meses alcanzará a tener vigente el plan antes del parto?</label>
+              <input type="number" id="meses-manual" min="0" max="9" step="1" placeholder="0 – 9">
+              <div class="hint">Ingresa un número entero entre 0 y 9.</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cobertura-plan">Cobertura del plan para parto (%) — opcional</label>
+            <input type="number" id="cobertura-plan" min="0" max="100" step="1" placeholder="Ej: 90">
+            <div class="hint">Si se deja vacío, se muestra solo el porcentaje de novenos.</div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn primary" id="calc-novenos">Calcular</button>
+            <button class="btn ghost" id="clear-novenos">Limpiar</button>
+          </div>
+
+          <div class="error" id="error-novenos"></div>
+
+          <div class="result" id="result-novenos">
+            <div class="big-number-label" id="novenos-result-label">Cobertura del parto</div>
+            <div class="big-number" id="novenos-big">0,0%</div>
+            <div class="progress-track"><div class="progress-fill" id="novenos-bar"></div></div>
+            <div class="breakdown" id="novenos-breakdown"></div>
+            <div class="explain" id="novenos-explain"></div>
+            <div class="resultbtns">
+              <button class="btn ghost small" id="copy-novenos">Copiar resultado</button>
+              <button class="btn ghost small" id="print-novenos">Descargar / Imprimir PDF</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD 2: 7% LEGAL -->
+      <section class="card card--siete">
+        <div class="card__head"><span class="dot"></span><h2>Cálculo del 7% Legal</h2></div>
+        <div class="card__body">
+          <div class="field">
+            <label id="meses-count-label">¿Sobre cuántos meses calcular la renta imponible?</label>
+            <div class="segmented segmented--wrap" role="radiogroup" aria-labelledby="meses-count-label" id="meses-count-group">
+              <input type="radio" name="meses-count" id="mc-1" value="1" checked><label for="mc-1">1 mes</label>
+              <input type="radio" name="meses-count" id="mc-3" value="3"><label for="mc-3">3 meses</label>
+              <input type="radio" name="meses-count" id="mc-4" value="4"><label for="mc-4">4 meses</label>
+              <input type="radio" name="meses-count" id="mc-5" value="5"><label for="mc-5">5 meses</label>
+              <input type="radio" name="meses-count" id="mc-6" value="6"><label for="mc-6">6 meses</label>
+              <input type="radio" name="meses-count" id="mc-7" value="7"><label for="mc-7">7 meses</label>
+            </div>
+            <div class="hint">Cada Isapre define su propio criterio: algunas usan la renta de un solo mes y otras un promedio de varios meses.</div>
+          </div>
+
+          <div class="field" id="renta-inputs-wrap">
+            <label id="renta-inputs-label">Renta imponible mensual</label>
+            <div id="renta-inputs-container"></div>
+          </div>
+
+          <div class="field">
+            <label for="valor-uf">Valor UF</label>
+            <div class="input-with-btn">
+              <input type="text" inputmode="decimal" id="valor-uf" placeholder="$ 40.844,79">
+              <button class="btn ghost small" id="fetch-uf" type="button">Obtener UF</button>
+            </div>
+            <div class="uf-note" id="uf-note"></div>
+          </div>
+
+          <div class="field">
+            <label for="tope-uf">Tope legal imponible (UF)</label>
+            <div class="input-with-btn">
+              <input type="text" inputmode="decimal" id="tope-uf" value="90">
+              <a class="btn ghost small" href="https://www.previred.com/indicadores-previsionales/" target="_blank" rel="noopener noreferrer">Ver en Previred</a>
+            </div>
+            <div class="hint">AFP y Salud comparten el mismo tope (Previred, julio 2026: 90 UF). Se reajusta cada año en agosto — verifica el valor vigente antes de calcular.
+              <button type="button" class="reset-link" id="reset-tope">restablecer 90</button>
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn primary" id="calc-siete">Calcular</button>
+            <button class="btn ghost" id="clear-siete">Limpiar</button>
+          </div>
+
+          <div class="error" id="error-siete"></div>
+
+          <div class="result" id="result-siete">
+            <div class="big-number-label">Cotización obligatoria (7%)</div>
+            <div class="big-number" id="siete-big">$0</div>
+            <div class="breakdown" id="siete-breakdown"></div>
+            <div class="explain" id="siete-explain"></div>
+            <div class="resultbtns">
+              <button class="btn ghost small" id="copy-siete">Copiar resultado</button>
+              <button class="btn ghost small" id="print-siete">Descargar / Imprimir PDF</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="legal">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01" stroke-linecap="round"/>
+      </svg>
+      <p><strong>Aviso legal:</strong> Los resultados de esta calculadora son referenciales. La cobertura definitiva por novenos depende de las condiciones particulares del plan de salud contratado, y el cálculo del 7% depende del tope imponible vigente (AFP y salud comparten el mismo tope, reajustado cada agosto y publicado mensualmente por <a href="https://www.previred.com/indicadores-previsionales/" target="_blank" rel="noopener noreferrer">Previred</a>). Verifica siempre estos valores antes de comunicar cifras finales a un afiliado.</p>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var fmtCurrency = function (n) {
+    return n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  };
+  var fmtPercent = function (n) {
+    return n.toLocaleString('es-CL', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+  };
+  var fmtNumber = function (n, decimals) {
+    return n.toLocaleString('es-CL', { minimumFractionDigits: decimals || 0, maximumFractionDigits: decimals || 0 });
+  };
+  var parseLocaleNumber = function (str) {
+    if (!str) return NaN;
+    var cleaned = String(str).replace(/[^0-9,.-]/g, '');
+    cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+    return parseFloat(cleaned);
+  };
+  var clamp = function (n, min, max) { return Math.max(min, Math.min(max, n)); };
+
+  // ---------- NOVENOS ----------
+  var modeAuto = document.getElementById('mode-auto');
+  var modeManual = document.getElementById('mode-manual');
+  var panelAuto = document.getElementById('panel-auto');
+  var panelManual = document.getElementById('panel-manual');
+
+  function syncMode() {
+    var auto = modeAuto.checked;
+    panelAuto.style.display = auto ? '' : 'none';
+    panelManual.style.display = auto ? 'none' : '';
+  }
+  modeAuto.addEventListener('change', syncMode);
+  modeManual.addEventListener('change', syncMode);
+
+  var fechaInicio = document.getElementById('fecha-inicio');
+  var fechaParto = document.getElementById('fecha-parto');
+  var mesesManual = document.getElementById('meses-manual');
+  var coberturaPlan = document.getElementById('cobertura-plan');
+  var errorNovenos = document.getElementById('error-novenos');
+  var resultNovenos = document.getElementById('result-novenos');
+
+  function showErrorNovenos(msg) {
+    errorNovenos.textContent = msg;
+    errorNovenos.classList.add('show');
+    resultNovenos.classList.remove('show');
+  }
+  function clearErrorNovenos() {
+    errorNovenos.classList.remove('show');
+    errorNovenos.textContent = '';
+  }
+
+  function fullMonthsBetween(start, end) {
+    var months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    if (end.getDate() < start.getDate()) months -= 1;
+    return months;
+  }
+
+  document.getElementById('calc-novenos').addEventListener('click', function () {
+    clearErrorNovenos();
+    var meses, rawMeses, noteExtra = '';
+
+    if (modeAuto.checked) {
+      if (!fechaInicio.value || !fechaParto.value) {
+        showErrorNovenos('Ingresa ambas fechas: inicio de contrato y fecha probable de parto.');
+        return;
+      }
+      var d1 = new Date(fechaInicio.value + 'T00:00:00');
+      var d2 = new Date(fechaParto.value + 'T00:00:00');
+      if (d2 <= d1) {
+        showErrorNovenos('La fecha probable de parto debe ser posterior a la fecha de inicio del contrato.');
+        return;
+      }
+      rawMeses = fullMonthsBetween(d1, d2);
+      if (rawMeses > 9) {
+        noteExtra = 'El contrato estará vigente ' + rawMeses + ' meses antes del parto (más de los 9 del embarazo), por lo que la cobertura no queda restringida por novenos.';
+        meses = 9;
+      } else {
+        meses = clamp(rawMeses, 0, 9);
+      }
+    } else {
+      if (mesesManual.value === '') {
+        showErrorNovenos('Ingresa cuántos meses alcanzará a tener vigente el plan (0 a 9).');
+        return;
+      }
+      rawMeses = parseFloat(mesesManual.value);
+      if (isNaN(rawMeses) || rawMeses < 0 || rawMeses > 9) {
+        showErrorNovenos('El número de meses debe estar entre 0 y 9.');
+        return;
+      }
+      meses = rawMeses;
+    }
+
+    var planPctRaw = coberturaPlan.value === '' ? null : parseFloat(coberturaPlan.value);
+    if (planPctRaw !== null && (isNaN(planPctRaw) || planPctRaw < 0 || planPctRaw > 100)) {
+      showErrorNovenos('La cobertura del plan debe ser un porcentaje entre 0 y 100.');
+      return;
+    }
+
+    var baseFraction = meses / 9;
+    var basePct = baseFraction * 100;
+    var efectivaPct = planPctRaw !== null ? planPctRaw * baseFraction : null;
+
+    var mainPct = efectivaPct !== null ? efectivaPct : basePct;
+    document.getElementById('novenos-result-label').textContent = efectivaPct !== null ? 'Cobertura efectiva del parto' : 'Cobertura del parto (novenos)';
+    document.getElementById('novenos-big').textContent = fmtPercent(mainPct);
+    document.getElementById('novenos-bar').style.width = clamp(mainPct, 0, 100) + '%';
+
+    var rows = [];
+    rows.push(['Meses de vigencia considerados', fmtNumber(meses, meses % 1 === 0 ? 0 : 1) + ' de 9']);
+    rows.push(['Cobertura por novenos (meses / 9)', fmtPercent(basePct)]);
+    if (planPctRaw !== null) {
+      rows.push(['Cobertura del plan', fmtPercent(planPctRaw)]);
+      rows.push(['Cobertura efectiva estimada', fmtPercent(efectivaPct)]);
+    }
+    document.getElementById('novenos-breakdown').innerHTML = rows.map(function (r) {
+      return '<div class="row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+    }).join('');
+
+    var explain = 'El cálculo de novenos corresponde a la proporción del tiempo que el plan de salud estará vigente durante los nueve meses del embarazo. Mientras más meses tenga vigente el contrato antes del parto, mayor será la cobertura efectiva.';
+    if (noteExtra) explain = noteExtra + ' ' + explain;
+    document.getElementById('novenos-explain').textContent = explain;
+
+    resultNovenos.classList.add('show');
+
+    resultNovenos.dataset.summary =
+      'Cálculo de Novenos — Cobertura de Parto\n' +
+      'Meses de vigencia considerados: ' + fmtNumber(meses, meses % 1 === 0 ? 0 : 1) + ' de 9\n' +
+      'Cobertura por novenos: ' + fmtPercent(basePct) + '\n' +
+      (planPctRaw !== null ? 'Cobertura del plan: ' + fmtPercent(planPctRaw) + '\nCobertura efectiva estimada: ' + fmtPercent(efectivaPct) + '\n' : '') +
+      '\n' + explain + '\n\nCálculo referencial, sujeto a las condiciones del plan y normativa vigente.';
+  });
+
+  document.getElementById('clear-novenos').addEventListener('click', function () {
+    fechaInicio.value = '';
+    fechaParto.value = '';
+    mesesManual.value = '';
+    coberturaPlan.value = '';
+    clearErrorNovenos();
+    resultNovenos.classList.remove('show');
+  });
+
+  document.getElementById('copy-novenos').addEventListener('click', function () {
+    var text = resultNovenos.dataset.summary || '';
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(function () {
+      var btn = document.getElementById('copy-novenos');
+      var old = btn.textContent;
+      btn.textContent = 'Copiado ✓';
+      setTimeout(function () { btn.textContent = old; }, 1500);
+    });
+  });
+  document.getElementById('print-novenos').addEventListener('click', function () { window.print(); });
+
+  // ---------- 7% LEGAL ----------
+  var ufInput = document.getElementById('valor-uf');
+  var topeInput = document.getElementById('tope-uf');
+  var errorSiete = document.getElementById('error-siete');
+  var resultSiete = document.getElementById('result-siete');
+  var ufNote = document.getElementById('uf-note');
+  var rentaInputsContainer = document.getElementById('renta-inputs-container');
+  var rentaInputsLabel = document.getElementById('renta-inputs-label');
+
+  function liveFormatCurrencyField(input) {
+    input.addEventListener('input', function () {
+      var digits = input.value.replace(/[^0-9]/g, '');
+      if (!digits) { input.value = ''; return; }
+      input.value = parseInt(digits, 10).toLocaleString('es-CL');
+    });
+  }
+  function currentMesesCount() {
+    var checked = document.querySelector('input[name="meses-count"]:checked');
+    return checked ? parseInt(checked.value, 10) : 1;
+  }
+
+  function renderRentaInputs(n, preserved) {
+    rentaInputsContainer.innerHTML = '';
+    rentaInputsLabel.textContent = n === 1 ? 'Renta imponible mensual' : 'Renta imponible de cada uno de los últimos ' + n + ' meses';
+    for (var i = 0; i < n; i++) {
+      var row = document.createElement('div');
+      row.className = 'renta-mes-row';
+      var tag = document.createElement('span');
+      tag.className = 'renta-mes-tag';
+      tag.textContent = n === 1 ? '' : 'Mes ' + (i + 1);
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.inputMode = 'numeric';
+      input.placeholder = '$ 1.250.000';
+      input.className = 'renta-mes-input';
+      if (preserved && preserved[i]) input.value = preserved[i];
+      liveFormatCurrencyField(input);
+      row.appendChild(tag);
+      row.appendChild(input);
+      rentaInputsContainer.appendChild(row);
+    }
+  }
+  renderRentaInputs(1);
+
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="meses-count"]'), function (radio) {
+    radio.addEventListener('change', function () {
+      var preserved = Array.prototype.map.call(rentaInputsContainer.querySelectorAll('.renta-mes-input'), function (i) { return i.value; });
+      renderRentaInputs(currentMesesCount(), preserved);
+    });
+  });
+
+  function showErrorSiete(msg) {
+    errorSiete.textContent = msg;
+    errorSiete.classList.add('show');
+    resultSiete.classList.remove('show');
+  }
+  function clearErrorSiete() {
+    errorSiete.classList.remove('show');
+    errorSiete.textContent = '';
+  }
+
+  document.getElementById('reset-tope').addEventListener('click', function () {
+    topeInput.value = '90';
+  });
+
+  document.getElementById('fetch-uf').addEventListener('click', function () {
+    ufNote.textContent = 'Consultando mindicador.cl…';
+    ufNote.className = 'uf-note';
+    fetch('https://mindicador.cl/api/uf')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var valor = data && data.serie && data.serie[0] && data.serie[0].valor;
+        if (!valor) throw new Error('sin datos');
+        ufInput.value = valor.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        ufNote.textContent = 'UF actualizada: ' + (data.serie[0].fecha ? data.serie[0].fecha.slice(0, 10) : 'hoy') + '.';
+        ufNote.className = 'uf-note ok';
+      })
+      .catch(function () {
+        ufNote.textContent = 'No se pudo obtener el valor automáticamente. Ingresa el valor UF manualmente.';
+        ufNote.className = 'uf-note err';
+      });
+  });
+
+  document.getElementById('calc-siete').addEventListener('click', function () {
+    clearErrorSiete();
+    var n = currentMesesCount();
+    var mesInputs = rentaInputsContainer.querySelectorAll('.renta-mes-input');
+    var rentas = [];
+    for (var i = 0; i < mesInputs.length; i++) {
+      var v = parseLocaleNumber(mesInputs[i].value);
+      if (isNaN(v) || v <= 0) {
+        showErrorSiete(n === 1
+          ? 'Ingresa una renta imponible válida, mayor a 0.'
+          : 'Ingresa una renta imponible válida (mayor a 0) para cada uno de los ' + n + ' meses.');
+        return;
+      }
+      rentas.push(v);
+    }
+    var renta = rentas.reduce(function (a, b) { return a + b; }, 0) / rentas.length;
+
+    var uf = parseLocaleNumber(ufInput.value);
+    var tope = parseLocaleNumber(topeInput.value);
+
+    if (isNaN(uf) || uf <= 0) {
+      showErrorSiete('Ingresa un valor UF válido, mayor a 0.');
+      return;
+    }
+    if (isNaN(tope) || tope <= 0) {
+      showErrorSiete('Ingresa un tope legal (en UF) válido, mayor a 0.');
+      return;
+    }
+
+    var topePesos = uf * tope;
+    var superaTope = renta > topePesos;
+    var base = superaTope ? topePesos : renta;
+    var cotizacion = base * 0.07;
+
+    document.getElementById('siete-big').textContent = fmtCurrency(cotizacion);
+
+    var rentaLabel = n === 1 ? 'Renta imponible' : 'Renta promedio (' + n + ' meses)';
+    var rows = [];
+    if (n > 1) {
+      rentas.forEach(function (r, idx) {
+        rows.push(['Mes ' + (idx + 1), fmtCurrency(r)]);
+      });
+    }
+    rows.push([rentaLabel, fmtCurrency(renta)]);
+    rows.push(['Tope legal (' + fmtNumber(tope, tope % 1 === 0 ? 0 : 1) + ' UF)', fmtCurrency(topePesos)]);
+    rows.push(['Base de cálculo utilizada', fmtCurrency(base)]);
+    document.getElementById('siete-breakdown').innerHTML = rows.map(function (r) {
+      return '<div class="row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+    }).join('');
+
+    var baseExplain = superaTope
+      ? 'Como la renta imponible supera el tope legal mensual (' + fmtNumber(tope, tope % 1 === 0 ? 0 : 1) + ' UF), el cálculo del 7% se realizó sobre dicho límite y no sobre la totalidad de la remuneración.'
+      : 'La renta imponible no supera el tope legal mensual, por lo que el 7% se calculó sobre el total de la renta.';
+    var explain = n > 1
+      ? 'El cálculo se realizó sobre el promedio de renta imponible de los últimos ' + n + ' meses, según el criterio definido por la Isapre. ' + baseExplain
+      : baseExplain;
+    document.getElementById('siete-explain').textContent = explain;
+
+    resultSiete.classList.add('show');
+
+    resultSiete.dataset.summary =
+      'Cálculo 7% Legal de Salud (Calculadora Isapre — Viex Salud)\n' +
+      (n > 1 ? rentas.map(function (r, idx) { return 'Mes ' + (idx + 1) + ': ' + fmtCurrency(r); }).join('\n') + '\n' : '') +
+      rentaLabel + ': ' + fmtCurrency(renta) + '\n' +
+      'Valor UF: ' + fmtCurrency(uf) + '\n' +
+      'Tope legal: ' + fmtNumber(tope, tope % 1 === 0 ? 0 : 1) + ' UF = ' + fmtCurrency(topePesos) + '\n' +
+      'Base de cálculo: ' + fmtCurrency(base) + '\n' +
+      'Cotización obligatoria (7%): ' + fmtCurrency(cotizacion) + '\n\n' +
+      explain + '\n\nCálculo referencial, verifica el tope imponible vigente con Previred.';
+  });
+
+  document.getElementById('clear-siete').addEventListener('click', function () {
+    document.getElementById('mc-1').checked = true;
+    renderRentaInputs(1);
+    ufInput.value = '';
+    topeInput.value = '90';
+    ufNote.textContent = '';
+    ufNote.className = 'uf-note';
+    clearErrorSiete();
+    resultSiete.classList.remove('show');
+  });
+
+  document.getElementById('copy-siete').addEventListener('click', function () {
+    var text = resultSiete.dataset.summary || '';
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(function () {
+      var btn = document.getElementById('copy-siete');
+      var old = btn.textContent;
+      btn.textContent = 'Copiado ✓';
+      setTimeout(function () { btn.textContent = old; }, 1500);
+    });
+  });
+  document.getElementById('print-siete').addEventListener('click', function () { window.print(); });
+})();
+</script>
+{% endblock %}
