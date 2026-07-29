@@ -311,6 +311,9 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
 .article-body ul, .article-body ol { margin: 0 0 1.1rem 1.3rem; color: var(--ink-700); }
 .article-body li { margin-bottom: 0.5rem; }
 .article-body strong { color: var(--ink-900); }
+.article-body img { max-width: 100%; height: auto; border-radius: var(--radius-md); margin: 1.75rem 0; box-shadow: var(--shadow-sm); }
+.article-cover { max-width: 42rem; margin: -2.5rem auto 0; padding: 0 1.5rem; }
+.article-cover img { width: 100%; height: auto; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); display: block; }
 .article-cta { margin-top: 2.5rem; padding: 1.75rem; background: var(--cream-100); border-radius: var(--radius-md); text-align: center; }
 .article-cta h3 { font-size: var(--fs-lg); font-weight: 800; margin-bottom: 0.5rem; }
 .article-cta p { color: var(--ink-500); margin-bottom: 1.2rem; }

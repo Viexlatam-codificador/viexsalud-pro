@@ -26,6 +26,9 @@
   ]
 }
 </script>
+{% if cover %}
+<meta property="og:image" content="https://www.viexsalud.cl{{ cover }}">
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -41,6 +44,10 @@
     </div>
   </div>
 </section>
+
+{% if cover %}
+<div class="article-cover"><img src="{{ cover }}" alt="{{ title }}"></div>
+{% endif %}
 
 <article class="article-body">
 {{ content | safe }}
