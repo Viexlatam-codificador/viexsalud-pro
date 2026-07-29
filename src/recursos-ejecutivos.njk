@@ -440,6 +440,7 @@ eleventyExcludeFromCollections: true
             <div class="explain" id="novenos-explain"></div>
             <div class="resultbtns">
               <button class="btn ghost small" id="copy-novenos">Copiar resultado</button>
+              <button class="btn ghost small" id="whatsapp-novenos">Enviar por WhatsApp</button>
               <button class="btn ghost small" id="print-novenos">Descargar / Imprimir PDF</button>
             </div>
           </div>
@@ -502,6 +503,7 @@ eleventyExcludeFromCollections: true
             <div class="explain" id="siete-explain"></div>
             <div class="resultbtns">
               <button class="btn ghost small" id="copy-siete">Copiar resultado</button>
+              <button class="btn ghost small" id="whatsapp-siete">Enviar por WhatsApp</button>
               <button class="btn ghost small" id="print-siete">Descargar / Imprimir PDF</button>
             </div>
           </div>
@@ -671,6 +673,12 @@ eleventyExcludeFromCollections: true
     });
   });
   document.getElementById('print-novenos').addEventListener('click', function () { window.print(); });
+
+  document.getElementById('whatsapp-novenos').addEventListener('click', function () {
+    var text = resultNovenos.dataset.summary || '';
+    if (!text) return;
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  });
 
   // ---------- 7% LEGAL ----------
   var ufInput = document.getElementById('valor-uf');
@@ -848,6 +856,12 @@ eleventyExcludeFromCollections: true
     });
   });
   document.getElementById('print-siete').addEventListener('click', function () { window.print(); });
+
+  document.getElementById('whatsapp-siete').addEventListener('click', function () {
+    var text = resultSiete.dataset.summary || '';
+    if (!text) return;
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  });
 })();
 </script>
 {% endblock %}
