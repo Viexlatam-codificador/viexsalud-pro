@@ -364,12 +364,52 @@ eleventyExcludeFromCollections: true
   .isaprecalc .uf-note.ok { color: var(--green); }
   .isaprecalc .uf-note.err { color: var(--danger); }
 
+  .print-sheet { display: none; }
+
   @media print {
-    .isaprecalc .btnrow, .isaprecalc .segmented, .isaprecalc .field,
-    .isaprecalc .input-with-btn button, .isaprecalc footer.legal { display: none !important; }
-    .isaprecalc .result { display: block !important; border-top: none; }
-    .isaprecalc .card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
-    .isaprecalc { background: #fff; }
+    body * { visibility: hidden; }
+    .print-sheet, .print-sheet * { visibility: visible; }
+    .print-sheet {
+      display: block;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      padding: 40px 48px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #16262b;
+    }
+    .print-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #cba63f;
+      margin-bottom: 28px;
+    }
+    .print-header img { width: 52px; height: 52px; }
+    .print-brand { font-family: Georgia, 'Times New Roman', serif; font-size: 1.4rem; font-weight: 700; color: #0e2b25; }
+    .print-sub { font-size: 0.85rem; color: #55676c; }
+    .print-sheet h1 { font-size: 1.15rem; color: #55676c; font-weight: 600; margin: 0 0 6px; }
+    .print-big-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #86979b; margin-bottom: 4px; }
+    .print-big { font-size: 3rem; font-weight: 700; color: #0e5a3a; margin-bottom: 24px; font-variant-numeric: tabular-nums; }
+    .print-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    .print-table tr { border-bottom: 1px solid #e4ddcc; }
+    .print-table td { padding: 9px 0; font-size: 0.95rem; }
+    .print-table td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .print-table td:first-child { color: #55676c; }
+    .print-explain { font-size: 0.88rem; color: #55676c; background: #f6faf9; border-radius: 10px; padding: 14px 16px; margin-bottom: 28px; }
+    .print-cta {
+      background: linear-gradient(135deg, #163a32, #0a201c);
+      color: #f4efe3;
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin-bottom: 20px;
+    }
+    .print-cta strong { display: block; font-size: 1.05rem; margin-bottom: 6px; color: #fff; }
+    .print-cta p { margin: 0; font-size: 0.92rem; color: #d7e2e0; }
+    .print-cta a { color: #e3c876; font-weight: 700; text-decoration: none; }
+    .print-footer { font-size: 0.76rem; color: #86979b; text-align: center; }
+    .print-legal { font-size: 0.72rem; color: #86979b; margin-top: 18px; }
   }
 </style>
 
@@ -517,6 +557,27 @@ eleventyExcludeFromCollections: true
       </svg>
       <p><strong>Aviso legal:</strong> Los resultados de esta calculadora son referenciales. La cobertura definitiva por novenos depende de las condiciones particulares del plan de salud contratado, y el cálculo del 7% depende del tope imponible vigente (AFP y salud comparten el mismo tope, reajustado cada agosto y publicado mensualmente por <a href="https://www.previred.com/indicadores-previsionales/" target="_blank" rel="noopener noreferrer">Previred</a>). Verifica siempre estos valores antes de comunicar cifras finales a un afiliado.</p>
     </footer>
+
+    <div class="print-sheet" id="print-sheet">
+      <div class="print-header">
+        <img src="/assets/img/logo-mark.svg" alt="">
+        <div>
+          <div class="print-brand">Viex Salud</div>
+          <div class="print-sub">Asesoría independiente de Isapres en Chile · viexsalud.cl</div>
+        </div>
+      </div>
+      <h1 id="print-title">Resultado</h1>
+      <div class="print-big-label" id="print-big-label"></div>
+      <div class="print-big" id="print-big"></div>
+      <table class="print-table" id="print-table"></table>
+      <div class="print-explain" id="print-explain"></div>
+      <div class="print-cta">
+        <strong>¿Quieres revisar tu caso con un ejecutivo, gratis?</strong>
+        <p>Escríbenos por WhatsApp al <a href="https://wa.me/56948627767">+56 9 4862 7767</a> o visita <a href="https://www.viexsalud.cl">viexsalud.cl</a> para más guías sobre tu Isapre.</p>
+      </div>
+      <p class="print-legal">Cálculo referencial generado con CalcuIsapre. No reemplaza la información oficial de tu Isapre ni de la Superintendencia de Salud.</p>
+      <p class="print-footer">viexsalud.cl/recursos-ejecutivos — CalcuIsapre</p>
+    </div>
   </div>
 </div>
 
@@ -540,6 +601,28 @@ eleventyExcludeFromCollections: true
     return parseFloat(cleaned);
   };
   var clamp = function (n, min, max) { return Math.max(min, Math.min(max, n)); };
+
+  function printBrandedResult(opts) {
+    document.getElementById('print-title').textContent = opts.title;
+    document.getElementById('print-big-label').textContent = opts.bigLabel;
+    document.getElementById('print-big').textContent = opts.bigValue;
+    document.getElementById('print-explain').textContent = opts.explain;
+    var table = document.getElementById('print-table');
+    table.innerHTML = opts.rows.map(function (r) {
+      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+    }).join('');
+    window.print();
+  }
+
+  function breakdownToRows(containerId) {
+    var rows = [];
+    var el = document.getElementById(containerId);
+    Array.prototype.forEach.call(el.querySelectorAll('.row'), function (row) {
+      var spans = row.querySelectorAll('span');
+      rows.push([spans[0].textContent, spans[1].textContent]);
+    });
+    return rows;
+  }
 
   // ---------- NOVENOS ----------
   var modeAuto = document.getElementById('mode-auto');
@@ -672,7 +755,16 @@ eleventyExcludeFromCollections: true
       setTimeout(function () { btn.textContent = old; }, 1500);
     });
   });
-  document.getElementById('print-novenos').addEventListener('click', function () { window.print(); });
+  document.getElementById('print-novenos').addEventListener('click', function () {
+    if (!resultNovenos.classList.contains('show')) return;
+    printBrandedResult({
+      title: 'Cobertura por Novenos',
+      bigLabel: document.getElementById('novenos-result-label').textContent,
+      bigValue: document.getElementById('novenos-big').textContent,
+      rows: breakdownToRows('novenos-breakdown'),
+      explain: document.getElementById('novenos-explain').textContent
+    });
+  });
 
   document.getElementById('whatsapp-novenos').addEventListener('click', function () {
     var text = resultNovenos.dataset.summary || '';
@@ -855,7 +947,16 @@ eleventyExcludeFromCollections: true
       setTimeout(function () { btn.textContent = old; }, 1500);
     });
   });
-  document.getElementById('print-siete').addEventListener('click', function () { window.print(); });
+  document.getElementById('print-siete').addEventListener('click', function () {
+    if (!resultSiete.classList.contains('show')) return;
+    printBrandedResult({
+      title: 'Cálculo del 7% Legal',
+      bigLabel: 'Cotización obligatoria (7%)',
+      bigValue: document.getElementById('siete-big').textContent,
+      rows: breakdownToRows('siete-breakdown'),
+      explain: document.getElementById('siete-explain').textContent
+    });
+  });
 
   document.getElementById('whatsapp-siete').addEventListener('click', function () {
     var text = resultSiete.dataset.summary || '';
