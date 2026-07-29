@@ -1,0 +1,22 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle">
+  <title id="logoTitle">Viex Salud</title>
+  <defs>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e3c876"/>
+      <stop offset="45%" stop-color="#cba63f"/>
+      <stop offset="100%" stop-color="#96731f"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#163a32"/>
+      <stop offset="100%" stop-color="#0a201c"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="60" cy="60" r="58" fill="url(#ring)"/>
+  <circle cx="60" cy="60" r="50" fill="url(#core)"/>
+
+  <!-- V mark built from two geometric strokes, echoing a shield/checkmark for trust+health -->
+  <path d="M34 40 L60 82 L86 40" fill="none" stroke="#e3c876" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- small pulse/cross accent above the V, nodding to health without being a literal medical cross -->
+  <circle cx="60" cy="34" r="4.5" fill="#e3c876"/>
+</svg>

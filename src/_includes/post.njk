@@ -1,0 +1,69 @@
+{% extends "base.njk" %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ title }}",
+  "description": "{{ description }}",
+  "author": {"@type": "Organization", "name": "Viex Salud"},
+  "publisher": {"@type": "Organization", "name": "Viex Salud"},
+  "mainEntityOfPage": "{{ canonical }}",
+  "datePublished": "{{ page.date | isoDate }}",
+  "dateModified": "{{ page.date | isoDate }}",
+  "inLanguage": "es-CL"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.viexsalud.cl/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.viexsalud.cl/blog/"},
+    {"@type": "ListItem", "position": 3, "name": "{{ breadcrumbLabel }}", "item": "{{ canonical }}"}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="article-hero">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Ruta de navegación" style="color:rgba(255,255,255,0.6);">
+      <a href="/" style="color:rgba(255,255,255,0.6);">Inicio</a> / <a href="/blog/" style="color:rgba(255,255,255,0.6);">Blog</a> / <span>{{ breadcrumbLabel }}</span>
+    </nav>
+    <p class="tag">{{ tag }}</p>
+    <h1>{{ title }}</h1>
+    <div class="article-meta">
+      <span>Por el equipo de Viex Salud</span><span>·</span><span>{{ page.date | readableDate }}</span><span>·</span><span>{{ readTime }}</span>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+{{ content | safe }}
+
+  <div class="article-cta">
+    <h3>{{ ctaTitle | default("¿Tienes dudas sobre tu plan actual?") }}</h3>
+    <p>{{ ctaText | default("En Viex Salud te ayudamos gratis, sin compromiso.") }}</p>
+    <a href="https://wa.me/56948627767" target="_blank" rel="noopener" class="btn btn-primary">Escríbenos por WhatsApp →</a>
+  </div>
+</article>
+
+<section class="section-cream" style="padding-top:0;">
+  <div class="container">
+    <h2 class="section-title" style="font-size:var(--fs-xl); margin-bottom:1.5rem;">Sigue leyendo</h2>
+  </div>
+  <div class="related-grid">
+    {% set related = collections.blog | relatedPosts(page.url) %}
+    {% for post in related %}
+    <a class="blog-card" href="{{ post.url }}">
+      <div class="thumb"><span class="tag">{{ post.data.tag }}</span></div>
+      <div class="body"><h3>{{ post.data.title }}</h3><span class="read-more">Leer →</span></div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

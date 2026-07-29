@@ -1,0 +1,62 @@
+---
+permalink: "blog/index.html"
+title: "Blog — Guías sobre Isapres, coberturas y salud en Chile"
+description: "Guías claras sobre Isapres, coberturas y trámites de salud en Chile. Aprende antes de decidir, con la asesoría gratuita de Viex Salud."
+canonical: "https://www.viexsalud.cl/blog/"
+ogType: "website"
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.viexsalud.cl/"},
+    {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.viexsalud.cl/blog/"}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="blog-hero">
+  <div class="container">
+    <p class="eyebrow on-dark" style="justify-content:center;">Blog Viex Salud</p>
+    <h1>Aprende antes de decidir</h1>
+    <p>Guías claras y responsables sobre Isapres, coberturas y trámites de salud en Chile — escritas para que entiendas tu plan, no para venderte algo.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="blog-grid">
+      {% for post in collections.blog | reverse %}
+      <a class="blog-card" href="{{ post.url }}">
+        <div class="thumb"><span class="tag">{{ post.data.tag }}</span></div>
+        <div class="body">
+          <span class="meta">{{ post.data.tag }} · {{ post.data.readTime }}</span>
+          <h3>{{ post.data.title }}</h3>
+          <p>{{ post.data.description }}</p>
+          <span class="read-more">Leer artículo →</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section-cream">
+  <div class="container">
+    <div class="cta-banner">
+      <div>
+        <h2>¿Tienes dudas sobre tu plan actual?</h2>
+        <p>Te ayudamos gratis a revisarlo, sin compromiso.</p>
+      </div>
+      <a href="/#cotizar" class="btn btn-primary">Cotizar mi plan gratis →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
