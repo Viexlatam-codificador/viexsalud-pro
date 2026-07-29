@@ -1,13 +1,7 @@
 ---
-layout: post.njk
-tags: blog
-permalink: "blog/5-senales-revisar-plan-isapre.html"
 title: "5 señales de que tu plan de Isapre necesita una revisión"
 description: "Revisar tu plan Isapre a tiempo cuida tu bolsillo y tu salud. Conoce 5 señales de alerta y agenda una asesoría gratuita por WhatsApp."
-canonical: "https://www.viexsalud.cl/blog/5-senales-revisar-plan-isapre.html"
 tag: "Guía · Isapres"
-breadcrumbLabel: "Señales de revisión"
-readTime: "6 min de lectura"
 date: 2026-07-28
 ---
 Cotizar en una Isapre no es como comprar un seguro y olvidarse de él. Cada mes destinas un 7% de tu renta imponible (como mínimo) a un plan de salud que debería adaptarse a tu vida, no al revés. El problema es que la mayoría de las personas contrata un plan una vez y no vuelve a mirarlo nunca más, aunque su situación familiar, laboral o de salud cambie por completo con los años.

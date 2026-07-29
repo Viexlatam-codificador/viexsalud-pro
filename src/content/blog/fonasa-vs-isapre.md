@@ -1,13 +1,7 @@
 ---
-layout: post.njk
-tags: blog
-permalink: "blog/fonasa-vs-isapre.html"
 title: "Fonasa vs. Isapre: en qué se diferencian y cómo elegir"
 description: "Descubre la diferencia Fonasa Isapre y cuál conviene según tu renta y familia. Asesoría gratuita de Viex Salud por WhatsApp."
-canonical: "https://www.viexsalud.cl/blog/fonasa-vs-isapre.html"
 tag: "Guía · Sistema de salud"
-breadcrumbLabel: "Fonasa vs. Isapre"
-readTime: "7 min de lectura"
 date: 2026-07-28
 ---
 Elegir entre Fonasa e Isapre es una de las decisiones financieras y de salud más importantes que toma una familia chilena, y sin embargo muchas personas la resuelven casi por inercia: porque "así lo tenía mi trabajo anterior" o porque un amigo le dijo que tal Isapre "es buena". La verdad es que no existe una respuesta única para todos. Lo que le conviene a una familia joven con hijos pequeños puede ser muy distinto de lo que le conviene a una persona soltera de 30 años, o a un matrimonio mayor con enfermedades preexistentes. Entender bien la diferencia entre Fonasa e Isapre —y hacerte las preguntas correctas antes de decidir— puede significar ahorrar dinero, tener mejor acceso a atención médica, o evitar dolores de cabeza cuando más necesitas cobertura.

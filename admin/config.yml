@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: TU-USUARIO/TU-REPO
+  repo: Viexlatam-codificador/viexsalud-pro
   branch: main
   base_url: https://viexsalud.cl
   auth_endpoint: api/auth
@@ -21,12 +21,6 @@ collections:
       - { label: "Título", name: "title", widget: "string" }
       - { label: "Descripción (SEO)", name: "description", widget: "text", hint: "Aparece en Google y al compartir por WhatsApp. Máximo 160 caracteres." }
       - { label: "Categoría", name: "tag", widget: "string", hint: "Ej: Guía · Isapres" }
-      - { label: "Texto en la ruta de navegación", name: "breadcrumbLabel", widget: "string" }
-      - { label: "Tiempo de lectura", name: "readTime", widget: "string", default: "5 min de lectura" }
       - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "URL del artículo (no tocar tras publicar)", name: "permalink", widget: "string", hint: "Ej: blog/mi-articulo-nuevo.html" }
-      - { label: "URL canónica (no tocar tras publicar)", name: "canonical", widget: "string", hint: "Ej: https://www.viexsalud.cl/blog/mi-articulo-nuevo.html" }
       - { label: "Imagen de portada (opcional)", name: "cover", widget: "image", required: false }
       - { label: "Contenido", name: "body", widget: "markdown" }
-      - { label: "Layout (no tocar)", name: "layout", widget: "hidden", default: "post.njk" }
-      - { label: "Tags internos (no tocar)", name: "tags", widget: "hidden", default: "blog" }

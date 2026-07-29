@@ -1,13 +1,7 @@
 ---
-layout: post.njk
-tags: blog
-permalink: "blog/antes-de-una-cirugia-que-revisar.html"
 title: "Antes de una cirugía: 5 cosas que deberías revisar en tu plan de salud"
 description: "Antes de una cirugía programada, revisa presupuesto, red de prestadores y coberturas de tu Isapre. Te ayudamos gratis por WhatsApp."
-canonical: "https://www.viexsalud.cl/blog/antes-de-una-cirugia-que-revisar.html"
 tag: "Preparación · Cirugías"
-breadcrumbLabel: "Antes de una cirugía"
-readTime: "6 min de lectura"
 date: 2026-07-28
 ---
 Si tienes una cirugía programada, estás en una posición mucho más favorable que alguien que debe operarse de urgencia: tienes tiempo. Y ese tiempo es justamente lo que te permite anticiparte a los costos, entender qué cubre tu Isapre y evitar sorpresas desagradables cuando llegue la cuenta o el bono de atención. A diferencia de una urgencia, donde todo ocurre a contrarreloj, una cirugía electiva te da la posibilidad de revisar con calma tu plan, hacer las preguntas correctas y llegar al día de la operación con la tranquilidad de saber, al menos en lo administrativo y financiero, qué esperar.

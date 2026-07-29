@@ -1,13 +1,7 @@
 ---
-layout: post.njk
-tags: blog
-permalink: "blog/que-es-el-ges.html"
 title: "¿Qué es el GES y por qué te conviene conocerlo?"
 description: "Descubre qué es el GES, sus 4 garantías y por qué conocerlo puede evitarte pagos innecesarios. Asesoría gratuita de Viex Salud por WhatsApp."
-canonical: "https://www.viexsalud.cl/blog/que-es-el-ges.html"
 tag: "Guía · Coberturas"
-breadcrumbLabel: "¿Qué es el GES?"
-readTime: "5 min de lectura"
 date: 2026-07-28
 ---
 Si alguna vez pagaste una consulta o un examen de tu bolsillo sin preguntar antes si existía alguna cobertura especial, no estás solo. Muchas personas en Chile terminan asumiendo gastos de salud importantes, o viven con la angustia de no saber cuánto tiempo más deberán esperar por una atención, sin saber que existe una protección legal pensada justamente para eso: el GES. Conocerlo puede ahorrarte plata, tiempo y, sobre todo, mucha incertidumbre en un momento en que lo último que necesitas es otro dolor de cabeza administrativo.

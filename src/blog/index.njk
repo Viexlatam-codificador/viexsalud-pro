@@ -37,7 +37,7 @@ eleventyExcludeFromCollections: true
       <a class="blog-card" href="{{ post.url }}">
         <div class="thumb"><span class="tag">{{ post.data.tag }}</span></div>
         <div class="body">
-          <span class="meta">{{ post.data.tag }} · {{ post.data.readTime }}</span>
+          <span class="meta">{{ post.data.tag }} · {{ post.templateContent | readingTime }}</span>
           <h3>{{ post.data.title }}</h3>
           <p>{{ post.data.description }}</p>
           <span class="read-more">Leer artículo →</span>

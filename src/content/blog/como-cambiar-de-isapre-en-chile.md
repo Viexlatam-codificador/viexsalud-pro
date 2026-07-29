@@ -1,13 +1,7 @@
 ---
-layout: post.njk
-tags: blog
-permalink: "blog/como-cambiar-de-isapre-en-chile.html"
 title: "¿Sabías que puedes cambiar de Isapre? Guía simple para hacerlo bien"
 description: "Descubre cómo cambiar de Isapre en Chile sin mitos. Guía simple sobre portabilidad, cargas y documentos. Evaluación gratis por WhatsApp."
-canonical: "https://www.viexsalud.cl/blog/como-cambiar-de-isapre-en-chile.html"
 tag: "Guía · Isapres"
-breadcrumbLabel: "Cambiar de Isapre"
-readTime: "7 min de lectura"
 date: 2026-07-28
 ---
 Muchas personas viven años pagando el mismo plan de salud, sintiendo que no le sacan provecho o que subió de precio sin explicación clara, y jamás se plantean que existe una alternativa. La realidad es que la ley chilena permite cambiar de Isapre cuando tú quieras, sin depender de que tu empleador cambie de convenio ni de fechas especiales del año. Sin embargo, es un derecho poco conocido y, cuando se conoce, suele rodearse de mitos que frenan a la gente antes de siquiera evaluarlo.

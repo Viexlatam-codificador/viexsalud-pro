@@ -16,6 +16,13 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.addFilter("isoDate", (dateObj) => new Date(dateObj).toISOString().slice(0, 10));
 
+  eleventyConfig.addFilter("readingTime", (html) => {
+    const text = String(html || "").replace(/<[^>]*>/g, " ");
+    const words = (text.match(/\S+/g) || []).length;
+    const minutes = Math.max(1, Math.round(words / 200));
+    return `${minutes} min de lectura`;
+  });
+
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
     const d = new Date(dateObj);
