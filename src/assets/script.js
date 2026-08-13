@@ -3,6 +3,31 @@
 
   const WHATSAPP_NUMBER = "56948627767";
 
+  /* ---- Conversion tracking (GA4 + Meta Pixel) ----
+     Fires a GA4 event and a Meta Pixel event together. Safe to call even if
+     analytics.js hasn't finished loading yet (checks before calling). */
+  function trackConversion(gaName, gaParams, metaName, metaParams) {
+    try {
+      if (typeof gtag === "function") gtag("event", gaName, gaParams || {});
+      if (typeof fbq === "function") fbq("track", metaName, metaParams || {});
+    } catch (err) {
+      /* Never let analytics break the page. */
+    }
+  }
+
+  /* Any click on a WhatsApp link anywhere on the site (header, hero, floating
+     button, footer, social card, etc.) counts as a contact conversion. */
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest('a[href*="wa.me"]');
+    if (!link) return;
+    trackConversion(
+      "whatsapp_click",
+      { link_text: (link.textContent || "").trim().slice(0, 60) || "whatsapp" },
+      "Contact",
+      {}
+    );
+  });
+
   /* Mobile nav toggle */
   const navToggle = document.querySelector(".nav-toggle");
   const navLinks = document.querySelector(".nav-links");
@@ -96,6 +121,14 @@
       ].filter(Boolean);
 
       const message = encodeURIComponent(lines.join("\n"));
+
+      trackConversion(
+        "generate_lead",
+        { form_id: "quote-form" },
+        "Lead",
+        { content_name: "Cotización Isapre" }
+      );
+
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank", "noopener");
     });
 
