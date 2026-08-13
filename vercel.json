@@ -83,6 +83,14 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "viexsalud.cl" }],
+      "destination": "https://www.viexsalud.cl/:path*",
+      "permanent": true
+    }
+  ],
   "trailingSlash": false,
   "cleanUrls": true
 }
