@@ -1,0 +1,240 @@
+---
+permalink: "ejecutivos/index.html"
+title: "Ejecutivos — Ingresa a tus herramientas"
+description: "Área de ejecutivos Viex Salud: inicia sesión o crea tu cuenta para acceder a CalcuIsapre y Preexistencias."
+canonical: "https://www.viexsalud.cl/ejecutivos/"
+ogType: "website"
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<style>
+  .isaprecalc {
+    --bg: #eef3f2; --surface: #ffffff; --surface-alt: #f6faf9; --border: #d7e2e0;
+    --ink: #16262b; --ink-soft: #55676c; --ink-faint: #86979b;
+    --blue: #1f6f8b; --blue-ink: #0f4a5e; --gold: #96731f; --gold-soft: #f5ead0;
+    --danger: #b3392a; --danger-soft: #fbeae7; --focus: #2f8fb0;
+    --calc-shadow: 0 1px 2px rgba(20, 40, 45, 0.06), 0 8px 24px -12px rgba(20, 40, 45, 0.18);
+    --calc-radius: 14px;
+    --calc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    .isaprecalc {
+      --bg: #0d1417; --surface: #141d21; --surface-alt: #182226; --border: #263940;
+      --ink: #e7eef0; --ink-soft: #9db0b5; --ink-faint: #6c8085;
+      --blue: #67bcdd; --blue-ink: #bfe6f4; --gold: #e3c876; --gold-soft: #3a2c10;
+      --danger: #ff7a68; --danger-soft: #3a1f1c;
+      --calc-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+    }
+  }
+  .isaprecalc, .isaprecalc * { box-sizing: border-box; }
+  .isaprecalc {
+    background: var(--bg); color: var(--ink); font-family: var(--calc-sans);
+    line-height: 1.45; -webkit-font-smoothing: antialiased; padding: 48px 0 60px; min-height: 60vh;
+  }
+  .isaprecalc .wrap { max-width: 440px; margin: 0 auto; padding: 0 20px; }
+
+  .isaprecalc header.top { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin-bottom: 28px; }
+  .isaprecalc .mark {
+    width: 48px; height: 48px; border-radius: 13px;
+    background: linear-gradient(155deg, var(--blue), var(--gold));
+    display: flex; align-items: center; justify-content: center; box-shadow: var(--calc-shadow);
+  }
+  .isaprecalc .mark svg { width: 26px; height: 26px; }
+  .isaprecalc header.top h1 { font-size: 1.4rem; margin: 0; }
+  .isaprecalc header.top p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
+
+  .isaprecalc .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--calc-radius);
+    box-shadow: var(--calc-shadow); padding: 22px 24px 26px;
+  }
+
+  .isaprecalc .segmented {
+    display: flex; background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: 10px; padding: 3px; gap: 2px; margin-bottom: 20px;
+  }
+  .isaprecalc .segmented button {
+    flex: 1; padding: 8px 10px; font-size: 0.88rem; font-weight: 700; border-radius: 8px;
+    border: none; background: transparent; color: var(--ink-soft); cursor: pointer; font-family: var(--calc-sans);
+  }
+  .isaprecalc .segmented button.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+
+  .isaprecalc .field { margin-bottom: 14px; }
+  .isaprecalc .field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 5px; }
+  .isaprecalc .field input {
+    width: 100%; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--surface-alt); color: var(--ink); font-size: 0.95rem; font-family: var(--calc-sans);
+  }
+  .isaprecalc .field input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+  .isaprecalc button.btn-primary {
+    width: 100%; padding: 11px 16px; border-radius: 9px; border: none;
+    background: var(--blue); color: #fff; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer; font-family: var(--calc-sans); margin-top: 4px;
+  }
+  .isaprecalc button.btn-primary:hover { filter: brightness(1.06); }
+  .isaprecalc button.btn-primary:disabled { opacity: 0.6; cursor: default; }
+
+  .isaprecalc .msg { font-size: 0.85rem; border-radius: 9px; padding: 10px 12px; margin-top: 14px; display: none; }
+  .isaprecalc .msg.show { display: block; }
+  .isaprecalc .msg.error { background: var(--danger-soft); color: var(--danger); }
+  .isaprecalc .msg.ok { background: var(--gold-soft); color: var(--gold); }
+
+  .isaprecalc .panel { display: none; }
+  .isaprecalc .panel.active { display: block; }
+</style>
+
+<div class="isaprecalc">
+  <div class="wrap">
+    <header class="top">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="3.4" stroke="white" stroke-width="1.8"/>
+          <path d="M5 20c0-3.6 3-6 7-6s7 2.4 7 6" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1>Ejecutivos</h1>
+      <p>Ingresa para usar CalcuIsapre y Preexistencias</p>
+    </header>
+
+    <div class="card">
+      <div class="segmented">
+        <button type="button" id="tab-login" class="active">Iniciar sesión</button>
+        <button type="button" id="tab-signup">Crear cuenta</button>
+      </div>
+
+      <form id="panel-login" class="panel active">
+        <div class="field">
+          <label for="login-email">Correo</label>
+          <input type="email" id="login-email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn-primary" id="login-submit">Entrar</button>
+        <div class="msg" id="login-msg"></div>
+      </form>
+
+      <form id="panel-signup" class="panel">
+        <div class="field">
+          <label for="signup-email">Correo</label>
+          <input type="email" id="signup-email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="signup-password">Contraseña</label>
+          <input type="password" id="signup-password" autocomplete="new-password" minlength="6" required>
+        </div>
+        <div class="field">
+          <label for="signup-password2">Repite la contraseña</label>
+          <input type="password" id="signup-password2" autocomplete="new-password" minlength="6" required>
+        </div>
+        <button type="submit" class="btn-primary" id="signup-submit">Crear cuenta</button>
+        <div class="msg" id="signup-msg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% include "supabase-auth.njk" %}
+<script>
+(function () {
+  "use strict";
+  var sb = window.VIEX_SUPABASE;
+
+  var tabLogin = document.getElementById('tab-login');
+  var tabSignup = document.getElementById('tab-signup');
+  var panelLogin = document.getElementById('panel-login');
+  var panelSignup = document.getElementById('panel-signup');
+
+  function showTab(which) {
+    var loginActive = which === 'login';
+    tabLogin.classList.toggle('active', loginActive);
+    tabSignup.classList.toggle('active', !loginActive);
+    panelLogin.classList.toggle('active', loginActive);
+    panelSignup.classList.toggle('active', !loginActive);
+  }
+  tabLogin.addEventListener('click', function () { showTab('login'); });
+  tabSignup.addEventListener('click', function () { showTab('signup'); });
+
+  function showMsg(el, text, isError) {
+    el.textContent = text;
+    el.className = 'msg show ' + (isError ? 'error' : 'ok');
+  }
+
+  function friendlyError(err) {
+    var m = (err && err.message) || '';
+    if (m.indexOf('Invalid login credentials') !== -1) return 'Correo o contraseña incorrectos.';
+    if (m.indexOf('already registered') !== -1 || m.indexOf('already exists') !== -1) return 'Ese correo ya tiene una cuenta. Prueba iniciar sesión.';
+    if (m.indexOf('Password should be at least') !== -1) return 'La contraseña debe tener al menos 6 caracteres.';
+    if (m.indexOf('Unable to validate email') !== -1 || m.indexOf('invalid') !== -1) return 'Revisa que el correo esté bien escrito.';
+    return m || 'Ocurrió un error. Intenta de nuevo.';
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var redirectTo = params.get('next') || '/recursos-ejecutivos/';
+
+  sb.auth.getSession().then(function (res) {
+    if (res.data && res.data.session) {
+      window.location.href = redirectTo;
+    }
+  });
+
+  document.getElementById('panel-login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('login-submit');
+    var msg = document.getElementById('login-msg');
+    msg.className = 'msg';
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+
+    sb.auth.signInWithPassword({
+      email: document.getElementById('login-email').value.trim(),
+      password: document.getElementById('login-password').value
+    }).then(function (res) {
+      if (res.error) {
+        showMsg(msg, friendlyError(res.error), true);
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+        return;
+      }
+      window.location.href = redirectTo;
+    });
+  });
+
+  document.getElementById('panel-signup').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('signup-submit');
+    var msg = document.getElementById('signup-msg');
+    msg.className = 'msg';
+
+    var email = document.getElementById('signup-email').value.trim();
+    var pw1 = document.getElementById('signup-password').value;
+    var pw2 = document.getElementById('signup-password2').value;
+
+    if (pw1 !== pw2) {
+      showMsg(msg, 'Las contraseñas no coinciden.', true);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Creando...';
+
+    sb.auth.signUp({ email: email, password: pw1 }).then(function (res) {
+      btn.disabled = false;
+      btn.textContent = 'Crear cuenta';
+      if (res.error) {
+        showMsg(msg, friendlyError(res.error), true);
+        return;
+      }
+      if (res.data && res.data.session) {
+        window.location.href = redirectTo;
+        return;
+      }
+      showMsg(msg, 'Cuenta creada. Revisa tu correo para confirmarla y luego inicia sesión.', false);
+    });
+  });
+})();
+</script>
+{% endblock %}

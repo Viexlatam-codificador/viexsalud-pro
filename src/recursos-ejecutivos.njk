@@ -421,7 +421,7 @@ eleventyExcludeFromCollections: true
   }
 </style>
 
-<div class="isaprecalc">
+<div class="isaprecalc" id="isaprecalc-root" style="visibility:hidden;">
   <div class="wrap">
     <header class="top">
       <div class="mark" aria-hidden="true">
@@ -436,9 +436,12 @@ eleventyExcludeFromCollections: true
       </div>
     </header>
 
-    <div class="tabs">
-      <a href="/recursos-ejecutivos/" class="active">CalcuIsapre</a>
-      <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
+    <div class="tabs" style="justify-content:space-between;">
+      <div style="display:flex; gap:8px;">
+        <a href="/recursos-ejecutivos/" class="active">CalcuIsapre</a>
+        <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
+      </div>
+      <a href="#" id="logout-link" style="color:var(--ink-faint);">Cerrar sesión</a>
     </div>
 
     <div class="grid">
@@ -594,6 +597,30 @@ eleventyExcludeFromCollections: true
   </div>
 </div>
 
+{% include "supabase-auth.njk" %}
+<script>
+(function () {
+  "use strict";
+  var sb = window.VIEX_SUPABASE;
+  var root = document.getElementById('isaprecalc-root');
+
+  sb.auth.getSession().then(function (res) {
+    if (!res.data || !res.data.session) {
+      window.location.href = '/ejecutivos/?next=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
+    root.style.visibility = 'visible';
+  });
+
+  var logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      sb.auth.signOut().then(function () { window.location.href = '/ejecutivos/'; });
+    });
+  }
+})();
+</script>
 <script>
 (function () {
   "use strict";
