@@ -24,3 +24,16 @@ collections:
       - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
       - { label: "Imagen de portada (opcional)", name: "cover", widget: "image", required: false }
       - { label: "Contenido", name: "body", widget: "markdown" }
+
+  - name: "preexistencias"
+    label: "Preexistencias"
+    label_singular: "Preexistencia"
+    folder: "src/content/preexistencias"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    summary: "{{fields.nombre}} — {{fields.isapre}}"
+    fields:
+      - { label: "Preexistencia", name: "nombre", widget: "string", hint: "Ej: Hipertensión, Hernia lumbar, Diabetes tipo 2" }
+      - { label: "Cómo declarar", name: "como_declarar", widget: "text", hint: "El texto o términos exactos que debe usar el ejecutivo para declararla correctamente." }
+      - { label: "Isapre", name: "isapre", widget: "string", hint: "Ej: Banmedica. Escribe el nombre siempre igual para que el filtro funcione bien." }

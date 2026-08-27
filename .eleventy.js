@@ -23,6 +23,16 @@ module.exports = function (eleventyConfig) {
     return `${minutes} min de lectura`;
   });
 
+  eleventyConfig.addFilter("collectionDataToJSON", (collection) =>
+    JSON.stringify(
+      (collection || []).map((item) => ({
+        nombre: item.data.nombre,
+        isapre: item.data.isapre,
+        como_declarar: item.data.como_declarar,
+      }))
+    ).replace(/</g, "\\u003c")
+  );
+
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
     const d = new Date(dateObj);

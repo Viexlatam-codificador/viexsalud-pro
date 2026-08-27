@@ -55,6 +55,18 @@
       ]
     },
     {
+      "source": "/recursos-ejecutivos/preexistencias",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/recursos-ejecutivos/preexistencias/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
       "source": "/preguntas-isapre",
       "headers": [
         {

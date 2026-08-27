@@ -1,0 +1,214 @@
+---
+permalink: "recursos-ejecutivos/preexistencias/index.html"
+title: "Preexistencias — Cómo declarar en cada Isapre"
+description: "Buscador interno para ejecutivos Viex Salud: cómo declarar correctamente cada preexistencia según la Isapre."
+canonical: "https://www.viexsalud.cl/recursos-ejecutivos/preexistencias/"
+ogType: "website"
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<style>
+  .isaprecalc {
+    --bg: #eef3f2;
+    --surface: #ffffff;
+    --surface-alt: #f6faf9;
+    --border: #d7e2e0;
+    --ink: #16262b;
+    --ink-soft: #55676c;
+    --ink-faint: #86979b;
+    --blue: #1f6f8b;
+    --blue-ink: #0f4a5e;
+    --gold: #96731f;
+    --gold-soft: #f5ead0;
+    --focus: #2f8fb0;
+    --calc-shadow: 0 1px 2px rgba(20, 40, 45, 0.06), 0 8px 24px -12px rgba(20, 40, 45, 0.18);
+    --calc-radius: 14px;
+    --calc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    .isaprecalc {
+      --bg: #0d1417; --surface: #141d21; --surface-alt: #182226; --border: #263940;
+      --ink: #e7eef0; --ink-soft: #9db0b5; --ink-faint: #6c8085;
+      --blue: #67bcdd; --blue-ink: #bfe6f4; --gold: #e3c876; --gold-soft: #3a2c10;
+      --calc-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+    }
+  }
+  .isaprecalc, .isaprecalc * { box-sizing: border-box; }
+  .isaprecalc {
+    background: var(--bg); color: var(--ink); font-family: var(--calc-sans);
+    line-height: 1.45; -webkit-font-smoothing: antialiased; padding: 32px 0 24px;
+  }
+  .isaprecalc .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px 40px; }
+  .isaprecalc a { color: var(--blue); }
+
+  .isaprecalc header.top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .isaprecalc .mark {
+    flex: none; width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(155deg, var(--blue), var(--gold));
+    display: flex; align-items: center; justify-content: center; box-shadow: var(--calc-shadow);
+  }
+  .isaprecalc .mark svg { width: 24px; height: 24px; }
+  .isaprecalc header.top h1 { font-size: 1.5rem; margin: 0 0 2px; letter-spacing: -0.01em; text-wrap: balance; }
+  .isaprecalc header.top p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; }
+
+  .isaprecalc .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+  .isaprecalc .tabs a {
+    font-size: 0.86rem; font-weight: 700; text-decoration: none; color: var(--ink-soft);
+    padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border);
+  }
+  .isaprecalc .tabs a.active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .isaprecalc .tabs a:not(.active):hover { border-color: var(--blue); color: var(--blue); }
+
+  .isaprecalc .search-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .isaprecalc .search-bar input[type="search"] {
+    flex: 1 1 240px; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); font-size: 0.95rem; font-family: var(--calc-sans);
+  }
+  .isaprecalc .search-bar select {
+    padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink); font-size: 0.95rem; font-family: var(--calc-sans); min-width: 170px;
+  }
+  .isaprecalc .search-bar input:focus-visible, .isaprecalc .search-bar select:focus-visible {
+    outline: 2px solid var(--focus); outline-offset: 1px;
+  }
+  .isaprecalc .count { font-size: 0.82rem; color: var(--ink-faint); margin: 0 0 16px; }
+
+  .isaprecalc .results { display: flex; flex-direction: column; gap: 10px; }
+  .isaprecalc .preex-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--calc-radius);
+    box-shadow: var(--calc-shadow); padding: 16px 18px;
+  }
+  .isaprecalc .preex-card .row1 { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .isaprecalc .preex-card h3 { margin: 0; font-size: 1.05rem; }
+  .isaprecalc .preex-card .isapre-badge {
+    flex: none; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--gold); background: var(--gold-soft); padding: 3px 10px; border-radius: 999px;
+  }
+  .isaprecalc .preex-card p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; white-space: pre-wrap; }
+  .isaprecalc .empty { text-align: center; color: var(--ink-faint); padding: 40px 10px; }
+
+  .isaprecalc .support {
+    margin-top: 36px; background: var(--surface-alt); border: 1px solid var(--border);
+    border-radius: var(--calc-radius); padding: 20px 22px;
+  }
+  .isaprecalc .support h3 { margin: 0 0 6px; font-size: 1.05rem; }
+  .isaprecalc .support p { margin: 0 0 14px; color: var(--ink-soft); font-size: 0.88rem; max-width: 60ch; }
+  .isaprecalc .support .bank-details {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;
+    background: var(--surface); border-radius: 10px; padding: 14px 16px; border: 1px solid var(--border);
+  }
+  .isaprecalc .support .bank-details span.k { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin-bottom: 2px; }
+  .isaprecalc .support .bank-details span.v { font-weight: 700; font-variant-numeric: tabular-nums; }
+</style>
+
+<div class="isaprecalc">
+  <div class="wrap">
+    <header class="top">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 3a8 8 0 105.29 14.29l4.21 4.21" stroke="white" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p style="margin:0 0 4px; font-size:0.8rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint);">Recursos para Ejecutivos</p>
+        <h1>Preexistencias</h1>
+        <p>Cómo declarar correctamente cada preexistencia, según la Isapre</p>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <a href="/recursos-ejecutivos/">CalcuIsapre</a>
+      <a href="/recursos-ejecutivos/preexistencias/" class="active">Preexistencias</a>
+    </div>
+
+    <div class="search-bar">
+      <input type="search" id="preex-search" placeholder="Busca una preexistencia, ej: hernia, diabetes, hipertensión...">
+      <select id="preex-filter-isapre">
+        <option value="">Todas las Isapres</option>
+      </select>
+    </div>
+    <p class="count" id="preex-count"></p>
+
+    <div class="results" id="preex-results"></div>
+    <p class="empty" id="preex-empty" style="display:none;">No encontramos ninguna preexistencia con ese criterio. Prueba con otra palabra, o agrégala desde <a href="/admin">el panel</a>.</p>
+
+    <div class="support">
+      <h3>¿Te sirve esta herramienta?</h3>
+      <p>Este buscador es gratuito y va a seguir creciendo. Si te ayuda en tu trabajo y quieres apoyar que sigamos desarrollándolo, puedes hacer un aporte voluntario — sin ningún compromiso.</p>
+      <div class="bank-details">
+        <div><span class="k">Titular</span><span class="v">ViexSalud.cl</span></div>
+        <div><span class="k">RUT</span><span class="v">17.904.490-0</span></div>
+        <div><span class="k">Banco</span><span class="v">Mercado Pago</span></div>
+        <div><span class="k">Tipo de cuenta</span><span class="v">Cuenta Vista</span></div>
+        <div><span class="k">N° de cuenta</span><span class="v">1042237559</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="preex-data">{{ collections.preexistencias | collectionDataToJSON | safe }}</script>
+<script>
+(function () {
+  "use strict";
+  var raw = [];
+  try { raw = JSON.parse(document.getElementById('preex-data').textContent || '[]'); } catch (e) { raw = []; }
+
+  var data = raw
+    .filter(function (d) { return d && d.nombre; })
+    .map(function (d) {
+      return {
+        nombre: d.nombre || '',
+        isapre: d.isapre || 'Sin especificar',
+        como_declarar: d.como_declarar || ''
+      };
+    });
+
+  var searchInput = document.getElementById('preex-search');
+  var filterSelect = document.getElementById('preex-filter-isapre');
+  var resultsEl = document.getElementById('preex-results');
+  var countEl = document.getElementById('preex-count');
+  var emptyEl = document.getElementById('preex-empty');
+
+  var isapres = Array.from(new Set(data.map(function (d) { return d.isapre; }))).sort(function (a, b) { return a.localeCompare(b, 'es'); });
+  isapres.forEach(function (name) {
+    var opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    filterSelect.appendChild(opt);
+  });
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function render() {
+    var q = searchInput.value.trim().toLowerCase();
+    var isapreFilter = filterSelect.value;
+
+    var filtered = data.filter(function (d) {
+      var matchesQuery = !q || d.nombre.toLowerCase().indexOf(q) !== -1 || d.como_declarar.toLowerCase().indexOf(q) !== -1;
+      var matchesIsapre = !isapreFilter || d.isapre === isapreFilter;
+      return matchesQuery && matchesIsapre;
+    });
+
+    countEl.textContent = filtered.length + (filtered.length === 1 ? ' resultado' : ' resultados');
+    resultsEl.innerHTML = filtered.map(function (d) {
+      return '<div class="preex-card">' +
+        '<div class="row1"><h3>' + escapeHtml(d.nombre) + '</h3><span class="isapre-badge">' + escapeHtml(d.isapre) + '</span></div>' +
+        '<p>' + escapeHtml(d.como_declarar) + '</p>' +
+        '</div>';
+    }).join('');
+
+    emptyEl.style.display = filtered.length === 0 ? 'block' : 'none';
+  }
+
+  searchInput.addEventListener('input', render);
+  filterSelect.addEventListener('change', render);
+  render();
+})();
+</script>
+{% endblock %}
