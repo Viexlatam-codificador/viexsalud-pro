@@ -1,0 +1,484 @@
+---
+permalink: "recursos-ejecutivos/comparador-planes/index.html"
+title: "Comparador de Planes — Recursos para Ejecutivos"
+description: "Herramienta interna Viex Salud para comparar planes de Isapre: precio, coberturas y recomendación."
+canonical: "https://www.viexsalud.cl/recursos-ejecutivos/comparador-planes/"
+ogType: "website"
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<style>
+  .isaprecalc {
+    --bg: #eef3f2; --surface: #ffffff; --surface-alt: #f6faf9; --border: #d7e2e0;
+    --ink: #16262b; --ink-soft: #55676c; --ink-faint: #86979b;
+    --blue: #1f6f8b; --blue-ink: #0f4a5e; --gold: #96731f; --gold-soft: #f5ead0;
+    --green: #1c8a5a; --green-soft: #e5f6ec; --danger: #b3392a; --danger-soft: #fbeae7;
+    --mixed: #96731f; --mixed-soft: #f5ead0;
+    --focus: #2f8fb0;
+    --calc-shadow: 0 1px 2px rgba(20, 40, 45, 0.06), 0 8px 24px -12px rgba(20, 40, 45, 0.18);
+    --calc-radius: 14px;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+    --calc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    .isaprecalc {
+      --bg: #0d1417; --surface: #141d21; --surface-alt: #182226; --border: #263940;
+      --ink: #e7eef0; --ink-soft: #9db0b5; --ink-faint: #6c8085;
+      --blue: #67bcdd; --blue-ink: #bfe6f4; --gold: #e3c876; --gold-soft: #3a2c10;
+      --green: #56d69a; --green-soft: #10321f; --danger: #ff7a68; --danger-soft: #3a1f1c;
+      --mixed: #e3c876; --mixed-soft: #3a2c10;
+      --calc-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+    }
+  }
+  .isaprecalc, .isaprecalc * { box-sizing: border-box; }
+  .isaprecalc {
+    background: var(--bg); color: var(--ink); font-family: var(--calc-sans);
+    line-height: 1.45; -webkit-font-smoothing: antialiased; padding: 32px 0 60px;
+  }
+  .isaprecalc .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+  .isaprecalc a { color: var(--blue); }
+
+  .isaprecalc header.top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .isaprecalc .mark {
+    flex: none; width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(155deg, var(--blue), var(--gold));
+    display: flex; align-items: center; justify-content: center; box-shadow: var(--calc-shadow);
+  }
+  .isaprecalc .mark svg { width: 24px; height: 24px; }
+  .isaprecalc header.top h1 { font-size: 1.5rem; margin: 0 0 2px; letter-spacing: -0.01em; }
+  .isaprecalc header.top p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; }
+
+  .isaprecalc .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; justify-content: space-between; }
+  .isaprecalc .tabs .tabs-left { display: flex; gap: 8px; flex-wrap: wrap; }
+  .isaprecalc .tabs a {
+    font-size: 0.86rem; font-weight: 700; text-decoration: none; color: var(--ink-soft);
+    padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border);
+  }
+  .isaprecalc .tabs a.active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .isaprecalc .tabs a:not(.active):hover { border-color: var(--blue); color: var(--blue); }
+
+  .isaprecalc .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--calc-radius);
+    box-shadow: var(--calc-shadow); padding: 20px 22px; margin-bottom: 18px;
+  }
+  .isaprecalc .card h2 { font-size: 1.05rem; margin: 0 0 14px; }
+  .isaprecalc .card h3 { font-size: 0.95rem; margin: 0 0 10px; color: var(--ink-soft); }
+
+  .isaprecalc .field { margin-bottom: 12px; }
+  .isaprecalc .field label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 4px; }
+  .isaprecalc .field input, .isaprecalc .field select {
+    width: 100%; padding: 9px 11px; border-radius: 9px; border: 1px solid var(--border);
+    background: var(--surface-alt); color: var(--ink); font-size: 0.92rem; font-family: var(--calc-sans);
+  }
+  .isaprecalc .field input:focus-visible, .isaprecalc .field select:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+  .isaprecalc .row-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 14px; }
+  .isaprecalc .row-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+  @media (max-width: 640px) { .isaprecalc .row-grid, .isaprecalc .row-grid-3 { grid-template-columns: 1fr; } }
+
+  .isaprecalc .family-row { display: grid; grid-template-columns: 2fr 1fr 1.4fr auto; gap: 8px; margin-bottom: 8px; align-items: end; }
+  @media (max-width: 640px) { .isaprecalc .family-row { grid-template-columns: 1fr; } }
+  .isaprecalc .family-row .field { margin-bottom: 0; }
+  .isaprecalc button.icon-btn {
+    padding: 9px 12px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface-alt);
+    color: var(--ink-soft); cursor: pointer; font-family: var(--calc-sans); font-size: 0.85rem;
+  }
+  .isaprecalc button.icon-btn:hover { border-color: var(--danger); color: var(--danger); }
+  .isaprecalc button.btn-ghost {
+    padding: 8px 14px; border-radius: 9px; border: 1px solid var(--border); background: transparent;
+    color: var(--ink-soft); cursor: pointer; font-family: var(--calc-sans); font-size: 0.85rem; font-weight: 600;
+  }
+  .isaprecalc button.btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+  .isaprecalc .offers-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .isaprecalc .offers-tabs button {
+    padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-alt);
+    color: var(--ink-soft); font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: var(--calc-sans);
+  }
+  .isaprecalc .offers-tabs button.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .isaprecalc .offer-panel { display: none; }
+  .isaprecalc .offer-panel.active { display: block; }
+
+  .isaprecalc button.btn-primary {
+    padding: 11px 20px; border-radius: 9px; border: none; background: var(--blue); color: #fff;
+    font-weight: 700; font-size: 0.95rem; cursor: pointer; font-family: var(--calc-sans);
+  }
+  .isaprecalc button.btn-primary:hover { filter: brightness(1.06); }
+
+  .isaprecalc .result-section { display: none; }
+  .isaprecalc .result-section.show { display: block; }
+
+  .isaprecalc .table-wrap { overflow-x: auto; }
+  .isaprecalc table.compare-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 640px; }
+  .isaprecalc table.compare-table th, .isaprecalc table.compare-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .isaprecalc table.compare-table th { color: var(--ink-faint); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .isaprecalc table.compare-table td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  .isaprecalc .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; }
+  .isaprecalc .pill.mejora { background: var(--green-soft); color: var(--green); }
+  .isaprecalc .pill.retrocede { background: var(--danger-soft); color: var(--danger); }
+  .isaprecalc .pill.mixto { background: var(--mixed-soft); color: var(--mixed); }
+  .isaprecalc tr.is-current td { font-weight: 700; }
+
+  .isaprecalc .reco-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media (max-width: 780px) { .isaprecalc .reco-grid { grid-template-columns: 1fr; } }
+  .isaprecalc .reco-card { border-radius: var(--calc-radius); padding: 18px 20px; border: 1px solid var(--border); }
+  .isaprecalc .reco-card.primary { background: var(--green-soft); border-color: var(--green); }
+  .isaprecalc .reco-card.secondary { background: var(--surface-alt); }
+  .isaprecalc .reco-card .reco-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); margin-bottom: 4px; }
+  .isaprecalc .reco-card h3 { margin: 0 0 8px; font-size: 1.1rem; color: var(--ink); }
+  .isaprecalc .reco-card p { margin: 0; font-size: 0.88rem; color: var(--ink-soft); }
+
+  .isaprecalc .resultbtns { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+  .print-sheet { display: none; }
+  @media print {
+    body * { visibility: hidden; }
+    .print-sheet, .print-sheet * { visibility: visible; }
+    .print-sheet {
+      display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 36px 44px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #16262b;
+    }
+    .print-header { display: flex; align-items: center; gap: 14px; padding-bottom: 18px; border-bottom: 2px solid #cba63f; margin-bottom: 22px; }
+    .print-header img { width: 48px; height: 48px; }
+    .print-brand { font-family: Georgia, serif; font-size: 1.3rem; font-weight: 700; color: #0e2b25; }
+    .print-sub { font-size: 0.82rem; color: #55676c; }
+    .print-sheet h1 { font-size: 1.1rem; color: #55676c; font-weight: 600; margin: 0 0 16px; }
+    .print-sheet table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.85rem; }
+    .print-sheet table th, .print-sheet table td { padding: 7px 8px; border-bottom: 1px solid #e4ddcc; text-align: left; }
+    .print-sheet table td.num { text-align: right; }
+    .print-cta { background: linear-gradient(135deg, #163a32, #0a201c); color: #f4efe3; border-radius: 12px; padding: 18px 20px; margin-top: 10px; }
+    .print-cta strong { display: block; margin-bottom: 4px; }
+    .print-cta a { color: #e3c876; font-weight: 700; text-decoration: none; }
+    .print-footer { font-size: 0.72rem; color: #86979b; text-align: center; margin-top: 16px; }
+  }
+</style>
+
+<div class="isaprecalc" id="isaprecalc-root" style="visibility:hidden;">
+  <div class="wrap">
+    <header class="top">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 19V5M4 19h16M8 15l3-4 3 3 5-7" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <p style="margin:0 0 4px; font-size:0.8rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint);">Recursos para Ejecutivos</p>
+        <h1>Comparador de Planes</h1>
+        <p>Compara el plan actual del cliente contra hasta 5 ofertas y obtén una recomendación</p>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <div class="tabs-left">
+        <a href="/recursos-ejecutivos/">CalcuIsapre</a>
+        <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
+        <a href="/recursos-ejecutivos/comparador-planes/" class="active">Comparador de Planes</a>
+      </div>
+      <a href="#" id="logout-link" style="color:var(--ink-faint); font-weight:700; text-decoration:none; font-size:0.86rem;">Cerrar sesión</a>
+    </div>
+
+    <div class="card">
+      <h2>Datos del cliente</h2>
+      <div class="row-grid">
+        <div class="field">
+          <label for="cliente-nombre">Nombre del cliente</label>
+          <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+        </div>
+        <div class="field">
+          <label for="cliente-prioridad">Prioridad del cliente</label>
+          <select id="cliente-prioridad">
+            <option value="equilibrio">Equilibrio entre precio y cobertura</option>
+            <option value="precio">Precio — quiere pagar menos</option>
+            <option value="cobertura">Cobertura — quiere mejor protección</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Grupo familiar (opcional, referencial)</h2>
+      <div id="family-rows"></div>
+      <button type="button" class="btn-ghost" id="add-family">+ Agregar carga</button>
+    </div>
+
+    <div class="card">
+      <h2>Plan actual</h2>
+      <div class="row-grid-3">
+        <div class="field"><label for="cur-isapre">Isapre</label><input type="text" id="cur-isapre" placeholder="Ej: Banmedica"></div>
+        <div class="field"><label for="cur-plan">Nombre del plan</label><input type="text" id="cur-plan"></div>
+        <div class="field"><label for="cur-precio">Precio mensual (CLP)</label><input type="number" id="cur-precio" min="0" placeholder="Ej: 180000"></div>
+      </div>
+      <div class="row-grid-3">
+        <div class="field"><label for="cur-amb">Cobertura ambulatoria (%)</label><input type="number" id="cur-amb" min="0" max="100" placeholder="Ej: 70"></div>
+        <div class="field"><label for="cur-hos">Cobertura hospitalaria (%)</label><input type="number" id="cur-hos" min="0" max="100" placeholder="Ej: 80"></div>
+        <div class="field"><label for="cur-notas">Notas / tope (opcional)</label><input type="text" id="cur-notas"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Ofertas (hasta 5)</h2>
+      <div class="offers-tabs" id="offers-tabs"></div>
+      <div id="offers-panels"></div>
+    </div>
+
+    <button type="button" class="btn-primary" id="btn-comparar">Comparar planes →</button>
+
+    <div class="card result-section" id="result-section" style="margin-top:20px;">
+      <h2>Comparación</h2>
+      <div class="table-wrap">
+        <table class="compare-table" id="compare-table"></table>
+      </div>
+
+      <div class="reco-grid" id="reco-grid"></div>
+
+      <div class="resultbtns">
+        <button type="button" class="btn-ghost" id="btn-print">Descargar / Imprimir PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="print-sheet" id="print-sheet">
+  <div class="print-header">
+    <img src="/assets/img/logo-mark.svg" alt="">
+    <div>
+      <div class="print-brand">Viex Salud</div>
+      <div class="print-sub">Comparador de Planes — uso interno de ejecutivos</div>
+    </div>
+  </div>
+  <h1 id="print-title">Comparación de planes</h1>
+  <table id="print-table"></table>
+  <div id="print-reco"></div>
+  <div class="print-cta">
+    <strong>Viex Salud</strong>
+    Asesoría independiente de Isapres · <a href="https://wa.me/56948627767">+56 9 4862 7767</a> · <a href="https://www.viexsalud.cl">viexsalud.cl</a>
+  </div>
+  <p class="print-footer">Documento de uso interno, generado con el Comparador de Planes de Viex Salud.</p>
+</div>
+
+{% include "supabase-auth.njk" %}
+<script>
+(function () {
+  "use strict";
+  var sb = window.VIEX_SUPABASE;
+  var root = document.getElementById('isaprecalc-root');
+
+  sb.auth.getSession().then(function (res) {
+    if (!res.data || !res.data.session) {
+      window.location.href = '/ejecutivos/?next=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
+    root.style.visibility = 'visible';
+  });
+
+  var logoutLink = document.getElementById('logout-link');
+  logoutLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    sb.auth.signOut().then(function () { window.location.href = '/ejecutivos/'; });
+  });
+
+  // ---------- Family rows ----------
+  var familyContainer = document.getElementById('family-rows');
+  var familyCount = 0;
+
+  function addFamilyRow() {
+    familyCount++;
+    var row = document.createElement('div');
+    row.className = 'family-row';
+    row.innerHTML =
+      '<div class="field"><label>Nombre</label><input type="text" class="fam-nombre"></div>' +
+      '<div class="field"><label>Edad</label><input type="number" min="0" max="120" class="fam-edad"></div>' +
+      '<div class="field"><label>Parentesco</label><input type="text" class="fam-parentesco" placeholder="Cónyuge, hijo/a..."></div>' +
+      '<button type="button" class="icon-btn" aria-label="Quitar">Quitar</button>';
+    row.querySelector('.icon-btn').addEventListener('click', function () { row.remove(); });
+    familyContainer.appendChild(row);
+  }
+  document.getElementById('add-family').addEventListener('click', addFamilyRow);
+
+  function getFamily() {
+    return Array.prototype.map.call(familyContainer.querySelectorAll('.family-row'), function (row) {
+      return {
+        nombre: row.querySelector('.fam-nombre').value.trim(),
+        edad: row.querySelector('.fam-edad').value.trim(),
+        parentesco: row.querySelector('.fam-parentesco').value.trim()
+      };
+    }).filter(function (f) { return f.nombre; });
+  }
+
+  // ---------- Offers (up to 5) ----------
+  var OFFER_COUNT = 5;
+  var tabsEl = document.getElementById('offers-tabs');
+  var panelsEl = document.getElementById('offers-panels');
+
+  for (var i = 1; i <= OFFER_COUNT; i++) {
+    (function (n) {
+      var tabBtn = document.createElement('button');
+      tabBtn.type = 'button';
+      tabBtn.textContent = 'Oferta ' + n;
+      if (n === 1) tabBtn.classList.add('active');
+      tabBtn.addEventListener('click', function () {
+        Array.prototype.forEach.call(tabsEl.children, function (b) { b.classList.remove('active'); });
+        Array.prototype.forEach.call(panelsEl.children, function (p) { p.classList.remove('active'); });
+        tabBtn.classList.add('active');
+        document.getElementById('offer-panel-' + n).classList.add('active');
+      });
+      tabsEl.appendChild(tabBtn);
+
+      var panel = document.createElement('div');
+      panel.className = 'offer-panel' + (n === 1 ? ' active' : '');
+      panel.id = 'offer-panel-' + n;
+      panel.innerHTML =
+        '<div class="row-grid-3">' +
+        '<div class="field"><label>Isapre</label><input type="text" id="off-' + n + '-isapre" placeholder="Ej: Colmena"></div>' +
+        '<div class="field"><label>Nombre del plan</label><input type="text" id="off-' + n + '-plan"></div>' +
+        '<div class="field"><label>Precio mensual (CLP)</label><input type="number" id="off-' + n + '-precio" min="0"></div>' +
+        '</div>' +
+        '<div class="row-grid-3">' +
+        '<div class="field"><label>Cobertura ambulatoria (%)</label><input type="number" id="off-' + n + '-amb" min="0" max="100"></div>' +
+        '<div class="field"><label>Cobertura hospitalaria (%)</label><input type="number" id="off-' + n + '-hos" min="0" max="100"></div>' +
+        '<div class="field"><label>Notas / tope (opcional)</label><input type="text" id="off-' + n + '-notas"></div>' +
+        '</div>';
+      panelsEl.appendChild(panel);
+    })(i);
+  }
+
+  function getOffers() {
+    var offers = [];
+    for (var n = 1; n <= OFFER_COUNT; n++) {
+      var isapre = document.getElementById('off-' + n + '-isapre').value.trim();
+      if (!isapre) continue;
+      offers.push({
+        n: n,
+        isapre: isapre,
+        plan: document.getElementById('off-' + n + '-plan').value.trim() || 'Plan ' + n,
+        precio: parseFloat(document.getElementById('off-' + n + '-precio').value) || 0,
+        amb: parseFloat(document.getElementById('off-' + n + '-amb').value) || 0,
+        hos: parseFloat(document.getElementById('off-' + n + '-hos').value) || 0,
+        notas: document.getElementById('off-' + n + '-notas').value.trim()
+      });
+    }
+    return offers;
+  }
+
+  var fmtCLP = function (n) { return n.toLocaleString('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }); };
+
+  function evaluate(offer, current, priority) {
+    var priceDiff = offer.precio - current.precio;
+    var pricePct = current.precio ? (priceDiff / current.precio) * 100 : 0;
+    var ambDiff = offer.amb - current.amb;
+    var hosDiff = offer.hos - current.hos;
+    var coverageAvgDiff = (ambDiff + hosDiff) / 2;
+
+    var veredicto;
+    if (priceDiff <= 0 && coverageAvgDiff >= 0) veredicto = 'mejora';
+    else if (priceDiff >= 0 && coverageAvgDiff <= 0) veredicto = 'retrocede';
+    else veredicto = 'mixto';
+
+    var score;
+    if (priority === 'precio') score = (-pricePct) + coverageAvgDiff * 0.15;
+    else if (priority === 'cobertura') score = coverageAvgDiff * 2.2 - pricePct * 0.1;
+    else score = coverageAvgDiff * 1.1 - pricePct * 0.5;
+
+    return {
+      offer: offer, priceDiff: priceDiff, pricePct: pricePct,
+      ambDiff: ambDiff, hosDiff: hosDiff, coverageAvgDiff: coverageAvgDiff,
+      veredicto: veredicto, score: score
+    };
+  }
+
+  function explain(ev) {
+    var o = ev.offer;
+    var parts = [];
+    if (ev.priceDiff < 0) parts.push('cuesta ' + fmtCLP(Math.abs(ev.priceDiff)) + ' menos al mes (' + Math.abs(ev.pricePct).toFixed(1) + '% menor)');
+    else if (ev.priceDiff > 0) parts.push('cuesta ' + fmtCLP(ev.priceDiff) + ' más al mes (' + ev.pricePct.toFixed(1) + '% mayor)');
+    else parts.push('mantiene el mismo precio mensual');
+
+    if (ev.ambDiff > 0) parts.push('mejora la cobertura ambulatoria en ' + ev.ambDiff + ' puntos');
+    else if (ev.ambDiff < 0) parts.push('reduce la cobertura ambulatoria en ' + Math.abs(ev.ambDiff) + ' puntos');
+
+    if (ev.hosDiff > 0) parts.push('mejora la cobertura hospitalaria en ' + ev.hosDiff + ' puntos');
+    else if (ev.hosDiff < 0) parts.push('reduce la cobertura hospitalaria en ' + Math.abs(ev.hosDiff) + ' puntos');
+
+    return 'El plan ' + o.isapre + ' — ' + o.plan + ' ' + parts.join(', ') + ', comparado con el plan actual.';
+  }
+
+  function veredictoPill(v) {
+    var label = v === 'mejora' ? 'Mejora' : v === 'retrocede' ? 'Retrocede' : 'Mixto';
+    return '<span class="pill ' + v + '">' + label + '</span>';
+  }
+
+  document.getElementById('btn-comparar').addEventListener('click', function () {
+    var current = {
+      isapre: document.getElementById('cur-isapre').value.trim() || 'Actual',
+      plan: document.getElementById('cur-plan').value.trim() || 'Plan actual',
+      precio: parseFloat(document.getElementById('cur-precio').value) || 0,
+      amb: parseFloat(document.getElementById('cur-amb').value) || 0,
+      hos: parseFloat(document.getElementById('cur-hos').value) || 0
+    };
+    var priority = document.getElementById('cliente-prioridad').value;
+    var offers = getOffers();
+
+    if (!offers.length) {
+      alert('Ingresa al menos una oferta (Isapre) antes de comparar.');
+      return;
+    }
+
+    var evaluations = offers.map(function (o) { return evaluate(o, current, priority); });
+    var ranked = evaluations.slice().sort(function (a, b) { return b.score - a.score; });
+
+    // ---- table ----
+    var rows = '<tr><th>Isapre / Plan</th><th class="num">Precio</th><th class="num">Dif. precio</th><th class="num">Amb.</th><th class="num">Hosp.</th><th>Veredicto</th></tr>';
+    rows += '<tr class="is-current"><td>' + current.isapre + ' — ' + current.plan + ' (actual)</td><td class="num">' + fmtCLP(current.precio) + '</td><td class="num">—</td><td class="num">' + current.amb + '%</td><td class="num">' + current.hos + '%</td><td>—</td></tr>';
+    evaluations.forEach(function (ev) {
+      var diffLabel = (ev.priceDiff > 0 ? '+' : '') + fmtCLP(ev.priceDiff);
+      rows += '<tr><td>' + ev.offer.isapre + ' — ' + ev.offer.plan + '</td><td class="num">' + fmtCLP(ev.offer.precio) + '</td><td class="num">' + diffLabel + '</td><td class="num">' + ev.offer.amb + '%</td><td class="num">' + ev.offer.hos + '%</td><td>' + veredictoPill(ev.veredicto) + '</td></tr>';
+    });
+    document.getElementById('compare-table').innerHTML = rows;
+
+    // ---- recommendation ----
+    var recoGrid = document.getElementById('reco-grid');
+    var best = ranked[0];
+    var second = ranked[1];
+    var html = '<div class="reco-card primary"><div class="reco-label">Plan recomendado</div><h3>' + best.offer.isapre + ' — ' + best.offer.plan + '</h3><p>' + explain(best) + '</p></div>';
+    if (second) {
+      html += '<div class="reco-card secondary"><div class="reco-label">Segunda alternativa</div><h3>' + second.offer.isapre + ' — ' + second.offer.plan + '</h3><p>' + explain(second) + '</p></div>';
+    }
+    recoGrid.innerHTML = html;
+
+    document.getElementById('result-section').classList.add('show');
+    document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // stash for print
+    window._comparadorData = { current: current, evaluations: evaluations, best: best, second: second, clienteNombre: document.getElementById('cliente-nombre').value.trim(), family: getFamily() };
+  });
+
+  document.getElementById('btn-print').addEventListener('click', function () {
+    var data = window._comparadorData;
+    if (!data) return;
+
+    var title = 'Comparación de planes' + (data.clienteNombre ? ' — ' + data.clienteNombre : '');
+    document.getElementById('print-title').textContent = title;
+
+    var rows = '<tr><th>Isapre / Plan</th><th class="num">Precio</th><th class="num">Dif.</th><th class="num">Amb.</th><th class="num">Hosp.</th><th>Veredicto</th></tr>';
+    rows += '<tr><td><strong>' + data.current.isapre + ' — ' + data.current.plan + ' (actual)</strong></td><td class="num">' + fmtCLP(data.current.precio) + '</td><td class="num">—</td><td class="num">' + data.current.amb + '%</td><td class="num">' + data.current.hos + '%</td><td>—</td></tr>';
+    data.evaluations.forEach(function (ev) {
+      var diffLabel = (ev.priceDiff > 0 ? '+' : '') + fmtCLP(ev.priceDiff);
+      var v = ev.veredicto === 'mejora' ? 'Mejora' : ev.veredicto === 'retrocede' ? 'Retrocede' : 'Mixto';
+      rows += '<tr><td>' + ev.offer.isapre + ' — ' + ev.offer.plan + '</td><td class="num">' + fmtCLP(ev.offer.precio) + '</td><td class="num">' + diffLabel + '</td><td class="num">' + ev.offer.amb + '%</td><td class="num">' + ev.offer.hos + '%</td><td>' + v + '</td></tr>';
+    });
+    document.getElementById('print-table').innerHTML = rows;
+
+    var recoHtml = '<p><strong>Plan recomendado:</strong> ' + data.best.offer.isapre + ' — ' + data.best.offer.plan + '. ' + explain(data.best) + '</p>';
+    if (data.second) recoHtml += '<p><strong>Segunda alternativa:</strong> ' + data.second.offer.isapre + ' — ' + data.second.offer.plan + '. ' + explain(data.second) + '</p>';
+    if (data.family.length) {
+      recoHtml += '<p><strong>Grupo familiar:</strong> ' + data.family.map(function (f) { return f.nombre + (f.parentesco ? ' (' + f.parentesco + ')' : ''); }).join(', ') + '</p>';
+    }
+    document.getElementById('print-reco').innerHTML = recoHtml;
+
+    window.print();
+  });
+})();
+</script>
+{% endblock %}
