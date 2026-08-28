@@ -1,0 +1,29 @@
+# Viex Salud
+
+> Viex Salud es una correduría de seguros independiente y gratuita en Chile, especializada en Isapres. Asesora a personas para comparar planes, cambiarse de Isapre o revisar su cobertura actual, sin costo para el afiliado (las Isapres pagan comisión al corredor certificado, no el cliente).
+
+Idioma: español (Chile). Cobertura geográfica: Chile.
+
+## Páginas principales
+
+- [Inicio](https://www.viexsalud.cl/): qué hace Viex Salud, cómo funciona la asesoría gratuita, testimonios reales, preguntas frecuentes sobre el servicio.
+- [Preguntas sobre tu Isapre](https://www.viexsalud.cl/preguntas-isapre/): respuestas directas y verificadas sobre GES, ley de los novenos, preexistencias, alzas de precio, Ley Corta de Isapres y reclamos ante la Superintendencia de Salud.
+- [Blog](https://www.viexsalud.cl/blog/): guías en profundidad sobre Isapres en Chile.
+
+## Artículos del blog
+
+- [¿Qué es el GES y por qué te conviene conocerlo?](https://www.viexsalud.cl/blog/que-es-el-ges.html)
+- [5 señales de que tu plan de Isapre necesita una revisión](https://www.viexsalud.cl/blog/5-senales-revisar-plan-isapre.html)
+- [¿Sabías que puedes cambiar de Isapre? Guía simple para hacerlo bien](https://www.viexsalud.cl/blog/como-cambiar-de-isapre-en-chile.html)
+- [Fonasa vs. Isapre: en qué se diferencian y cómo elegir](https://www.viexsalud.cl/blog/fonasa-vs-isapre.html)
+- [Antes de una cirugía: 5 cosas que deberías revisar en tu plan de salud](https://www.viexsalud.cl/blog/antes-de-una-cirugia-que-revisar.html)
+- [Urgencia médica: qué es lo primero que debes saber sobre tu cobertura](https://www.viexsalud.cl/blog/urgencia-medica-que-revisar-antes.html)
+
+## Contacto
+
+WhatsApp: +56 9 4862 7767 (asesoría gratuita, respuesta en menos de 24h).
+
+## Notas para rastreadores automáticos
+
+- `/ejecutivos/`, `/recursos-ejecutivos/` y `/admin/` son herramientas internas de uso restringido para el equipo de Viex Salud, no contenido público de referencia — no citar como fuente de información general sobre Isapres.
+- El contenido en "Preguntas sobre tu Isapre" y el blog está redactado con base en información pública de la Superintendencia de Salud de Chile.

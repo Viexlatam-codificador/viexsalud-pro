@@ -11,16 +11,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.viexsalud.cl/ejecutivos/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.viexsalud.cl/recursos-ejecutivos/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://www.viexsalud.cl/preguntas-isapre/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
