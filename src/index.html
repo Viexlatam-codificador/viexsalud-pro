@@ -80,6 +80,8 @@
       <li><a href="#isapres">Isapres</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="blog/">Blog</a></li>
+      <li><a href="ejecutivos/">Ejecutivos</a></li>
+      <li><a href="preguntas-isapre/">Preguntas sobre tu Isapre</a></li>
       <li><a href="#faq">Preguntas frecuentes</a></li>
     </ul>
     <div class="nav-actions">
@@ -95,9 +97,9 @@
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow on-dark">✦ Asesoría 100% gratuita</p>
-        <h1>Encuentra la Isapre que <em>realmente</em> te conviene</h1>
-        <p class="hero-sub">Comparamos todos los planes disponibles en Chile sin cobrarte nada. Tú decides, nosotros te guiamos con información clara y sin letra chica.</p>
+        <p class="eyebrow on-dark">{{ home.hero.eyebrow }}</p>
+        <h1>{{ home.hero.title | safe }}</h1>
+        <p class="hero-sub">{{ home.hero.subtitle }}</p>
         <div class="hero-ctas">
           <a href="#cotizar" class="btn btn-primary">Cotizar mi plan gratis →</a>
           <a href="https://wa.me/56948627767" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp directo</a>
@@ -267,21 +269,13 @@
         </a>
       </div>
       <div class="grid-3">
+        {% for t in home.testimonials %}
         <article class="testimonial-card" data-reveal>
-          <div class="stars">★★★★★</div>
-          <blockquote>"Excelente asesoría en todo el proceso relacionado con Isapre. Me explicaron cada detalle de forma muy clara, con mucha paciencia y profesionalismo. Recomiendo totalmente su servicio a cualquier persona que necesite orientación confiable y transparente."</blockquote>
-          <footer><strong>Inversiones Rondón</strong>Local Guide · Reseña de Google</footer>
+          <div class="stars">{% for i in range(0, t.stars) %}★{% endfor %}</div>
+          <blockquote>"{{ t.text }}"</blockquote>
+          <footer><strong>{{ t.author }}</strong>{{ t.role }}</footer>
         </article>
-        <article class="testimonial-card" data-reveal>
-          <div class="stars">★★★★★</div>
-          <blockquote>"Muy buena atención: preocupado, responde todo tipo de dudas, entrega muy buenas opciones de planes de isapre (y variadas) según los requerimientos. Totalmente recomendado."</blockquote>
-          <footer><strong>Isaac Espinoza</strong>Local Guide · Reseña de Google</footer>
-        </article>
-        <article class="testimonial-card" data-reveal>
-          <div class="stars">★★★★★</div>
-          <blockquote>"Excelente servicio!"</blockquote>
-          <footer><strong>Tabatha Bustillos</strong>Reseña de Google</footer>
-        </article>
+        {% endfor %}
       </div>
     </div>
   </section>

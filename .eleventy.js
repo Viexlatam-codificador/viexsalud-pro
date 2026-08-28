@@ -1,6 +1,5 @@
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/assets");
-  eleventyConfig.addPassthroughCopy("src/index.html");
   eleventyConfig.addPassthroughCopy("src/robots.txt");
   eleventyConfig.addPassthroughCopy("src/sitemap.xml");
   eleventyConfig.addPassthroughCopy("src/llms.txt");
@@ -33,6 +32,8 @@ module.exports = function (eleventyConfig) {
       }))
     ).replace(/</g, "\\u003c")
   );
+
+  eleventyConfig.addFilter("toJSON", (val) => JSON.stringify(val).replace(/</g, "\\u003c"));
 
   eleventyConfig.addFilter("readableDate", (dateObj) => {
     const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];

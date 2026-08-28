@@ -206,7 +206,17 @@ eleventyExcludeFromCollections: true
     <div class="card">
       <h2>Plan actual</h2>
       <div class="row-grid-3">
-        <div class="field"><label for="cur-isapre">Isapre</label><input type="text" id="cur-isapre" placeholder="Ej: Banmedica"></div>
+        <div class="field">
+          <label for="cur-isapre">Isapre</label>
+          <select id="cur-isapre">
+            <option value="">Selecciona...</option>
+            {% for isapre in collections.isapres %}
+            <option value="{{ isapre.data.nombre }}">{{ isapre.data.nombre }}</option>
+            {% endfor %}
+            <option value="__other__">Otra (especificar)</option>
+          </select>
+          <input type="text" id="cur-isapre-otra" placeholder="Nombre de la Isapre" style="display:none; margin-top:6px;">
+        </div>
         <div class="field"><label for="cur-plan">Nombre del plan</label><input type="text" id="cur-plan"></div>
         <div class="field"><label for="cur-precio">Precio mensual (CLP)</label><input type="number" id="cur-precio" min="0" placeholder="Ej: 180000"></div>
       </div>
@@ -258,10 +268,27 @@ eleventyExcludeFromCollections: true
   <p class="print-footer">Documento de uso interno, generado con el Comparador de Planes de Viex Salud.</p>
 </div>
 
+{% set isapreOptionsMarkup %}<option value="">Selecciona...</option>{% for isapre in collections.isapres %}<option value="{{ isapre.data.nombre }}">{{ isapre.data.nombre }}</option>{% endfor %}<option value="__other__">Otra (especificar)</option>{% endset %}
 {% include "supabase-auth.njk" %}
 <script>
 (function () {
   "use strict";
+  var ISAPRE_OPTIONS_HTML = {{ isapreOptionsMarkup | toJSON | safe }};
+
+  function getIsapreValue(selectId, otherId) {
+    var sel = document.getElementById(selectId);
+    if (sel.value === '__other__') return document.getElementById(otherId).value.trim();
+    return sel.value;
+  }
+
+  function wireIsapreOther(selectId, otherId) {
+    var sel = document.getElementById(selectId);
+    var other = document.getElementById(otherId);
+    sel.addEventListener('change', function () {
+      other.style.display = sel.value === '__other__' ? 'block' : 'none';
+    });
+  }
+  wireIsapreOther('cur-isapre', 'cur-isapre-otra');
   var sb = window.VIEX_SUPABASE;
   var root = document.getElementById('isaprecalc-root');
 
@@ -331,7 +358,10 @@ eleventyExcludeFromCollections: true
       panel.id = 'offer-panel-' + n;
       panel.innerHTML =
         '<div class="row-grid-3">' +
-        '<div class="field"><label>Isapre</label><input type="text" id="off-' + n + '-isapre" placeholder="Ej: Colmena"></div>' +
+        '<div class="field"><label>Isapre</label>' +
+        '<select id="off-' + n + '-isapre">' + ISAPRE_OPTIONS_HTML + '</select>' +
+        '<input type="text" id="off-' + n + '-isapre-otra" placeholder="Nombre de la Isapre" style="display:none; margin-top:6px;">' +
+        '</div>' +
         '<div class="field"><label>Nombre del plan</label><input type="text" id="off-' + n + '-plan"></div>' +
         '<div class="field"><label>Precio mensual (CLP)</label><input type="number" id="off-' + n + '-precio" min="0"></div>' +
         '</div>' +
@@ -341,13 +371,14 @@ eleventyExcludeFromCollections: true
         '<div class="field"><label>Notas / tope (opcional)</label><input type="text" id="off-' + n + '-notas"></div>' +
         '</div>';
       panelsEl.appendChild(panel);
+      wireIsapreOther('off-' + n + '-isapre', 'off-' + n + '-isapre-otra');
     })(i);
   }
 
   function getOffers() {
     var offers = [];
     for (var n = 1; n <= OFFER_COUNT; n++) {
-      var isapre = document.getElementById('off-' + n + '-isapre').value.trim();
+      var isapre = getIsapreValue('off-' + n + '-isapre', 'off-' + n + '-isapre-otra');
       if (!isapre) continue;
       offers.push({
         n: n,
@@ -411,7 +442,7 @@ eleventyExcludeFromCollections: true
 
   document.getElementById('btn-comparar').addEventListener('click', function () {
     var current = {
-      isapre: document.getElementById('cur-isapre').value.trim() || 'Actual',
+      isapre: getIsapreValue('cur-isapre', 'cur-isapre-otra') || 'Actual',
       plan: document.getElementById('cur-plan').value.trim() || 'Plan actual',
       precio: parseFloat(document.getElementById('cur-precio').value) || 0,
       amb: parseFloat(document.getElementById('cur-amb').value) || 0,

@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "eyebrow": "✦ Asesoría 100% gratuita",
+    "title": "Encuentra la Isapre que <em>realmente</em> te conviene",
+    "subtitle": "Comparamos todos los planes disponibles en Chile sin cobrarte nada. Tú decides, nosotros te guiamos con información clara y sin letra chica."
+  },
+  "testimonials": [
+    {
+      "stars": 5,
+      "text": "Excelente asesoría en todo el proceso relacionado con Isapre. Me explicaron cada detalle de forma muy clara, con mucha paciencia y profesionalismo. Recomiendo totalmente su servicio a cualquier persona que necesite orientación confiable y transparente.",
+      "author": "Inversiones Rondón",
+      "role": "Local Guide · Reseña de Google"
+    },
+    {
+      "stars": 5,
+      "text": "Muy buena atención: preocupado, responde todo tipo de dudas, entrega muy buenas opciones de planes de isapre (y variadas) según los requerimientos. Totalmente recomendado.",
+      "author": "Isaac Espinoza",
+      "role": "Local Guide · Reseña de Google"
+    },
+    {
+      "stars": 5,
+      "text": "Excelente servicio!",
+      "author": "Tabatha Bustillos",
+      "role": "Reseña de Google"
+    }
+  ]
+}
