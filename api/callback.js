@@ -43,17 +43,35 @@ module.exports = async (req, res) => {
 <script>
 (function () {
   var payload = { token: ${tokenLiteral}, provider: "github" };
-  function receiveMessage(e) {
-    window.opener.postMessage(
-      "authorization:github:success:" + JSON.stringify(payload),
-      e.origin
-    );
-    window.removeEventListener("message", receiveMessage, false);
+  var sent = false;
+
+  function send(origin) {
+    if (sent) return;
+    try {
+      window.opener.postMessage("authorization:github:success:" + JSON.stringify(payload), origin || "*");
+      sent = true;
+      setTimeout(function () { window.close(); }, 300);
+    } catch (e) {
+      document.getElementById("cms-auth-msg").textContent =
+        "No se pudo comunicar con la ventana original (" + e.message + "). Cierra esta pestaña y vuelve a intentar desde /admin, sin recargar esta página.";
+    }
   }
-  window.addEventListener("message", receiveMessage, false);
+
+  if (!window.opener) {
+    document.getElementById("cms-auth-msg").textContent =
+      "No se detectó la ventana original que abrió este login. Cierra esta pestaña y vuelve a intentar desde /admin (haz clic en 'Login with GitHub' y no recargues esta página mientras carga).";
+    return;
+  }
+
+  window.addEventListener("message", function receiveMessage(e) {
+    send(e.origin);
+    window.removeEventListener("message", receiveMessage, false);
+  }, false);
   window.opener.postMessage("authorizing:github", "*");
+  // Fallback for browsers/extensions that swallow the reply message.
+  setTimeout(function () { send("*"); }, 800);
 })();
 </script>
-Autenticado. Podés cerrar esta ventana si no se cierra sola.
+<span id="cms-auth-msg">Autenticado. Podés cerrar esta ventana si no se cierra sola.</span>
 </body></html>`);
 };
