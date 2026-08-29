@@ -43,33 +43,40 @@ module.exports = async (req, res) => {
 <script>
 (function () {
   var payload = { token: ${tokenLiteral}, provider: "github" };
-  var sent = false;
-
-  function send(origin) {
-    if (sent) return;
-    try {
-      window.opener.postMessage("authorization:github:success:" + JSON.stringify(payload), origin || "*");
-      sent = true;
-      setTimeout(function () { window.close(); }, 300);
-    } catch (e) {
-      document.getElementById("cms-auth-msg").textContent =
-        "No se pudo comunicar con la ventana original (" + e.message + "). Cierra esta pestaña y vuelve a intentar desde /admin, sin recargar esta página.";
-    }
-  }
+  var replied = false;
 
   if (!window.opener) {
     document.getElementById("cms-auth-msg").textContent =
-      "No se detectó la ventana original que abrió este login. Cierra esta pestaña y vuelve a intentar desde /admin (haz clic en 'Login with GitHub' y no recargues esta página mientras carga).";
+      "No se detectó la ventana original que abrió este login. Cierra esta pestaña y vuelve a intentar desde /admin.";
     return;
   }
 
-  window.addEventListener("message", function receiveMessage(e) {
-    send(e.origin);
+  function receiveMessage(e) {
+    if (replied) return;
+    replied = true;
+    clearInterval(pingInterval);
+    window.opener.postMessage("authorization:github:success:" + JSON.stringify(payload), e.origin);
     window.removeEventListener("message", receiveMessage, false);
-  }, false);
-  window.opener.postMessage("authorizing:github", "*");
-  // Fallback for browsers/extensions that swallow the reply message.
-  setTimeout(function () { send("*"); }, 800);
+    setTimeout(function () { window.close(); }, 300);
+  }
+  window.addEventListener("message", receiveMessage, false);
+
+  // The main window's listener may not be ready the instant we redirect back,
+  // so keep pinging until it actually acknowledges (real fix for the race
+  // condition, instead of assuming success after a single fixed delay).
+  var pingInterval = setInterval(function () {
+    if (replied) { clearInterval(pingInterval); return; }
+    try { window.opener.postMessage("authorizing:github", "*"); }
+    catch (e) { clearInterval(pingInterval); }
+  }, 250);
+
+  setTimeout(function () {
+    if (!replied) {
+      clearInterval(pingInterval);
+      document.getElementById("cms-auth-msg").textContent =
+        "La pestaña principal no respondió. Cierra esta ventana y recarga la pestaña de /admin (sin volver a hacer clic en Login), luego intenta de nuevo.";
+    }
+  }, 15000);
 })();
 </script>
 <span id="cms-auth-msg">Autenticado. Podés cerrar esta ventana si no se cierra sola.</span>
