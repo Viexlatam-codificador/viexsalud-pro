@@ -319,6 +319,15 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
 .article-cta h3 { font-size: var(--fs-lg); font-weight: 800; margin-bottom: 0.5rem; }
 .article-cta p { color: var(--ink-500); margin-bottom: 1.2rem; }
 .disclaimer { font-size: var(--fs-xs); color: var(--ink-500); border-left: 3px solid var(--gold-500); padding-left: 1rem; margin: 1.5rem 0; }
+
+.blog-subscribe { margin-top: 1.5rem; padding: 1.75rem; background: var(--teal-950); border-radius: var(--radius-md); text-align: center; }
+.blog-subscribe h3 { color: var(--white); font-size: var(--fs-lg); font-weight: 800; margin-bottom: 0.5rem; }
+.blog-subscribe p { color: rgba(255,255,255,0.75); margin-bottom: 1.2rem; }
+.blog-subscribe form { display: flex; gap: 0.6rem; max-width: 26rem; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+.blog-subscribe input[type="email"] { flex: 1; min-width: 200px; padding: 0.7rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--line); font-size: var(--fs-base); }
+.subscribe-msg { margin: 0.8rem 0 0; font-size: var(--fs-sm); }
+.subscribe-msg.ok { color: var(--gold-300); }
+.subscribe-msg.error { color: #ff8a75; }
 .related-grid { max-width: 60rem; margin: 0 auto; padding: 0 1.5rem 5rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
 
 /* ---------- Blog index hero ---------- */

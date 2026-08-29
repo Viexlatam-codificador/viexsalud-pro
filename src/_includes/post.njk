@@ -57,7 +57,48 @@
     <p>{{ ctaText | default("En Viex Salud te ayudamos gratis, sin compromiso.") }}</p>
     <a href="https://wa.me/56948627767" target="_blank" rel="noopener" class="btn btn-primary">Escríbenos por WhatsApp →</a>
   </div>
+
+  <div class="blog-subscribe">
+    <h3>Recibe más guías como esta</h3>
+    <p>Te avisamos por correo cuando publiquemos algo nuevo sobre Isapres. Sin spam.</p>
+    <form id="subscribe-form">
+      <input type="email" id="subscribe-email" placeholder="tucorreo@ejemplo.com" required>
+      <button type="submit" class="btn btn-primary" id="subscribe-btn">Suscribirme</button>
+    </form>
+    <p class="subscribe-msg" id="subscribe-msg"></p>
+  </div>
 </article>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+(function () {
+  "use strict";
+  var sb = supabase.createClient(
+    "https://jniaoqcgpdryqrssntfp.supabase.co",
+    "sb_publishable_BCFzQF1HZw8EPsGsdNvXCQ_0ILWpQB6"
+  );
+  document.getElementById('subscribe-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('subscribe-btn');
+    var msg = document.getElementById('subscribe-msg');
+    var email = document.getElementById('subscribe-email').value.trim();
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    sb.from('suscriptores').insert({ email: email, fuente: window.location.pathname }).then(function (res) {
+      btn.disabled = false;
+      btn.textContent = 'Suscribirme';
+      if (res.error && res.error.code !== '23505') {
+        msg.textContent = 'No se pudo suscribir, intenta de nuevo.';
+        msg.className = 'subscribe-msg error';
+        return;
+      }
+      msg.textContent = '¡Listo! Ya estás suscrito.';
+      msg.className = 'subscribe-msg ok';
+      document.getElementById('subscribe-form').reset();
+    });
+  });
+})();
+</script>
 
 <section class="section-cream" style="padding-top:0;">
   <div class="container">
