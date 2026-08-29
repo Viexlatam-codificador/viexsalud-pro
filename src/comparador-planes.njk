@@ -241,7 +241,7 @@ eleventyExcludeFromCollections: true
       </div>
       <div class="file-row">
         <input type="file" id="cur-archivo" accept=".pdf,.png,.jpg,.jpeg">
-        <button type="button" class="btn-ghost" id="cur-archivo-btn">Analizar con IA</button>
+        <button type="button" class="btn-ghost" id="cur-archivo-btn">Guardar archivo</button>
         <span class="ai-status" id="cur-archivo-status"></span>
       </div>
       <div class="ai-result" id="cur-archivo-result"></div>
@@ -310,11 +310,10 @@ eleventyExcludeFromCollections: true
   }
   wireIsapreOther('cur-isapre', 'cur-isapre-otra');
 
-  function wireFileAnalysis(prefix, label) {
+  function wireFileUpload(prefix) {
     var fileInput = document.getElementById(prefix + '-archivo');
     var btn = document.getElementById(prefix + '-archivo-btn');
     var status = document.getElementById(prefix + '-archivo-status');
-    var result = document.getElementById(prefix + '-archivo-result');
 
     btn.addEventListener('click', function () {
       var file = fileInput.files && fileInput.files[0];
@@ -324,9 +323,8 @@ eleventyExcludeFromCollections: true
         return;
       }
       btn.disabled = true;
-      status.textContent = 'Subiendo archivo...';
+      status.textContent = 'Guardando archivo...';
       status.className = 'ai-status';
-      result.classList.remove('show');
 
       window.VIEX_SUPABASE.auth.getSession().then(function (sessionRes) {
         var session = sessionRes.data && sessionRes.data.session;
@@ -340,29 +338,14 @@ eleventyExcludeFromCollections: true
 
         window.VIEX_SUPABASE.storage.from('comparador-archivos').upload(path, file, { upsert: false })
           .then(function (uploadRes) {
-            if (uploadRes.error) throw new Error(uploadRes.error.message);
-            status.textContent = 'Analizando con IA...';
-            return fetch('/api/analyze-plan', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + session.access_token
-              },
-              body: JSON.stringify({ path: path, label: label })
-            });
-          })
-          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-          .then(function (res) {
             btn.disabled = false;
-            if (!res.ok) {
-              status.textContent = res.body.error || 'No se pudo analizar el archivo.';
+            if (uploadRes.error) {
+              status.textContent = uploadRes.error.message || 'No se pudo guardar el archivo.';
               status.className = 'ai-status error';
               return;
             }
-            status.textContent = 'Análisis listo.';
+            status.textContent = 'Archivo guardado como respaldo ✓';
             status.className = 'ai-status';
-            result.innerHTML = '<span class="ai-badge">Análisis IA</span><br>' + res.body.analysis.replace(/\n/g, '<br>');
-            result.classList.add('show');
           })
           .catch(function (err) {
             btn.disabled = false;
@@ -372,7 +355,7 @@ eleventyExcludeFromCollections: true
       });
     });
   }
-  wireFileAnalysis('cur', 'Plan actual');
+  wireFileUpload('cur');
 
   var sb = window.VIEX_SUPABASE;
   var root = document.getElementById('isaprecalc-root');
@@ -457,13 +440,13 @@ eleventyExcludeFromCollections: true
         '</div>' +
         '<div class="file-row">' +
         '<input type="file" id="off-' + n + '-archivo" accept=".pdf,.png,.jpg,.jpeg">' +
-        '<button type="button" class="btn-ghost" id="off-' + n + '-archivo-btn">Analizar con IA</button>' +
+        '<button type="button" class="btn-ghost" id="off-' + n + '-archivo-btn">Guardar archivo</button>' +
         '<span class="ai-status" id="off-' + n + '-archivo-status"></span>' +
         '</div>' +
         '<div class="ai-result" id="off-' + n + '-archivo-result"></div>';
       panelsEl.appendChild(panel);
       wireIsapreOther('off-' + n + '-isapre', 'off-' + n + '-isapre-otra');
-      wireFileAnalysis('off-' + n, 'Oferta ' + n);
+      wireFileUpload('off-' + n);
     })(i);
   }
 
