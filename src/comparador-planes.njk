@@ -190,7 +190,10 @@ eleventyExcludeFromCollections: true
         <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
         <a href="/recursos-ejecutivos/comparador-planes/" class="active">Comparador de Planes</a>
       </div>
-      <a href="#" id="logout-link" style="color:var(--ink-faint); font-weight:700; text-decoration:none; font-size:0.86rem;">Cerrar sesión</a>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <a href="#" id="export-link" style="color:var(--ink-faint); font-weight:700; text-decoration:none; font-size:0.86rem;">Exportar datos (admin)</a>
+        <a href="#" id="logout-link" style="color:var(--ink-faint); font-weight:700; text-decoration:none; font-size:0.86rem;">Cerrar sesión</a>
+      </div>
     </div>
 
     <div class="card">
@@ -372,6 +375,30 @@ eleventyExcludeFromCollections: true
   logoutLink.addEventListener('click', function (e) {
     e.preventDefault();
     sb.auth.signOut().then(function () { window.location.href = '/ejecutivos/'; });
+  });
+
+  document.getElementById('export-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    sb.auth.getSession().then(function (res) {
+      var session = res.data && res.data.session;
+      if (!session) return;
+      fetch('/api/export-data', { headers: { Authorization: 'Bearer ' + session.access_token } })
+        .then(function (r) {
+          if (!r.ok) return r.json().then(function (j) { throw new Error(j.error || 'No autorizado.'); });
+          return r.blob();
+        })
+        .then(function (blob) {
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'viexsalud-comparaciones.csv';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        })
+        .catch(function (err) { alert(err.message); });
+    });
   });
 
   // ---------- Family rows ----------
@@ -557,7 +584,26 @@ eleventyExcludeFromCollections: true
     document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // stash for print
-    window._comparadorData = { current: current, evaluations: evaluations, best: best, second: second, clienteNombre: document.getElementById('cliente-nombre').value.trim(), family: getFamily() };
+    var clienteNombre = document.getElementById('cliente-nombre').value.trim();
+    var family = getFamily();
+    window._comparadorData = { current: current, evaluations: evaluations, best: best, second: second, clienteNombre: clienteNombre, family: family };
+
+    // save a record of this comparison (fire-and-forget, never blocks the UI)
+    window.VIEX_SUPABASE.auth.getSession().then(function (res) {
+      var session = res.data && res.data.session;
+      if (!session) return;
+      window.VIEX_SUPABASE.from('comparaciones').insert({
+        ejecutivo_id: session.user.id,
+        ejecutivo_email: session.user.email,
+        cliente_nombre: clienteNombre,
+        prioridad: priority,
+        familia: family,
+        plan_actual: current,
+        ofertas: offers,
+        recomendado: best.offer,
+        segunda_alternativa: second ? second.offer : null
+      }).then(function (r) { if (r.error) console.warn('No se pudo guardar la comparación:', r.error.message); });
+    });
   });
 
   document.getElementById('btn-print').addEventListener('click', function () {

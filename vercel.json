@@ -107,6 +107,12 @@
       ]
     },
     {
+      "source": "/api/export-data",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
       "source": "/api/callback",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
