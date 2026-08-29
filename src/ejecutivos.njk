@@ -114,7 +114,29 @@ eleventyExcludeFromCollections: true
           <input type="password" id="login-password" autocomplete="current-password" required>
         </div>
         <button type="submit" class="btn-primary" id="login-submit">Entrar</button>
+        <p style="text-align:center; margin: 10px 0 0;"><a href="#" id="forgot-link" style="font-size:0.82rem;">¿Olvidaste tu contraseña?</a></p>
         <div class="msg" id="login-msg"></div>
+      </form>
+
+      <form id="panel-forgot" class="panel">
+        <p style="margin:0 0 12px; font-size:0.85rem; color:var(--ink-soft);">Ingresa tu correo y te enviamos un enlace para crear una nueva contraseña.</p>
+        <div class="field">
+          <label for="forgot-email">Correo</label>
+          <input type="email" id="forgot-email" autocomplete="email" required>
+        </div>
+        <button type="submit" class="btn-primary" id="forgot-submit">Enviar enlace</button>
+        <p style="text-align:center; margin: 10px 0 0;"><a href="#" id="back-to-login-link" style="font-size:0.82rem;">Volver a iniciar sesión</a></p>
+        <div class="msg" id="forgot-msg"></div>
+      </form>
+
+      <form id="panel-reset" class="panel">
+        <p style="margin:0 0 12px; font-size:0.85rem; color:var(--ink-soft);">Crea tu nueva contraseña.</p>
+        <div class="field">
+          <label for="reset-password">Nueva contraseña</label>
+          <input type="password" id="reset-password" autocomplete="new-password" minlength="6" required>
+        </div>
+        <button type="submit" class="btn-primary" id="reset-submit">Guardar nueva contraseña</button>
+        <div class="msg" id="reset-msg"></div>
       </form>
 
       <form id="panel-signup" class="panel">
@@ -147,16 +169,25 @@ eleventyExcludeFromCollections: true
   var tabSignup = document.getElementById('tab-signup');
   var panelLogin = document.getElementById('panel-login');
   var panelSignup = document.getElementById('panel-signup');
+  var panelForgot = document.getElementById('panel-forgot');
+  var panelReset = document.getElementById('panel-reset');
+  var allPanels = [panelLogin, panelSignup, panelForgot, panelReset];
 
   function showTab(which) {
     var loginActive = which === 'login';
+    var signupActive = which === 'signup';
     tabLogin.classList.toggle('active', loginActive);
-    tabSignup.classList.toggle('active', !loginActive);
-    panelLogin.classList.toggle('active', loginActive);
-    panelSignup.classList.toggle('active', !loginActive);
+    tabSignup.classList.toggle('active', signupActive);
+    allPanels.forEach(function (p) { p.classList.remove('active'); });
+    if (which === 'login') panelLogin.classList.add('active');
+    else if (which === 'signup') panelSignup.classList.add('active');
+    else if (which === 'forgot') panelForgot.classList.add('active');
+    else if (which === 'reset') panelReset.classList.add('active');
   }
   tabLogin.addEventListener('click', function () { showTab('login'); });
   tabSignup.addEventListener('click', function () { showTab('signup'); });
+  document.getElementById('forgot-link').addEventListener('click', function (e) { e.preventDefault(); showTab('forgot'); });
+  document.getElementById('back-to-login-link').addEventListener('click', function (e) { e.preventDefault(); showTab('login'); });
 
   function showMsg(el, text, isError) {
     el.textContent = text;
@@ -174,11 +205,57 @@ eleventyExcludeFromCollections: true
 
   var params = new URLSearchParams(window.location.search);
   var redirectTo = params.get('next') || '/recursos-ejecutivos/';
+  var isRecovery = window.location.hash.indexOf('type=recovery') !== -1;
 
-  sb.auth.getSession().then(function (res) {
-    if (res.data && res.data.session) {
-      window.location.href = redirectTo;
-    }
+  if (isRecovery) {
+    showTab('reset');
+  } else {
+    sb.auth.getSession().then(function (res) {
+      if (res.data && res.data.session) {
+        window.location.href = redirectTo;
+      }
+    });
+  }
+
+  document.getElementById('panel-forgot').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('forgot-submit');
+    var msg = document.getElementById('forgot-msg');
+    msg.className = 'msg';
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    sb.auth.resetPasswordForEmail(document.getElementById('forgot-email').value.trim(), {
+      redirectTo: window.location.origin + '/ejecutivos/'
+    }).then(function (res) {
+      btn.disabled = false;
+      btn.textContent = 'Enviar enlace';
+      if (res.error) {
+        showMsg(msg, friendlyError(res.error), true);
+        return;
+      }
+      showMsg(msg, 'Listo. Revisa tu correo (y spam) para el enlace de recuperación.', false);
+    });
+  });
+
+  document.getElementById('panel-reset').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = document.getElementById('reset-submit');
+    var msg = document.getElementById('reset-msg');
+    msg.className = 'msg';
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
+    sb.auth.updateUser({ password: document.getElementById('reset-password').value }).then(function (res) {
+      if (res.error) {
+        showMsg(msg, friendlyError(res.error), true);
+        btn.disabled = false;
+        btn.textContent = 'Guardar nueva contraseña';
+        return;
+      }
+      showMsg(msg, 'Contraseña actualizada. Entrando...', false);
+      setTimeout(function () { window.location.href = redirectTo; }, 1200);
+    });
   });
 
   document.getElementById('panel-login').addEventListener('submit', function (e) {
