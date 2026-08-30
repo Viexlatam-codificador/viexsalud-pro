@@ -8,6 +8,34 @@
   <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
+  <script>
+    // Relays the OAuth result from /api/callback into the message-based
+    // handshake Decap's own login code listens for. Needed because Chrome
+    // severs window.opener once the popup round-trips through github.com,
+    // so the callback page can't always postMessage us directly.
+    (function () {
+      function relay(payload) {
+        window.postMessage("authorization:github:success:" + JSON.stringify(payload), window.location.origin);
+      }
+      window.addEventListener("storage", function (e) {
+        if (e.key === "decap-cms-auth-token" && e.newValue) {
+          try { relay(JSON.parse(e.newValue)); } catch (err) {}
+          localStorage.removeItem("decap-cms-auth-token");
+        }
+      });
+      try {
+        var bc = new BroadcastChannel("decap-cms-auth");
+        bc.onmessage = function (e) { relay(e.data); };
+      } catch (e) {}
+      try {
+        var existing = localStorage.getItem("decap-cms-auth-token");
+        if (existing) {
+          relay(JSON.parse(existing));
+          localStorage.removeItem("decap-cms-auth-token");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 </body>
 </html>

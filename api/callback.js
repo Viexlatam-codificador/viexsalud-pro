@@ -45,38 +45,46 @@ module.exports = async (req, res) => {
   var payload = { token: ${tokenLiteral}, provider: "github" };
   var replied = false;
 
-  if (!window.opener) {
-    document.getElementById("cms-auth-msg").textContent =
-      "No se detectó la ventana original que abrió este login. Cierra esta pestaña y vuelve a intentar desde /admin.";
-    return;
-  }
-
-  function receiveMessage(e) {
-    if (replied) return;
+  function markDone() {
     replied = true;
-    clearInterval(pingInterval);
-    window.opener.postMessage("authorization:github:success:" + JSON.stringify(payload), e.origin);
-    window.removeEventListener("message", receiveMessage, false);
-    setTimeout(function () { window.close(); }, 300);
+    document.getElementById("cms-auth-msg").textContent = "Autenticado. Cerrando...";
+    setTimeout(function () { window.close(); }, 400);
   }
-  window.addEventListener("message", receiveMessage, false);
 
-  // The main window's listener may not be ready the instant we redirect back,
-  // so keep pinging until it actually acknowledges (real fix for the race
-  // condition, instead of assuming success after a single fixed delay).
-  var pingInterval = setInterval(function () {
-    if (replied) { clearInterval(pingInterval); return; }
-    try { window.opener.postMessage("authorizing:github", "*"); }
-    catch (e) { clearInterval(pingInterval); }
-  }, 250);
+  // Primary channel: localStorage + the "storage" event, which fires in the
+  // OTHER tab of the same site regardless of window.opener. Chrome severs
+  // window.opener when the popup round-trips through github.com, so relying
+  // only on postMessage(window.opener, ...) silently fails for many users.
+  try {
+    localStorage.setItem("decap-cms-auth-token", JSON.stringify(payload));
+    markDone();
+  } catch (e) {}
+
+  // Backup channel in case localStorage is blocked (private mode, etc).
+  try {
+    var bc = new BroadcastChannel("decap-cms-auth");
+    bc.postMessage(payload);
+    bc.close();
+  } catch (e) {}
+
+  // Best-effort classic postMessage too, for browsers where opener survives.
+  if (window.opener) {
+    function receiveMessage(e) {
+      if (replied) return;
+      window.opener.postMessage("authorization:github:success:" + JSON.stringify(payload), e.origin);
+      window.removeEventListener("message", receiveMessage, false);
+      markDone();
+    }
+    window.addEventListener("message", receiveMessage, false);
+    window.opener.postMessage("authorizing:github", "*");
+  }
 
   setTimeout(function () {
     if (!replied) {
-      clearInterval(pingInterval);
       document.getElementById("cms-auth-msg").textContent =
-        "La pestaña principal no respondió. Cierra esta ventana y recarga la pestaña de /admin (sin volver a hacer clic en Login), luego intenta de nuevo.";
+        "Autenticado, pero esta ventana no pudo confirmarlo sola. Ciérrala y recarga la pestaña de /admin.";
     }
-  }, 15000);
+  }, 4000);
 })();
 </script>
 <span id="cms-auth-msg">Autenticado. Podés cerrar esta ventana si no se cierra sola.</span>
