@@ -1,6 +1,5 @@
 ---
-nombre: Trastorno de ansiedad
-como_declarar: |
-  Estrés postraumático por la muerte de ...
+nombre: Alergia estacional
+como_declarar: Toma Silbutramon.
 isapre: Nueva Mas Vida
 ---
