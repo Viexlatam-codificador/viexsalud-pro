@@ -1,8 +1,8 @@
 ---
-nombre: Epicondilitis en codo izquierdo
+nombre: Epilepsia no refractaria
 como_declarar: |-
-  Toma antiinflamatorios en caso de dolor.
-  Reposo parcial y uso de inmovilizador.
-  Actualmente sin dolor y realizando kinesioterapia.
+  Controlada con Keppra de 500 mg, 2 pastillas diarias.
+  Declarada a los 10 años.
+  Sin complicaciones.
 isapre: Nueva Mas Vida
 ---
