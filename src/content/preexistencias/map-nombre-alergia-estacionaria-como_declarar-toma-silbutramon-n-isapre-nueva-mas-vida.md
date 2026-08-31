@@ -1,9 +1,7 @@
 ---
-nombre: Cirugía bariátrica
+nombre: Rinoplastia
 como_declarar: |-
-  Actualmente de alta, sin secuelas ni patologías asociadas.
-  Peso inicial: X.
-  Hospitalización: 4 días.
+  Hospitalización: 2 días.
   Reposo: 2 semanas.
 isapre: Nueva Mas Vida
 ---
