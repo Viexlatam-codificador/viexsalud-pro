@@ -5,4 +5,5 @@ como_declarar: |-
   Toma Eutirox de 50 diariamente.
   Se solicita ecografía de tiroides.
 isapre: Isapre Nueva MasVida
+fecha: 2026-08-31
 ---
