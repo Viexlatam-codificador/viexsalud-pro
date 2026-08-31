@@ -59,6 +59,8 @@ module.exports = async (req, res) => {
     });
     const usersJson = await usersRes.json();
     const users = (usersJson.users || []).map((u) => ({
+      nombre: u.user_metadata && u.user_metadata.nombre,
+      telefono: u.user_metadata && u.user_metadata.telefono,
       email: u.email,
       creado: u.created_at,
       ultimo_ingreso: u.last_sign_in_at,
@@ -66,7 +68,7 @@ module.exports = async (req, res) => {
 
     const csv =
       "EJECUTIVOS REGISTRADOS\n" +
-      toCsv(users, ["email", "creado", "ultimo_ingreso"]) +
+      toCsv(users, ["nombre", "telefono", "email", "creado", "ultimo_ingreso"]) +
       "\n\nCOMPARACIONES\n" +
       toCsv(comparaciones, [
         "created_at",

@@ -141,6 +141,14 @@ eleventyExcludeFromCollections: true
 
       <form id="panel-signup" class="panel">
         <div class="field">
+          <label for="signup-nombre">Nombre completo</label>
+          <input type="text" id="signup-nombre" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="signup-telefono">Teléfono</label>
+          <input type="tel" id="signup-telefono" autocomplete="tel" placeholder="+56 9 1234 5678" required>
+        </div>
+        <div class="field">
           <label for="signup-email">Correo</label>
           <input type="email" id="signup-email" autocomplete="email" required>
         </div>
@@ -286,6 +294,8 @@ eleventyExcludeFromCollections: true
     var msg = document.getElementById('signup-msg');
     msg.className = 'msg';
 
+    var nombre = document.getElementById('signup-nombre').value.trim();
+    var telefono = document.getElementById('signup-telefono').value.trim();
     var email = document.getElementById('signup-email').value.trim();
     var pw1 = document.getElementById('signup-password').value;
     var pw2 = document.getElementById('signup-password2').value;
@@ -298,7 +308,7 @@ eleventyExcludeFromCollections: true
     btn.disabled = true;
     btn.textContent = 'Creando...';
 
-    sb.auth.signUp({ email: email, password: pw1 }).then(function (res) {
+    sb.auth.signUp({ email: email, password: pw1, options: { data: { nombre: nombre, telefono: telefono } } }).then(function (res) {
       btn.disabled = false;
       btn.textContent = 'Crear cuenta';
       if (res.error) {
