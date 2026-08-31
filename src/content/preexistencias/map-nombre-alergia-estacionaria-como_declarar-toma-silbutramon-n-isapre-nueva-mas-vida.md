@@ -1,7 +1,6 @@
 ---
-nombre: Hipotiroidismo
-como_declarar: |+
-  Sin nodulos, ni bocio. tomo eutirox de 50 diario (piden la eco etoroide)
-
+nombre: Trastorno de ansiedad
+como_declarar: |
+  Estrés postraumático por la muerte de ...
 isapre: Nueva Mas Vida
 ---
