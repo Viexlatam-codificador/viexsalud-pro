@@ -1,7 +1,5 @@
 ---
-nombre: Rinoplastia
-como_declarar: |-
-  Hospitalización: 2 días.
-  Reposo: 2 semanas.
+nombre: Hipertensión grado 1
+como_declarar: Toma Losartán de 50.
 isapre: Nueva Mas Vida
 ---
