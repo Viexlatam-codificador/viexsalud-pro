@@ -63,6 +63,18 @@
       ]
     },
     {
+      "source": "/recursos-ejecutivos/gestionar-preexistencias",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/api/delete-preexistencias",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
       "source": "/recursos-ejecutivos/preexistencias/(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }

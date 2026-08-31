@@ -1,0 +1,230 @@
+---
+permalink: "recursos-ejecutivos/gestionar-preexistencias/index.html"
+title: "Gestionar Preexistencias — Admin"
+description: "Selección múltiple para borrar preexistencias del sistema."
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<style>
+  .isaprecalc {
+    --bg: #eef3f2; --surface: #ffffff; --surface-alt: #f6faf9; --border: #d7e2e0;
+    --ink: #16262b; --ink-soft: #55676c; --ink-faint: #86979b;
+    --blue: #1f6f8b; --gold: #96731f; --gold-soft: #f5ead0;
+    --danger: #b3392a; --danger-soft: #fbeae7; --focus: #2f8fb0;
+    --calc-shadow: 0 1px 2px rgba(20, 40, 45, 0.06), 0 8px 24px -12px rgba(20, 40, 45, 0.18);
+    --calc-radius: 14px;
+    --calc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    .isaprecalc {
+      --bg: #0d1417; --surface: #141d21; --surface-alt: #182226; --border: #263940;
+      --ink: #e7eef0; --ink-soft: #9db0b5; --ink-faint: #6c8085;
+      --blue: #67bcdd; --gold: #e3c876; --gold-soft: #3a2c10;
+      --danger: #ff7a68; --danger-soft: #3a1f1c;
+      --calc-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+    }
+  }
+  .isaprecalc, .isaprecalc * { box-sizing: border-box; }
+  .isaprecalc { background: var(--bg); color: var(--ink); font-family: var(--calc-sans); line-height: 1.45; padding: 32px 0 60px; }
+  .isaprecalc .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+  .isaprecalc header.top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .isaprecalc .mark { flex: none; width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(155deg, var(--blue), var(--gold)); display: flex; align-items: center; justify-content: center; box-shadow: var(--calc-shadow); }
+  .isaprecalc .mark svg { width: 24px; height: 24px; }
+  .isaprecalc header.top h1 { font-size: 1.5rem; margin: 0 0 2px; }
+  .isaprecalc header.top p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; }
+
+  .isaprecalc .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; justify-content: space-between; }
+  .isaprecalc .tabs .tabs-left { display: flex; gap: 8px; flex-wrap: wrap; }
+  .isaprecalc .tabs a { font-size: 0.86rem; font-weight: 700; text-decoration: none; color: var(--ink-soft); padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border); }
+  .isaprecalc .tabs a.active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  .isaprecalc .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .isaprecalc .toolbar input[type="search"] { flex: 1 1 220px; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font-family: var(--calc-sans); }
+  .isaprecalc button.btn-ghost { padding: 8px 14px; border-radius: 9px; border: 1px solid var(--border); background: transparent; color: var(--ink-soft); cursor: pointer; font-family: var(--calc-sans); font-size: 0.85rem; font-weight: 600; }
+  .isaprecalc button.btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+  .isaprecalc button.btn-danger { padding: 8px 16px; border-radius: 9px; border: none; background: var(--danger); color: #fff; cursor: pointer; font-family: var(--calc-sans); font-size: 0.85rem; font-weight: 700; }
+  .isaprecalc button.btn-danger:disabled { opacity: 0.5; cursor: default; }
+
+  .isaprecalc .list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .isaprecalc .row { display: flex; align-items: flex-start; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .isaprecalc .row input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; flex: none; }
+  .isaprecalc .row .info h3 { margin: 0 0 2px; font-size: 0.98rem; }
+  .isaprecalc .row .info .meta { font-size: 0.78rem; color: var(--ink-faint); }
+  .isaprecalc .status { font-size: 0.85rem; margin-top: 10px; }
+  .isaprecalc .status.error { color: var(--danger); }
+  .isaprecalc .status.ok { color: var(--gold); }
+  .isaprecalc .count { font-size: 0.82rem; color: var(--ink-faint); }
+</style>
+
+<div class="isaprecalc" id="isaprecalc-root" style="visibility:hidden;">
+  <div class="wrap">
+    <header class="top">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6L6 18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <p style="margin:0 0 4px; font-size:0.8rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint);">Recursos para Ejecutivos · Solo admin</p>
+        <h1>Gestionar Preexistencias</h1>
+        <p>Selecciona una o varias para borrarlas del sistema.</p>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <div class="tabs-left">
+        <a href="/recursos-ejecutivos/">CalcuIsapre</a>
+        <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
+        <a href="/recursos-ejecutivos/comparador-planes/">Comparador de Planes</a>
+        <a href="/recursos-ejecutivos/gestionar-preexistencias/" class="active">Gestionar (admin)</a>
+      </div>
+      <a href="#" id="logout-link" style="color:var(--ink-faint);">Cerrar sesión</a>
+    </div>
+
+    <div id="not-admin-msg" style="display:none;" class="status error">Esta sección es solo para el administrador.</div>
+
+    <div id="admin-area" style="display:none;">
+      <div class="toolbar">
+        <input type="search" id="search" placeholder="Buscar por nombre o Isapre...">
+        <button type="button" class="btn-ghost" id="select-all">Seleccionar todo</button>
+        <button type="button" class="btn-ghost" id="select-none">Deseleccionar todo</button>
+        <button type="button" class="btn-danger" id="delete-btn" disabled>Eliminar seleccionadas (<span id="sel-count">0</span>)</button>
+      </div>
+      <p class="count" id="count"></p>
+      <div class="list" id="list"></div>
+      <p class="status" id="status"></p>
+    </div>
+  </div>
+</div>
+
+{% include "supabase-auth.njk" %}
+<script type="application/json" id="preex-data">{{ collections.preexistencias | collectionDataToJSON | safe }}</script>
+<script>
+(function () {
+  "use strict";
+  var ADMIN_EMAIL = "viexlatam@gmail.com";
+  var sb = window.VIEX_SUPABASE;
+  var root = document.getElementById('isaprecalc-root');
+  var session = null;
+
+  sb.auth.getSession().then(function (res) {
+    session = res.data && res.data.session;
+    if (!session) {
+      window.location.href = '/ejecutivos/?next=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
+    root.style.visibility = 'visible';
+    if ((session.user.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+      document.getElementById('not-admin-msg').style.display = 'block';
+    } else {
+      document.getElementById('admin-area').style.display = 'block';
+      init();
+    }
+  });
+
+  document.getElementById('logout-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    sb.auth.signOut().then(function () { window.location.href = '/ejecutivos/'; });
+  });
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function init() {
+    var raw = [];
+    try { raw = JSON.parse(document.getElementById('preex-data').textContent || '[]'); } catch (e) { raw = []; }
+    var data = raw.filter(function (d) { return d && d.nombre; })
+      .sort(function (a, b) { return a.nombre.localeCompare(b.nombre, 'es'); });
+
+    var listEl = document.getElementById('list');
+    var searchEl = document.getElementById('search');
+    var countEl = document.getElementById('count');
+    var selCountEl = document.getElementById('sel-count');
+    var deleteBtn = document.getElementById('delete-btn');
+    var statusEl = document.getElementById('status');
+    var checked = {};
+
+    function updateSelCount() {
+      var n = Object.keys(checked).filter(function (k) { return checked[k]; }).length;
+      selCountEl.textContent = n;
+      deleteBtn.disabled = n === 0;
+    }
+
+    function render() {
+      var q = searchEl.value.trim().toLowerCase();
+      var filtered = data.filter(function (d) {
+        return !q || (d.nombre + ' ' + d.isapre).toLowerCase().indexOf(q) !== -1;
+      });
+      countEl.textContent = filtered.length + (filtered.length === 1 ? ' preexistencia' : ' preexistencias');
+      listEl.innerHTML = filtered.map(function (d) {
+        var isChecked = !!checked[d.path];
+        return '<label class="row">' +
+          '<input type="checkbox" data-path="' + escapeHtml(d.path) + '" ' + (isChecked ? 'checked' : '') + '>' +
+          '<div class="info"><h3>' + escapeHtml(d.nombre) + '</h3>' +
+          '<div class="meta">' + escapeHtml(d.isapre) + (d.fecha ? ' · ' + escapeHtml(d.fecha) : '') + '</div></div>' +
+          '</label>';
+      }).join('');
+      Array.prototype.forEach.call(listEl.querySelectorAll('input[type="checkbox"]'), function (cb) {
+        cb.addEventListener('change', function () {
+          checked[cb.getAttribute('data-path')] = cb.checked;
+          updateSelCount();
+        });
+      });
+    }
+
+    document.getElementById('select-all').addEventListener('click', function () {
+      data.forEach(function (d) { checked[d.path] = true; });
+      render(); updateSelCount();
+    });
+    document.getElementById('select-none').addEventListener('click', function () {
+      checked = {};
+      render(); updateSelCount();
+    });
+    searchEl.addEventListener('input', render);
+
+    deleteBtn.addEventListener('click', function () {
+      var paths = Object.keys(checked).filter(function (k) { return checked[k]; });
+      if (!paths.length) return;
+      if (!confirm('¿Borrar ' + paths.length + ' preexistencia(s)? Esta acción no se puede deshacer.')) return;
+
+      deleteBtn.disabled = true;
+      statusEl.textContent = 'Borrando...';
+      statusEl.className = 'status';
+
+      fetch('/api/delete-preexistencias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + session.access_token },
+        body: JSON.stringify({ paths: paths })
+      })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+        .then(function (res) {
+          if (!res.ok) {
+            statusEl.textContent = res.body.error || 'No se pudo completar el borrado.';
+            statusEl.className = 'status error';
+            deleteBtn.disabled = false;
+            return;
+          }
+          var failed = (res.body.results || []).filter(function (r) { return !r.ok; });
+          data = data.filter(function (d) { return !paths.includes(d.path) || failed.some(function (f) { return f.path === d.path; }); });
+          checked = {};
+          render(); updateSelCount();
+          statusEl.textContent = failed.length
+            ? 'Se borraron algunas, pero fallaron: ' + failed.map(function (f) { return f.path; }).join(', ')
+            : 'Listo. Recarga la página para ver el listado actualizado del todo el sitio.';
+          statusEl.className = failed.length ? 'status error' : 'status ok';
+        })
+        .catch(function (err) {
+          statusEl.textContent = err.message;
+          statusEl.className = 'status error';
+          deleteBtn.disabled = false;
+        });
+    });
+
+    render();
+  }
+})();
+</script>
+{% endblock %}

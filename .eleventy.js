@@ -30,6 +30,7 @@ module.exports = function (eleventyConfig) {
         isapre: item.data.isapre,
         como_declarar: item.data.como_declarar,
         fecha: item.data.fecha ? new Date(item.data.fecha).toISOString().slice(0, 10) : null,
+        path: `src/content/preexistencias/${item.fileSlug}.md`,
       }))
     ).replace(/</g, "\\u003c")
   );
