@@ -86,6 +86,9 @@ eleventyExcludeFromCollections: true
     <div id="admin-area" style="display:none;">
       <div class="toolbar">
         <input type="search" id="search" placeholder="Buscar por nombre o Isapre...">
+        <select id="filter-isapre">
+          <option value="">Todas las Isapres</option>
+        </select>
         <button type="button" class="btn-ghost" id="select-all">Seleccionar todo</button>
         <button type="button" class="btn-ghost" id="select-none">Deseleccionar todo</button>
         <button type="button" class="btn-danger" id="delete-btn" disabled>Eliminar seleccionadas (<span id="sel-count">0</span>)</button>
@@ -141,11 +144,24 @@ eleventyExcludeFromCollections: true
 
     var listEl = document.getElementById('list');
     var searchEl = document.getElementById('search');
+    var isapreEl = document.getElementById('filter-isapre');
     var countEl = document.getElementById('count');
     var selCountEl = document.getElementById('sel-count');
     var deleteBtn = document.getElementById('delete-btn');
     var statusEl = document.getElementById('status');
     var checked = {};
+
+    Array.from(new Set(data.map(function (d) { return d.isapre; })))
+      .sort(function (a, b) { return a.localeCompare(b, 'es'); })
+      .forEach(function (name) {
+        var opt = document.createElement('option');
+        opt.value = name; opt.textContent = name;
+        isapreEl.appendChild(opt);
+      });
+
+    function slugFromPath(path) {
+      return path.replace('src/content/preexistencias/', '').replace(/\.md$/, '');
+    }
 
     function updateSelCount() {
       var n = Object.keys(checked).filter(function (k) { return checked[k]; }).length;
@@ -155,16 +171,21 @@ eleventyExcludeFromCollections: true
 
     function render() {
       var q = searchEl.value.trim().toLowerCase();
+      var isapreFilter = isapreEl.value;
       var filtered = data.filter(function (d) {
-        return !q || (d.nombre + ' ' + d.isapre).toLowerCase().indexOf(q) !== -1;
+        var matchesQuery = !q || (d.nombre + ' ' + d.isapre).toLowerCase().indexOf(q) !== -1;
+        var matchesIsapre = !isapreFilter || d.isapre === isapreFilter;
+        return matchesQuery && matchesIsapre;
       });
       countEl.textContent = filtered.length + (filtered.length === 1 ? ' preexistencia' : ' preexistencias');
-      listEl.innerHTML = filtered.map(function (d) {
+      listEl.innerHTML = filtered.map(function (d, i) {
         var isChecked = !!checked[d.path];
+        var editUrl = '/admin/#/collections/preexistencias/entries/' + encodeURIComponent(slugFromPath(d.path));
         return '<label class="row">' +
           '<input type="checkbox" data-path="' + escapeHtml(d.path) + '" ' + (isChecked ? 'checked' : '') + '>' +
-          '<div class="info"><h3>' + escapeHtml(d.nombre) + '</h3>' +
+          '<div class="info" style="flex:1;"><h3>' + (i + 1) + '. ' + escapeHtml(d.nombre) + '</h3>' +
           '<div class="meta">' + escapeHtml(d.isapre) + (d.fecha ? ' · ' + escapeHtml(d.fecha) : '') + '</div></div>' +
+          '<a href="' + editUrl + '" target="_blank" rel="noopener" class="btn-ghost" style="text-decoration:none; align-self:center;">Editar</a>' +
           '</label>';
       }).join('');
       Array.prototype.forEach.call(listEl.querySelectorAll('input[type="checkbox"]'), function (cb) {
@@ -183,6 +204,7 @@ eleventyExcludeFromCollections: true
       checked = {};
       render(); updateSelCount();
     });
+    isapreEl.addEventListener('change', render);
     searchEl.addEventListener('input', render);
 
     deleteBtn.addEventListener('click', function () {
