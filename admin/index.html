@@ -15,7 +15,13 @@
     // so the callback page can't always postMessage us directly.
     (function () {
       function relay(payload) {
-        window.postMessage("authorization:github:success:" + JSON.stringify(payload), window.location.origin);
+        // Decap first waits for the "authorizing:<provider>" ping (which is
+        // what swaps its listener over to the one that accepts the final
+        // success payload) before it will accept anything else.
+        window.postMessage("authorizing:" + payload.provider, window.location.origin);
+        setTimeout(function () {
+          window.postMessage("authorization:" + payload.provider + ":success:" + JSON.stringify(payload), window.location.origin);
+        }, 50);
       }
       window.addEventListener("storage", function (e) {
         if (e.key === "decap-cms-auth-token" && e.newValue) {

@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Viexlatam-codificador/viexsalud-pro
   branch: main
-  base_url: https://viexsalud.cl
+  base_url: https://www.viexsalud.cl
   auth_endpoint: api/auth
 
 publish_mode: simple
