@@ -363,14 +363,16 @@ eleventyExcludeFromCollections: true
 
   var sb = window.VIEX_SUPABASE;
   var root = document.getElementById('isaprecalc-root');
+  var currentSession = null;
 
   sb.auth.getSession().then(function (res) {
     if (!res.data || !res.data.session) {
       window.location.href = '/ejecutivos/?next=' + encodeURIComponent(window.location.pathname);
       return;
     }
+    currentSession = res.data.session;
     root.style.visibility = 'visible';
-    if ((res.data.session.user.email || '').toLowerCase() === 'viexlatam@gmail.com') {
+    if ((currentSession.user.email || '').toLowerCase() === 'viexlatam@gmail.com') {
       var adminLink = document.getElementById('admin-link');
       if (adminLink) adminLink.style.display = '';
     }
@@ -591,7 +593,8 @@ eleventyExcludeFromCollections: true
     // stash for print
     var clienteNombre = document.getElementById('cliente-nombre').value.trim();
     var family = getFamily();
-    window._comparadorData = { current: current, evaluations: evaluations, best: best, second: second, clienteNombre: clienteNombre, family: family };
+    var ejecutivoNombre = (currentSession && currentSession.user.user_metadata && currentSession.user.user_metadata.nombre) || (currentSession && currentSession.user.email) || '';
+    window._comparadorData = { current: current, evaluations: evaluations, best: best, second: second, clienteNombre: clienteNombre, family: family, ejecutivoNombre: ejecutivoNombre };
 
     // save a record of this comparison (fire-and-forget, never blocks the UI)
     window.VIEX_SUPABASE.auth.getSession().then(function (res) {
@@ -600,6 +603,7 @@ eleventyExcludeFromCollections: true
       window.VIEX_SUPABASE.from('comparaciones').insert({
         ejecutivo_id: session.user.id,
         ejecutivo_email: session.user.email,
+        ejecutivo_nombre: (session.user.user_metadata && session.user.user_metadata.nombre) || null,
         cliente_nombre: clienteNombre,
         prioridad: priority,
         familia: family,
@@ -631,6 +635,9 @@ eleventyExcludeFromCollections: true
     if (data.second) recoHtml += '<p><strong>Segunda alternativa:</strong> ' + data.second.offer.isapre + ' — ' + data.second.offer.plan + '. ' + explain(data.second) + '</p>';
     if (data.family.length) {
       recoHtml += '<p><strong>Grupo familiar:</strong> ' + data.family.map(function (f) { return f.nombre + (f.parentesco ? ' (' + f.parentesco + ')' : ''); }).join(', ') + '</p>';
+    }
+    if (data.ejecutivoNombre) {
+      recoHtml += '<p style="margin-top:14px; font-size:0.8rem; color:#86979b;">Comparación realizada por: ' + data.ejecutivoNombre + ' · viexsalud.cl</p>';
     }
     document.getElementById('print-reco').innerHTML = recoHtml;
 
