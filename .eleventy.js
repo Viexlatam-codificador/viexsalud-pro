@@ -29,6 +29,7 @@ module.exports = function (eleventyConfig) {
         nombre: item.data.nombre,
         isapre: item.data.isapre,
         como_declarar: item.data.como_declarar,
+        fecha: item.data.fecha ? new Date(item.data.fecha).toISOString().slice(0, 10) : null,
       }))
     ).replace(/</g, "\\u003c")
   );

@@ -86,7 +86,8 @@ eleventyExcludeFromCollections: true
     flex: none; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
     color: var(--gold); background: var(--gold-soft); padding: 3px 10px; border-radius: 999px;
   }
-  .isaprecalc .preex-card p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; white-space: pre-wrap; }
+  .isaprecalc .preex-card p { margin: 0 0 6px; color: var(--ink-soft); font-size: 0.9rem; white-space: pre-wrap; }
+  .isaprecalc .preex-card .fecha { margin: 0; font-size: 0.74rem; color: var(--ink-faint); }
   .isaprecalc .empty { text-align: center; color: var(--ink-faint); padding: 40px 10px; }
 
   .isaprecalc .support {
@@ -128,9 +129,14 @@ eleventyExcludeFromCollections: true
     </div>
 
     <div class="search-bar">
-      <input type="search" id="preex-search" placeholder="Busca una preexistencia, ej: hernia, diabetes, hipertensión...">
+      <input type="search" id="preex-search" placeholder="Busca una preexistencia, ej: hernia diabetes, hipertensión...">
       <select id="preex-filter-isapre">
         <option value="">Todas las Isapres</option>
+      </select>
+      <select id="preex-sort">
+        <option value="nombre">Orden: Preexistencia (A-Z)</option>
+        <option value="isapre">Orden: Isapre (A-Z)</option>
+        <option value="fecha">Orden: Más reciente primero</option>
       </select>
     </div>
     <p class="count" id="preex-count"></p>
@@ -189,15 +195,24 @@ eleventyExcludeFromCollections: true
       return {
         nombre: d.nombre || '',
         isapre: d.isapre || 'Sin especificar',
-        como_declarar: d.como_declarar || ''
+        como_declarar: d.como_declarar || '',
+        fecha: d.fecha || null
       };
     });
 
   var searchInput = document.getElementById('preex-search');
   var filterSelect = document.getElementById('preex-filter-isapre');
+  var sortSelect = document.getElementById('preex-sort');
   var resultsEl = document.getElementById('preex-results');
   var countEl = document.getElementById('preex-count');
   var emptyEl = document.getElementById('preex-empty');
+
+  function fmtFecha(iso) {
+    if (!iso) return '';
+    var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var p = iso.split('-');
+    return 'Actualizado el ' + parseInt(p[2], 10) + ' de ' + meses[parseInt(p[1], 10) - 1] + ' de ' + p[0];
+  }
 
   var isapres = Array.from(new Set(data.map(function (d) { return d.isapre; }))).sort(function (a, b) { return a.localeCompare(b, 'es'); });
   isapres.forEach(function (name) {
@@ -214,13 +229,20 @@ eleventyExcludeFromCollections: true
   }
 
   function render() {
-    var q = searchInput.value.trim().toLowerCase();
+    var qWords = searchInput.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
     var isapreFilter = filterSelect.value;
+    var sortBy = sortSelect.value;
 
     var filtered = data.filter(function (d) {
-      var matchesQuery = !q || d.nombre.toLowerCase().indexOf(q) !== -1 || d.como_declarar.toLowerCase().indexOf(q) !== -1;
+      var haystack = (d.nombre + ' ' + d.como_declarar + ' ' + d.isapre).toLowerCase();
+      var matchesQuery = qWords.every(function (w) { return haystack.indexOf(w) !== -1; });
       var matchesIsapre = !isapreFilter || d.isapre === isapreFilter;
       return matchesQuery && matchesIsapre;
+    });
+
+    filtered.sort(function (a, b) {
+      if (sortBy === 'fecha') return (b.fecha || '').localeCompare(a.fecha || '');
+      return (a[sortBy] || '').localeCompare(b[sortBy] || '', 'es');
     });
 
     countEl.textContent = filtered.length + (filtered.length === 1 ? ' resultado' : ' resultados');
@@ -228,6 +250,7 @@ eleventyExcludeFromCollections: true
       return '<div class="preex-card">' +
         '<div class="row1"><h3>' + escapeHtml(d.nombre) + '</h3><span class="isapre-badge">' + escapeHtml(d.isapre) + '</span></div>' +
         '<p>' + escapeHtml(d.como_declarar) + '</p>' +
+        (d.fecha ? '<p class="fecha">' + escapeHtml(fmtFecha(d.fecha)) + '</p>' : '') +
         '</div>';
     }).join('');
 
@@ -236,6 +259,7 @@ eleventyExcludeFromCollections: true
 
   searchInput.addEventListener('input', render);
   filterSelect.addEventListener('change', render);
+  sortSelect.addEventListener('change', render);
   render();
 })();
 </script>

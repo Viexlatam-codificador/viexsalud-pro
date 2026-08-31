@@ -30,10 +30,32 @@ collections:
     label_singular: "Preexistencia"
     folder: "src/content/preexistencias"
     create: true
-    slug: "{{slug}}"
+    identifier_field: "nombre"
+    slug: "{{fields.nombre}}-{{fields.isapre}}"
     extension: "md"
     summary: "{{fields.nombre}} — {{fields.isapre}}"
+    sortable_fields: ["nombre", "isapre", "fecha"]
     fields:
       - { label: "Preexistencia", name: "nombre", widget: "string", hint: "Ej: Hipertensión, Hernia lumbar, Diabetes tipo 2" }
       - { label: "Cómo declarar", name: "como_declarar", widget: "text", hint: "El texto o términos exactos que debe usar el ejecutivo para declararla correctamente." }
-      - { label: "Isapre", name: "isapre", widget: "string", hint: "Ej: Banmedica. Escribe el nombre siempre igual para que el filtro funcione bien." }
+      - label: "Isapre"
+        name: "isapre"
+        widget: "relation"
+        collection: "isapres"
+        search_fields: ["nombre"]
+        display_fields: ["nombre"]
+        value_field: "nombre"
+        hint: "Si no aparece la Isapre que buscas, agrégala primero en la colección 'Isapres' (más abajo en el menú)."
+      - { label: "Fecha de ingreso", name: "fecha", widget: "datetime", format: "YYYY-MM-DD", hint: "Para saber qué tan actualizada está esta información." }
+
+  - name: "isapres"
+    label: "Isapres"
+    label_singular: "Isapre"
+    folder: "src/content/isapres"
+    create: true
+    identifier_field: "nombre"
+    slug: "{{fields.nombre}}"
+    extension: "md"
+    summary: "{{fields.nombre}}"
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string", hint: "Se usará igual en Preexistencias y en el Comparador de Planes." }

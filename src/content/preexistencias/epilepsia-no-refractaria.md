@@ -5,4 +5,5 @@ como_declarar: |-
   Declarada a los 10 años.
   Sin complicaciones.
 isapre: Nueva Mas Vida
+fecha: 2026-08-30
 ---
