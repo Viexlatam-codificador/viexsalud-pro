@@ -8,10 +8,10 @@
   "headline": "{{ title }}",
   "description": "{{ description }}",
   "author": {"@type": "Organization", "name": "Viex Salud"},
-  "publisher": {"@type": "Organization", "name": "Viex Salud"},
+  "publisher": {"@type": "Organization", "name": "Viex Salud", "logo": {"@type": "ImageObject", "url": "https://www.viexsalud.cl/assets/img/logo-mark.svg"}},
   "mainEntityOfPage": "{{ canonical }}",
   "datePublished": "{{ page.date | isoDate }}",
-  "dateModified": "{{ page.date | isoDate }}",
+  "dateModified": "{% if updated %}{{ updated | isoDate }}{% else %}{{ page.date | isoDate }}{% endif %}",
   "inLanguage": "es-CL"
 }
 </script>
@@ -28,6 +28,7 @@
 </script>
 {% if cover %}
 <meta property="og:image" content="https://www.viexsalud.cl{{ cover }}">
+<meta property="og:image:alt" content="{{ coverAlt | default(title) }}">
 {% endif %}
 {% endblock %}
 
@@ -40,19 +41,36 @@
     <p class="tag">{{ tag }}</p>
     <h1>{{ title }}</h1>
     <div class="article-meta">
-      <span>Por el equipo de Viex Salud</span><span>·</span><span>{{ page.date | readableDate }}</span><span>·</span><span>{{ content | readingTime }}</span>
+      <span>Por el equipo de Viex Salud</span><span>·</span><span>{{ page.date | readableDate }}</span>{% if updated %}<span>·</span><span>Actualizado {{ updated | readableDate }}</span>{% endif %}<span>·</span><span>{{ content | readingTime }}</span>
     </div>
   </div>
 </section>
 
 {% if cover %}
-<div class="article-cover"><img src="{{ cover }}" alt="{{ title }}"></div>
+<div class="article-cover"><img src="{{ cover }}" alt="{{ coverAlt | default(title) }}"></div>
 {% endif %}
 
 <article class="article-body">
 {{ content | safe }}
 
+  {% if sources and sources.length %}
+  <aside class="article-sources" aria-labelledby="sources-title">
+    <h2 id="sources-title">Fuentes verificadas</h2>
+    <ol>
+      {% for source in sources %}
+      <li>
+        <a href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.title }}</a>
+        <span>{{ source.name }}{% if source.published %} · Publicada {{ source.published | readableDate }}{% endif %}{% if source.effective %} · Vigente desde {{ source.effective | readableDate }}{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ol>
+  </aside>
+  {% endif %}
+
+  <p class="editorial-note"><strong>Compromiso Viex Salud:</strong> informamos, educamos y acompañamos de manera independiente. Este contenido es informativo y no reemplaza la revisión individual del contrato, antecedentes de salud y condiciones de cada Isapre.</p>
+
   <div class="article-cta">
+    <img class="article-cta-logo" src="/assets/img/logo-mark.svg" alt="" width="54" height="54">
     <h3>{{ ctaTitle | default("¿Tienes dudas sobre tu plan actual?") }}</h3>
     <p>{{ ctaText | default("En Viex Salud te ayudamos gratis, sin compromiso.") }}</p>
     <a href="https://wa.me/56948627767" target="_blank" rel="noopener" class="btn btn-primary">Escríbenos por WhatsApp →</a>
@@ -108,7 +126,7 @@
     {% set related = collections.blog | relatedPosts(page.url) %}
     {% for post in related %}
     <a class="blog-card" href="{{ post.url }}">
-      <div class="thumb">{% if post.data.cover %}<img src="{{ post.data.cover }}" alt="{{ post.data.title }}" loading="lazy">{% endif %}<span class="tag">{{ post.data.tag }}</span></div>
+      <div class="thumb">{% if post.data.cover %}<img src="{{ post.data.cover }}" alt="{{ post.data.coverAlt | default(post.data.title) }}" loading="lazy">{% endif %}<span class="tag">{{ post.data.tag }}</span></div>
       <div class="body"><h3>{{ post.data.title }}</h3><span class="read-more">Leer →</span></div>
     </a>
     {% endfor %}
