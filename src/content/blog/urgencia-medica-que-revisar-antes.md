@@ -3,6 +3,8 @@ title: "Urgencia médica: qué es lo primero que debes saber sobre tu cobertura"
 description: "Ante una urgencia médica, lo primero es buscar atención. Después, entérate cómo revisar tu cobertura Isapre sin sorpresas. Asesoría gratuita."
 tag: "Urgencias"
 date: 2026-07-28
+cover: /assets/img/blog/urgencia-medica-que-revisar-antes.svg
+coverAlt: "Guía Viex Salud sobre qué hacer ante una urgencia médica"
 ---
 Vivir una urgencia médica, propia o de un ser querido, es uno de los momentos más estresantes que existen. En medio de los nervios, es común que aparezcan dudas sobre la Isapre, el plan de salud y qué va a pasar con la cuenta. Es una preocupación totalmente válida, pero hay un orden de prioridades que nunca debe cambiar. En este artículo te contamos qué es lo primero que importa y qué conviene tener claro sobre tu cobertura una vez que la emergencia esté controlada.
 
