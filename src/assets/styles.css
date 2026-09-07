@@ -409,3 +409,26 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
   .cta-banner { flex-direction: column; align-items: flex-start; text-align: left; }
   .form-actions { flex-direction: column-reverse; align-items: stretch; }
 }
+
+
+/* ---------- Actualidad editorial Viex Salud ---------- */
+.article-sources {
+  margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--line);
+  border-radius: var(--radius-md); background: var(--white); box-shadow: var(--shadow-sm);
+}
+.article-sources h2 { margin: 0 0 1rem; font-size: var(--fs-lg); }
+.article-sources ol { margin: 0; padding-left: 1.25rem; }
+.article-sources li { margin-bottom: 0.9rem; color: var(--ink-700); }
+.article-sources li:last-child { margin-bottom: 0; }
+.article-sources a { color: var(--teal-700); font-weight: 750; text-decoration: underline; text-decoration-color: var(--gold-500); text-underline-offset: 3px; }
+.article-sources span { display: block; margin-top: 0.15rem; color: var(--ink-500); font-size: var(--fs-xs); }
+.editorial-note {
+  margin: 1.5rem 0 0; padding: 1.1rem 1.2rem; border-left: 4px solid var(--gold-500);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; background: var(--gold-100);
+  color: var(--ink-700); font-size: var(--fs-sm);
+}
+.article-cta-logo { margin: 0 auto 0.8rem; border-radius: 50%; }
+
+
+.editorial-badges { display:flex; justify-content:center; flex-wrap:wrap; gap:.65rem; margin-top:1.5rem; }
+.editorial-badges span { padding:.45rem .85rem; border:1px solid rgba(227,200,118,.45); border-radius:var(--radius-pill); color:var(--gold-100); background:rgba(255,255,255,.06); font-size:var(--fs-xs); font-weight:700; }

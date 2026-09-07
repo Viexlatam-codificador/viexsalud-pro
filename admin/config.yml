@@ -5,25 +5,61 @@ backend:
   base_url: https://www.viexsalud.cl
   auth_endpoint: api/auth
 
-publish_mode: simple
+# Ningún artículo llega al sitio hasta pasar por Borrador → En revisión → Listo → Publicado.
+publish_mode: editorial_workflow
 media_folder: "src/assets/img/blog"
 public_folder: "/assets/img/blog"
 
 collections:
   - name: "blog"
-    label: "Blog"
-    label_singular: "Artículo"
+    label: "Blog y redes"
+    label_singular: "Paquete editorial"
     folder: "src/content/blog"
     create: true
     slug: "{{slug}}"
     extension: "md"
+    summary: "{{fields.title}} — {{fields.content_type}}"
+    sortable_fields: ["date", "title", "content_type"]
     fields:
       - { label: "Título", name: "title", widget: "string" }
       - { label: "Descripción (SEO)", name: "description", widget: "text", hint: "Aparece en Google y al compartir por WhatsApp. Máximo 160 caracteres." }
-      - { label: "Categoría", name: "tag", widget: "string", hint: "Ej: Guía · Isapres" }
-      - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "Imagen de portada (opcional)", name: "cover", widget: "image", required: false }
-      - { label: "Contenido", name: "body", widget: "markdown" }
+      - { label: "Categoría", name: "tag", widget: "string", hint: "Ej: Actualidad Isapres · Guía · Coberturas" }
+      - label: "Tipo de contenido"
+        name: "content_type"
+        widget: "select"
+        default: "Actualidad Isapres"
+        options: ["Actualidad Isapres", "Guía educativa", "Comparativa", "Preguntas frecuentes"]
+      - { label: "Fecha de publicación", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Última actualización", name: "updated", widget: "datetime", format: "YYYY-MM-DD", required: false, hint: "Completar cuando cambie un dato relevante después de publicar." }
+      - { label: "Imagen de portada", name: "cover", widget: "image", required: false, hint: "Usar logo, verde bosque, dorado y crema de Viex Salud." }
+      - { label: "Texto alternativo de portada", name: "coverAlt", widget: "string", required: false, hint: "Describe la imagen para accesibilidad." }
+      - { label: "Ángulo comercial / lead", name: "leadAngle", widget: "text", required: false, hint: "Uso interno: qué segmento contactar y qué revisión ofrecer." }
+      - { label: "Título del llamado a la acción", name: "ctaTitle", widget: "string", required: false }
+      - { label: "Texto del llamado a la acción", name: "ctaText", widget: "text", required: false }
+      - { label: "Contenido del artículo", name: "body", widget: "markdown" }
+      - label: "Fuentes verificadas"
+        name: "sources"
+        widget: "list"
+        required: false
+        hint: "Agrega una fila por cada fuente oficial o primaria."
+        fields:
+          - { label: "Institución o medio", name: "name", widget: "string" }
+          - { label: "Título de la fuente", name: "title", widget: "string" }
+          - { label: "Enlace", name: "url", widget: "string" }
+          - { label: "Fecha de publicación", name: "published", widget: "datetime", format: "YYYY-MM-DD", required: false }
+          - { label: "Fecha de vigencia", name: "effective", widget: "datetime", format: "YYYY-MM-DD", required: false }
+      - label: "Publicaciones para redes (requieren aprobación)"
+        name: "social"
+        widget: "object"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "Instagram", name: "instagram", widget: "text", required: false, hint: "Copy, CTA y hashtags." }
+          - { label: "Facebook", name: "facebook", widget: "text", required: false, hint: "Copy con enlace al artículo y CTA." }
+          - { label: "LinkedIn", name: "linkedin", widget: "text", required: false, hint: "Versión profesional con contexto e implicación." }
+          - { label: "TikTok", name: "tiktok", widget: "text", required: false, hint: "Guion corto: gancho, explicación, cierre y CTA." }
+          - { label: "Imagen cuadrada/redes", name: "image", widget: "image", required: false }
+          - { label: "Portada vertical TikTok/Reels", name: "verticalImage", widget: "image", required: false }
 
   - name: "preexistencias"
     label: "Preexistencias"
