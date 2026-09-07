@@ -6,7 +6,8 @@ tag: "Guía · Cotización y precio"
 content_type: "Guía educativa"
 date: 2026-09-07
 updated: 2026-09-07
-coverAlt: "Guía Viex Salud sobre el adicional de salud en la liquidación"
+cover: "/assets/img/blog/adicional-salud-7-por-ciento.svg"
+coverAlt: "Guía Viex Salud: por qué aparece un adicional de salud si ya cotizas el 7%"
 leadAngle: "Personas cuyo descuento de salud aumentó o que no distinguen el 7%, precio base, GES y beneficios adicionales."
 ctaTitle: "¿Tu descuento de salud aumentó?"
 ctaText: "Envíanos tu liquidación y revisamos gratuitamente cómo se compone el cobro de tu plan."
