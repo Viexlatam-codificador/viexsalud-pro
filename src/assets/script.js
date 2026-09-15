@@ -165,44 +165,38 @@
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear().toString();
 
-  /* Mensaje en movimiento constante en el título de la pestaña del navegador:
-     "Gracias por visitarnos" mientras la pestaña está activa (desplazamiento
-     letra por letra, sin límite de velocidad porque la pestaña está en primer
-     plano), y un recordatorio que alterna entre dos frases completas cuando el
-     visitante cambia a otra pestaña. En segundo plano los navegadores frenan
-     mucho los temporizadores (ahorro de batería), así que un desplazamiento
-     largo letra por letra nunca alcanza a mostrarse completo: alternar frases
-     cortas y ya completas evita ese problema.
+  /* Mensaje en movimiento constante en el título de la pestaña del navegador,
+     corriendo de derecha a izquierda: "Gracias por visitarnos" mientras la
+     pestaña está activa, y un recordatorio distinto mientras el visitante
+     está en otra pestaña.
+     La posición del texto se calcula a partir del tiempo real transcurrido
+     (Date.now()), no de cuántas veces alcanzó a dispararse el temporizador:
+     en segundo plano los navegadores frenan mucho los temporizadores (ahorro
+     de batería), así que contar "ticks" dejaba el mensaje pegado a mitad de
+     camino. Basarse en el tiempo real hace que, aunque los saltos sean más
+     grandes cuando el tick tarda más, el texto siga avanzando y complete la
+     vuelta igual.
      Se revisa document.hidden en cada paso del propio temporizador (en vez de
      depender solo del evento "visibilitychange", que algunos navegadores no
      disparan de forma confiable al cambiar de pestaña). */
   const originalTitle = document.title;
   const tickerVisible = "💛 Gracias por visitarnos — Viex Salud     ";
-  const hiddenPhrases = ["⏳ No olvides que te esperamos", "💛 Cotiza tu mejor plan de salud"];
+  const tickerHidden = "⏳ No olvides que te esperamos con paciencia para ayudarte a cotizar tu mejor plan de salud     ";
+  const SCROLL_CHARS_PER_SEC = 4;
 
   if (!prefersReduced) {
-    let tickerPos = 0;
     let wasHidden = document.hidden;
-    let hiddenIndex = 0;
-    let hiddenTicks = 0;
+    let stateStartedAt = Date.now();
     const tickerInterval = setInterval(() => {
       const isHidden = document.hidden;
       if (isHidden !== wasHidden) {
         wasHidden = isHidden;
-        tickerPos = 0;
-        hiddenIndex = 0;
-        hiddenTicks = 0;
+        stateStartedAt = Date.now();
       }
-      if (isHidden) {
-        if (hiddenTicks % 6 === 0) {
-          hiddenIndex = (hiddenIndex + 1) % hiddenPhrases.length;
-        }
-        hiddenTicks += 1;
-        document.title = hiddenPhrases[hiddenIndex];
-      } else {
-        document.title = tickerVisible.slice(tickerPos) + tickerVisible.slice(0, tickerPos);
-        tickerPos = (tickerPos + 1) % tickerVisible.length;
-      }
+      const text = isHidden ? tickerHidden : tickerVisible;
+      const elapsedSec = (Date.now() - stateStartedAt) / 1000;
+      const pos = Math.floor(elapsedSec * SCROLL_CHARS_PER_SEC) % text.length;
+      document.title = text.slice(pos) + text.slice(0, pos);
     }, 280);
 
     window.addEventListener("beforeunload", () => {
