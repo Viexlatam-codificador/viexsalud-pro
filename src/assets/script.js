@@ -165,19 +165,37 @@
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear().toString();
 
-  /* Cambia el título de la pestaña cuando el visitante se va a otra pestaña,
-     para recordarle que seguimos disponibles cuando vuelva a mirarla. */
+  /* Mensaje en movimiento constante en el título de la pestaña del navegador:
+     "Gracias por visitarnos" mientras la pestaña está activa, y un recordatorio
+     distinto, también en movimiento, cuando el visitante cambia a otra pestaña. */
   const originalTitle = document.title;
-  const awayTitle = "No olvides que te esperamos con paciencia 💛";
-  let awayTimer;
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      awayTimer = setTimeout(() => {
-        document.title = awayTitle;
-      }, 1500);
-    } else {
-      clearTimeout(awayTimer);
-      document.title = originalTitle;
-    }
-  });
+  const tickerVisible = "💛 Gracias por visitarnos — Viex Salud     ";
+  const tickerHidden = "⏳ No olvides que te esperamos con paciencia para ayudarte a cotizar tu mejor plan de salud     ";
+  let tickerText = tickerVisible;
+  let tickerPos = 0;
+  let tickerInterval = null;
+
+  function startTicker(text) {
+    tickerText = text;
+    tickerPos = 0;
+    clearInterval(tickerInterval);
+    tickerInterval = setInterval(() => {
+      document.title = tickerText.slice(tickerPos) + tickerText.slice(0, tickerPos);
+      tickerPos = (tickerPos + 1) % tickerText.length;
+    }, 280);
+  }
+
+  function stopTicker() {
+    clearInterval(tickerInterval);
+    tickerInterval = null;
+    document.title = originalTitle;
+  }
+
+  if (!prefersReduced) {
+    startTicker(tickerVisible);
+    document.addEventListener("visibilitychange", () => {
+      startTicker(document.hidden ? tickerHidden : tickerVisible);
+    });
+    window.addEventListener("beforeunload", stopTicker);
+  }
 })();
