@@ -178,10 +178,14 @@
      vuelta igual.
      Se revisa document.hidden en cada paso del propio temporizador (en vez de
      depender solo del evento "visibilitychange", que algunos navegadores no
-     disparan de forma confiable al cambiar de pestaña). */
+     disparan de forma confiable al cambiar de pestaña).
+     El emoji (💛, ⏳) ocupa dos unidades internas de la cadena de texto; cortar
+     por índice de string a veces caía justo a la mitad del emoji y lo
+     mostraba roto. Por eso se separa el texto en caracteres "completos" con
+     Array.from antes de recortarlo. */
   const originalTitle = document.title;
-  const tickerVisible = "💛 Gracias por visitarnos — Viex Salud     ";
-  const tickerHidden = "⏳ No olvides que te esperamos con paciencia para ayudarte a cotizar tu mejor plan de salud     ";
+  const tickerVisible = Array.from("💛 Gracias por visitarnos — Viex Salud     ");
+  const tickerHidden = Array.from("⏳ No olvides que te esperamos con paciencia para ayudarte a cotizar tu mejor plan de salud     ");
   const SCROLL_CHARS_PER_SEC = 4;
 
   if (!prefersReduced) {
@@ -193,10 +197,10 @@
         wasHidden = isHidden;
         stateStartedAt = Date.now();
       }
-      const text = isHidden ? tickerHidden : tickerVisible;
+      const chars = isHidden ? tickerHidden : tickerVisible;
       const elapsedSec = (Date.now() - stateStartedAt) / 1000;
-      const pos = Math.floor(elapsedSec * SCROLL_CHARS_PER_SEC) % text.length;
-      document.title = text.slice(pos) + text.slice(0, pos);
+      const pos = Math.floor(elapsedSec * SCROLL_CHARS_PER_SEC) % chars.length;
+      document.title = chars.slice(pos).join("") + chars.slice(0, pos).join("");
     }, 280);
 
     window.addEventListener("beforeunload", () => {
