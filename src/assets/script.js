@@ -3,13 +3,18 @@
 
   const WHATSAPP_NUMBER = "56948627767";
 
-  /* ---- Conversion tracking (GA4 + Meta Pixel) ----
-     Fires a GA4 event and a Meta Pixel event together. Safe to call even if
-     analytics.js hasn't finished loading yet (checks before calling). */
+  /* ---- Conversion tracking (GA4 + Meta Pixel + GTM dataLayer) ----
+     Fires a GA4 event and a Meta Pixel event together, and also pushes a
+     plain {event: gaName, ...} object to the GTM dataLayer so a Custom
+     Event trigger in Google Tag Manager can fire a Google Ads conversion
+     tag on the same action, without needing another code change here.
+     Safe to call even if analytics.js hasn't finished loading yet. */
   function trackConversion(gaName, gaParams, metaName, metaParams) {
     try {
       if (typeof gtag === "function") gtag("event", gaName, gaParams || {});
       if (typeof fbq === "function") fbq("track", metaName, metaParams || {});
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(Object.assign({ event: gaName }, gaParams || {}));
     } catch (err) {
       /* Never let analytics break the page. */
     }
