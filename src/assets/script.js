@@ -167,35 +167,31 @@
 
   /* Mensaje en movimiento constante en el título de la pestaña del navegador:
      "Gracias por visitarnos" mientras la pestaña está activa, y un recordatorio
-     distinto, también en movimiento, cuando el visitante cambia a otra pestaña. */
+     distinto, también en movimiento, cuando el visitante cambia a otra pestaña.
+     Se revisa document.hidden en cada paso del propio temporizador (en vez de
+     depender solo del evento "visibilitychange", que algunos navegadores no
+     disparan de forma confiable al cambiar de pestaña). */
   const originalTitle = document.title;
   const tickerVisible = "💛 Gracias por visitarnos — Viex Salud     ";
   const tickerHidden = "⏳ No olvides que te esperamos con paciencia para ayudarte a cotizar tu mejor plan de salud     ";
-  let tickerText = tickerVisible;
-  let tickerPos = 0;
-  let tickerInterval = null;
-
-  function startTicker(text) {
-    tickerText = text;
-    tickerPos = 0;
-    clearInterval(tickerInterval);
-    tickerInterval = setInterval(() => {
-      document.title = tickerText.slice(tickerPos) + tickerText.slice(0, tickerPos);
-      tickerPos = (tickerPos + 1) % tickerText.length;
-    }, 280);
-  }
-
-  function stopTicker() {
-    clearInterval(tickerInterval);
-    tickerInterval = null;
-    document.title = originalTitle;
-  }
 
   if (!prefersReduced) {
-    startTicker(tickerVisible);
-    document.addEventListener("visibilitychange", () => {
-      startTicker(document.hidden ? tickerHidden : tickerVisible);
+    let tickerPos = 0;
+    let wasHidden = document.hidden;
+    const tickerInterval = setInterval(() => {
+      const isHidden = document.hidden;
+      if (isHidden !== wasHidden) {
+        wasHidden = isHidden;
+        tickerPos = 0;
+      }
+      const text = isHidden ? tickerHidden : tickerVisible;
+      document.title = text.slice(tickerPos) + text.slice(0, tickerPos);
+      tickerPos = (tickerPos + 1) % text.length;
+    }, 280);
+
+    window.addEventListener("beforeunload", () => {
+      clearInterval(tickerInterval);
+      document.title = originalTitle;
     });
-    window.addEventListener("beforeunload", stopTicker);
   }
 })();
