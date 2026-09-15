@@ -166,27 +166,43 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear().toString();
 
   /* Mensaje en movimiento constante en el título de la pestaña del navegador:
-     "Gracias por visitarnos" mientras la pestaña está activa, y un recordatorio
-     distinto, también en movimiento, cuando el visitante cambia a otra pestaña.
+     "Gracias por visitarnos" mientras la pestaña está activa (desplazamiento
+     letra por letra, sin límite de velocidad porque la pestaña está en primer
+     plano), y un recordatorio que alterna entre dos frases completas cuando el
+     visitante cambia a otra pestaña. En segundo plano los navegadores frenan
+     mucho los temporizadores (ahorro de batería), así que un desplazamiento
+     largo letra por letra nunca alcanza a mostrarse completo: alternar frases
+     cortas y ya completas evita ese problema.
      Se revisa document.hidden en cada paso del propio temporizador (en vez de
      depender solo del evento "visibilitychange", que algunos navegadores no
      disparan de forma confiable al cambiar de pestaña). */
   const originalTitle = document.title;
   const tickerVisible = "💛 Gracias por visitarnos — Viex Salud     ";
-  const tickerHidden = "⏳ No olvides que te esperamos con paciencia para ayudarte a cotizar tu mejor plan de salud     ";
+  const hiddenPhrases = ["⏳ No olvides que te esperamos", "💛 Cotiza tu mejor plan de salud"];
 
   if (!prefersReduced) {
     let tickerPos = 0;
     let wasHidden = document.hidden;
+    let hiddenIndex = 0;
+    let hiddenTicks = 0;
     const tickerInterval = setInterval(() => {
       const isHidden = document.hidden;
       if (isHidden !== wasHidden) {
         wasHidden = isHidden;
         tickerPos = 0;
+        hiddenIndex = 0;
+        hiddenTicks = 0;
       }
-      const text = isHidden ? tickerHidden : tickerVisible;
-      document.title = text.slice(tickerPos) + text.slice(0, tickerPos);
-      tickerPos = (tickerPos + 1) % text.length;
+      if (isHidden) {
+        if (hiddenTicks % 6 === 0) {
+          hiddenIndex = (hiddenIndex + 1) % hiddenPhrases.length;
+        }
+        hiddenTicks += 1;
+        document.title = hiddenPhrases[hiddenIndex];
+      } else {
+        document.title = tickerVisible.slice(tickerPos) + tickerVisible.slice(0, tickerPos);
+        tickerPos = (tickerPos + 1) % tickerVisible.length;
+      }
     }, 280);
 
     window.addEventListener("beforeunload", () => {
