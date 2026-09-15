@@ -337,7 +337,7 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
 
 /* ---------- WhatsApp floating button ---------- */
 .wa-float {
-  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 90; width: 58px; height: 58px; border-radius: 50%;
+  position: fixed; left: 1.25rem; bottom: 1.25rem; z-index: 90; width: 58px; height: 58px; border-radius: 50%;
   background: #25d366; display: grid; place-items: center; box-shadow: var(--shadow-lg); color: var(--white); font-size: 1.6rem;
   transition: transform .15s ease;
 }
