@@ -126,6 +126,31 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
 .btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
 .btn-sm { padding: 0.6rem 1.1rem; font-size: var(--fs-xs); }
 
+/* ---------- Topbar (mensaje animado de bienvenida) ---------- */
+.topbar {
+  background: linear-gradient(90deg, var(--gold-600), var(--gold-500), var(--gold-600));
+  color: var(--teal-950);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.topbar-track {
+  display: flex;
+  width: max-content;
+  animation: topbar-scroll 18s linear infinite;
+}
+.topbar:hover .topbar-track { animation-play-state: paused; }
+.topbar-track span {
+  display: inline-block;
+  padding: 0.5rem 3rem;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+@keyframes topbar-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 /* ---------- Header ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 100;

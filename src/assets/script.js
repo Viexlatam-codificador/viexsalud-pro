@@ -164,4 +164,20 @@
   /* Current year in footer */
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear().toString();
+
+  /* Cambia el título de la pestaña cuando el visitante se va a otra pestaña,
+     para recordarle que seguimos disponibles cuando vuelva a mirarla. */
+  const originalTitle = document.title;
+  const awayTitle = "No olvides que te esperamos con paciencia 💛";
+  let awayTimer;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      awayTimer = setTimeout(() => {
+        document.title = awayTitle;
+      }, 1500);
+    } else {
+      clearTimeout(awayTimer);
+      document.title = originalTitle;
+    }
+  });
 })();
