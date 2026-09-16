@@ -441,7 +441,8 @@ eleventyExcludeFromCollections: true
         <a href="/recursos-ejecutivos/" class="active">CalcuIsapre</a>
         <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
         <a href="/recursos-ejecutivos/comparador-planes/">Comparador de Planes</a>
-        <a href="/recursos-ejecutivos/gestionar-preexistencias/" id="admin-link" style="display:none;">Gestionar (admin)</a>
+        <a href="/recursos-ejecutivos/gestionar-preexistencias/" id="admin-link" class="admin-only" style="display:none;">Gestionar (admin)</a>
+        <a href="/recursos-ejecutivos/panel/" class="admin-only" style="display:none;">Panel (admin)</a>
       </div>
       <a href="#" id="logout-link" style="color:var(--ink-faint);">Cerrar sesión</a>
     </div>
@@ -613,8 +614,7 @@ eleventyExcludeFromCollections: true
     }
     root.style.visibility = 'visible';
     if ((res.data.session.user.email || '').toLowerCase() === 'viexlatam@gmail.com') {
-      var adminLink = document.getElementById('admin-link');
-      if (adminLink) adminLink.style.display = '';
+      document.querySelectorAll('.admin-only').forEach(function (el) { el.style.display = ''; });
     }
   });
 

@@ -69,6 +69,18 @@
       ]
     },
     {
+      "source": "/recursos-ejecutivos/panel",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/api/dashboard-summary",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
       "source": "/api/delete-preexistencias",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }

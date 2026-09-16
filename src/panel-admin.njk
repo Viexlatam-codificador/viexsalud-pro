@@ -1,0 +1,201 @@
+---
+permalink: "recursos-ejecutivos/panel/index.html"
+title: "Panel — Admin"
+description: "Resumen de visitas y actividad del sitio, solo para el administrador."
+eleventyExcludeFromCollections: true
+---
+{% extends "base.njk" %}
+
+{% block content %}
+<style>
+  .isaprecalc {
+    --bg: #eef3f2; --surface: #ffffff; --surface-alt: #f6faf9; --border: #d7e2e0;
+    --ink: #16262b; --ink-soft: #55676c; --ink-faint: #86979b;
+    --blue: #1f6f8b; --gold: #96731f; --gold-soft: #f5ead0;
+    --danger: #b3392a; --danger-soft: #fbeae7; --focus: #2f8fb0;
+    --calc-shadow: 0 1px 2px rgba(20, 40, 45, 0.06), 0 8px 24px -12px rgba(20, 40, 45, 0.18);
+    --calc-radius: 14px;
+    --calc-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    .isaprecalc {
+      --bg: #0d1417; --surface: #141d21; --surface-alt: #182226; --border: #263940;
+      --ink: #e7eef0; --ink-soft: #9db0b5; --ink-faint: #6c8085;
+      --blue: #67bcdd; --gold: #e3c876; --gold-soft: #3a2c10;
+      --danger: #ff7a68; --danger-soft: #3a1f1c;
+      --calc-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+    }
+  }
+  .isaprecalc, .isaprecalc * { box-sizing: border-box; }
+  .isaprecalc { background: var(--bg); color: var(--ink); font-family: var(--calc-sans); line-height: 1.45; padding: 32px 0 60px; }
+  .isaprecalc .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  .isaprecalc header.top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .isaprecalc .mark { flex: none; width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(155deg, var(--blue), var(--gold)); display: flex; align-items: center; justify-content: center; box-shadow: var(--calc-shadow); }
+  .isaprecalc .mark svg { width: 24px; height: 24px; }
+  .isaprecalc header.top h1 { font-size: 1.5rem; margin: 0 0 2px; }
+  .isaprecalc header.top p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; }
+
+  .isaprecalc .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; justify-content: space-between; }
+  .isaprecalc .tabs .tabs-left { display: flex; gap: 8px; flex-wrap: wrap; }
+  .isaprecalc .tabs a { font-size: 0.86rem; font-weight: 700; text-decoration: none; color: var(--ink-soft); padding: 7px 15px; border-radius: 999px; border: 1px solid var(--border); }
+  .isaprecalc .tabs a.active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  .isaprecalc .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .isaprecalc .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--calc-radius); padding: 16px; }
+  .isaprecalc .card .label { font-size: 0.78rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.03em; font-weight: 700; margin-bottom: 6px; }
+  .isaprecalc .card .value { font-size: 1.9rem; font-weight: 800; line-height: 1; }
+  .isaprecalc .card .sub { font-size: 0.8rem; color: var(--ink-soft); margin-top: 4px; }
+
+  .isaprecalc h2.section-h { font-size: 1.1rem; margin: 28px 0 12px; }
+  .isaprecalc table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--calc-radius); overflow: hidden; }
+  .isaprecalc th, .isaprecalc td { text-align: left; padding: 9px 12px; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
+  .isaprecalc th { color: var(--ink-faint); font-weight: 700; font-size: 0.76rem; text-transform: uppercase; }
+  .isaprecalc tr:last-child td { border-bottom: none; }
+
+  .isaprecalc .notice { background: var(--gold-soft); border: 1px solid var(--gold); border-radius: var(--calc-radius); padding: 14px 16px; font-size: 0.88rem; color: var(--ink); }
+  .isaprecalc .status { font-size: 0.85rem; margin-top: 10px; }
+  .isaprecalc .status.error { color: var(--danger); }
+</style>
+
+<div class="isaprecalc" id="isaprecalc-root" style="visibility:hidden;">
+  <div class="wrap">
+    <header class="top">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6L6 18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <p style="margin:0 0 4px; font-size:0.8rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint);">Recursos para Ejecutivos · Solo admin</p>
+        <h1>Panel</h1>
+        <p>Visitas del sitio y actividad de tus ejecutivos, todo en un solo lugar.</p>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <div class="tabs-left">
+        <a href="/recursos-ejecutivos/">CalcuIsapre</a>
+        <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
+        <a href="/recursos-ejecutivos/comparador-planes/">Comparador de Planes</a>
+        <a href="/recursos-ejecutivos/gestionar-preexistencias/">Gestionar</a>
+        <a href="/recursos-ejecutivos/panel/" class="active">Panel</a>
+      </div>
+      <a href="#" id="logout-link" style="color:var(--ink-faint);">Cerrar sesión</a>
+    </div>
+
+    <div id="not-admin-msg" style="display:none;" class="status error">Esta sección es solo para el administrador.</div>
+    <div id="loading-msg" style="display:none;">Cargando...</div>
+    <p class="status error" id="error-msg" style="display:none;"></p>
+
+    <div id="panel-area" style="display:none;">
+      <h2 class="section-h">Visitas al sitio</h2>
+      <div class="cards" id="visitas-cards"></div>
+
+      <h2 class="section-h">Últimos 7 días</h2>
+      <table id="tabla-diaria"><thead><tr><th>Fecha</th><th>Visitas</th></tr></thead><tbody></tbody></table>
+
+      <h2 class="section-h">Conversiones</h2>
+      <div class="cards" id="eventos-cards"></div>
+
+      <h2 class="section-h">Actividad de ejecutivos</h2>
+      <div class="cards" id="supabase-cards"></div>
+
+      <div id="ga4-notice" style="display:none; margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
+
+{% include "supabase-auth.njk" %}
+<script>
+(function () {
+  "use strict";
+  var ADMIN_EMAIL = "viexlatam@gmail.com";
+  var sb = window.VIEX_SUPABASE;
+  var root = document.getElementById('isaprecalc-root');
+  var session = null;
+
+  function fmt(n) { return Number(n || 0).toLocaleString('es-CL'); }
+
+  function card(label, value, sub) {
+    return '<div class="card"><div class="label">' + label + '</div><div class="value">' + fmt(value) + '</div>' +
+      (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>';
+  }
+
+  function render(data) {
+    document.getElementById('visitas-cards').innerHTML =
+      card('Visitas hoy', data.ga4.configured ? data.ga4.visitas.hoy : '—', data.ga4.configured ? (fmt(data.ga4.visitas.sesionesHoy) + ' sesiones') : null) +
+      card('Visitas ayer', data.ga4.configured ? data.ga4.visitas.ayer : '—') +
+      card('Últimos 7 días', data.ga4.configured ? data.ga4.visitas.ultimos7 : '—') +
+      card('Páginas vistas hoy', data.ga4.configured ? data.ga4.visitas.paginasVistasHoy : '—');
+
+    var tbody = document.querySelector('#tabla-diaria tbody');
+    if (data.ga4.configured && data.ga4.serieDiaria) {
+      tbody.innerHTML = data.ga4.serieDiaria.map(function (d) {
+        var f = d.fecha.replace(/(\d{4})(\d{2})(\d{2})/, '$3-$2-$1');
+        return '<tr><td>' + f + '</td><td>' + fmt(d.visitas) + '</td></tr>';
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="2">Conecta Google Analytics para ver esta tabla.</td></tr>';
+    }
+
+    document.getElementById('eventos-cards').innerHTML = data.ga4.configured
+      ? card('Clics a WhatsApp hoy', data.ga4.eventos.whatsappHoy) +
+        card('Clics a WhatsApp (7 días)', data.ga4.eventos.whatsapp7dias) +
+        card('Formularios enviados hoy', data.ga4.eventos.formularioHoy) +
+        card('Formularios enviados (7 días)', data.ga4.eventos.formulario7dias)
+      : card('Clics a WhatsApp', '—') + card('Formularios enviados', '—');
+
+    document.getElementById('supabase-cards').innerHTML =
+      card('Comparaciones hoy', data.supabase.comparaciones.hoy, fmt(data.supabase.comparaciones.total) + ' en total') +
+      card('Suscriptores nuevos hoy', data.supabase.suscriptores.hoy, fmt(data.supabase.suscriptores.total) + ' en total') +
+      card('Ejecutivos registrados', data.supabase.ejecutivos.total);
+
+    var notice = document.getElementById('ga4-notice');
+    if (!data.ga4.configured) {
+      notice.style.display = 'block';
+      notice.innerHTML = '<div class="notice"><strong>Google Analytics no está conectado todavía.</strong> Las visitas del sitio se muestran como "—" hasta que se configure la cuenta de servicio de Google (GA4_PROPERTY_ID, GA4_SA_EMAIL, GA4_SA_PRIVATE_KEY) en Vercel.</div>';
+    } else if (data.ga4.error) {
+      notice.style.display = 'block';
+      notice.innerHTML = '<div class="notice"><strong>No se pudo leer Google Analytics:</strong> ' + data.ga4.error + '</div>';
+    } else {
+      notice.style.display = 'none';
+    }
+  }
+
+  sb.auth.getSession().then(function (res) {
+    session = res.data && res.data.session;
+    if (!session) {
+      window.location.href = '/ejecutivos/?next=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
+    root.style.visibility = 'visible';
+    if ((session.user.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+      document.getElementById('not-admin-msg').style.display = 'block';
+      return;
+    }
+    document.getElementById('panel-area').style.display = 'block';
+    document.getElementById('loading-msg').style.display = 'block';
+
+    fetch('/api/dashboard-summary', { headers: { Authorization: 'Bearer ' + session.access_token } })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+      .then(function (res) {
+        document.getElementById('loading-msg').style.display = 'none';
+        if (!res.ok) {
+          document.getElementById('error-msg').style.display = 'block';
+          document.getElementById('error-msg').textContent = res.body.error || 'No se pudo cargar el panel.';
+          return;
+        }
+        render(res.body);
+      })
+      .catch(function (err) {
+        document.getElementById('loading-msg').style.display = 'none';
+        document.getElementById('error-msg').style.display = 'block';
+        document.getElementById('error-msg').textContent = err.message;
+      });
+  });
+
+  document.getElementById('logout-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    sb.auth.signOut().then(function () { window.location.href = '/ejecutivos/'; });
+  });
+})();
+</script>
+{% endblock %}

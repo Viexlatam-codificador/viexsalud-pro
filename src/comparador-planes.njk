@@ -189,7 +189,8 @@ eleventyExcludeFromCollections: true
         <a href="/recursos-ejecutivos/">CalcuIsapre</a>
         <a href="/recursos-ejecutivos/preexistencias/">Preexistencias</a>
         <a href="/recursos-ejecutivos/comparador-planes/" class="active">Comparador de Planes</a>
-        <a href="/recursos-ejecutivos/gestionar-preexistencias/" id="admin-link" style="display:none;">Gestionar (admin)</a>
+        <a href="/recursos-ejecutivos/gestionar-preexistencias/" id="admin-link" class="admin-only" style="display:none;">Gestionar (admin)</a>
+        <a href="/recursos-ejecutivos/panel/" class="admin-only" style="display:none;">Panel (admin)</a>
       </div>
       <div style="display:flex; gap:14px; align-items:center;">
         <a href="#" id="export-link" style="color:var(--ink-faint); font-weight:700; text-decoration:none; font-size:0.86rem;">Exportar datos (admin)</a>
@@ -373,8 +374,7 @@ eleventyExcludeFromCollections: true
     currentSession = res.data.session;
     root.style.visibility = 'visible';
     if ((currentSession.user.email || '').toLowerCase() === 'viexlatam@gmail.com') {
-      var adminLink = document.getElementById('admin-link');
-      if (adminLink) adminLink.style.display = '';
+      document.querySelectorAll('.admin-only').forEach(function (el) { el.style.display = ''; });
     }
   });
 
