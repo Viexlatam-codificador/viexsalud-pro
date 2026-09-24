@@ -11,18 +11,33 @@ export default async function handler(req, res) {
 
   const b = req.body || {};
   const lead = {
-    nombre: clean(b.nombre), telefono: clean(b.telefono, 40), edad: Number(b.edad) || null,
-    sexo: clean(b.sexo, 30), region: clean(b.region, 100), cargas: clean(b.cargas, 20),
-    fuente: clean(b.fuente || 'web', 80), pagina: clean(b.pagina || '/', 300),
-    utm_source: clean(b.utm_source, 100), utm_medium: clean(b.utm_medium, 100),
-    utm_campaign: clean(b.utm_campaign, 150), estado: 'nuevo'
+    nombre: clean(b.nombre),
+    telefono: clean(b.telefono, 40),
+    edad: Number(b.edad) || null,
+    cargas: b.cargas === 'si' ? 1 : 0,
+    fuente: clean(b.fuente || 'web', 80),
+    campana: clean(b.utm_campaign, 150),
+    utm_source: clean(b.utm_source, 100),
+    utm_medium: clean(b.utm_medium, 100),
+    utm_campaign: clean(b.utm_campaign, 150),
+    necesidad: clean([b.sexo && `Sexo: ${b.sexo}`, b.region && `Región: ${b.region}`].filter(Boolean).join(' | '), 500),
+    estado: 'nuevo',
+    consentimiento_contacto: true
   };
-  if (!lead.nombre || !lead.telefono || !lead.edad) return res.status(400).json({ ok: false, error: 'missing_fields' });
+
+  if (!lead.nombre || !lead.telefono || !lead.edad) {
+    return res.status(400).json({ ok: false, error: 'missing_fields' });
+  }
 
   try {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
       method: 'POST',
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation'
+      },
       body: JSON.stringify(lead)
     });
     if (!r.ok) throw new Error(await r.text());
