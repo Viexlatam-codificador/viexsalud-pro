@@ -77,30 +77,19 @@
     });
   }
 
-  /* Multi-step quote form -> saves the lead (see saveLeadToDatabase) and opens a prefilled WhatsApp message */
+  /* Single-step quote form -> saves the lead (see saveLeadToDatabase) and opens a prefilled WhatsApp message */
   const form = document.getElementById("quote-form");
   if (form) {
-    const steps = Array.from(form.querySelectorAll(".form-step"));
-    const dots = Array.from(form.querySelectorAll(".progress-dots span"));
-    let current = 0;
-
-    function renderStep() {
-      steps.forEach((s, i) => s.classList.toggle("active", i === current));
-      dots.forEach((d, i) => {
-        d.classList.toggle("done", i < current);
-        d.classList.toggle("active", i === current);
-      });
-      const counter = form.querySelector(".step-count");
-      if (counter) counter.textContent = `Paso ${current + 1} de ${steps.length}`;
-    }
-
-    function validateStep(index) {
-      const fields = steps[index].querySelectorAll("[required]");
+    function validateForm() {
+      const fields = form.querySelectorAll("[required]");
       for (const f of fields) {
         if (f.name === "telefono") f.setCustomValidity(/^(?:\+?56)?9\d{8}$/.test(f.value.replace(/[\s()-]/g, "")) ? "" : "Ingresa un celular chileno válido, por ejemplo +56 9 1234 5678.");
         if (f.type === "radio") {
-          const group = steps[index].querySelectorAll(`[name="${f.name}"]`);
-          if (![...group].some((r) => r.checked)) return false;
+          const group = form.querySelectorAll(`[name="${f.name}"]`);
+          if (![...group].some((r) => r.checked)) {
+            f.reportValidity();
+            return false;
+          }
         } else if (!f.checkValidity() || (f.type !== "checkbox" && !f.value.trim())) {
           f.reportValidity();
           f.focus();
@@ -110,32 +99,9 @@
       return true;
     }
 
-    form.querySelectorAll("[data-next]").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        if (!validateStep(current)) {
-          steps[current].classList.add("shake");
-          setTimeout(() => steps[current].classList.remove("shake"), 300);
-          return;
-        }
-        if (current < steps.length - 1) {
-          current += 1;
-          renderStep();
-        }
-      })
-    );
-
-    form.querySelectorAll("[data-prev]").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        if (current > 0) {
-          current -= 1;
-          renderStep();
-        }
-      })
-    );
-
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      if (!validateStep(current)) return;
+      if (!validateForm()) return;
 
       const data = new FormData(form);
       const nombre = (data.get("nombre") || "").toString().trim();
@@ -168,8 +134,6 @@
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank", "noopener");
     });
-
-    renderStep();
   }
 
   /* Reveal-on-scroll (progressive enhancement, respects reduced motion) */

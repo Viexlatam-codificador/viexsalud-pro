@@ -128,84 +128,65 @@
 
       <div class="quote-card" id="cotizar" data-reveal>
         <p class="quote-kicker">Cotiza tu plan hoy</p>
-        <h2>3 pasos rápidos, sin compromiso</h2>
+        <h2>Un solo paso, sin compromiso</h2>
         <p class="quote-lead">100% gratis. Te contactamos por WhatsApp con tu comparativa.</p>
 
         <form id="quote-form" novalidate>
-          <div class="progress-dots"><span class="active"></span><span></span><span></span></div>
-          <p class="step-count">Paso 1 de 3</p>
-
-          <div class="form-step active">
-            <div class="field">
-              <label for="nombre">Nombre completo</label>
-              <input type="text" id="nombre" name="nombre" required autocomplete="name">
-            </div>
-            <div class="field">
-              <label for="telefono">Teléfono / WhatsApp</label>
-              <input type="tel" id="telefono" name="telefono" required autocomplete="tel" placeholder="+56 9 ...">
-            </div>
-            <div class="field">
-              <label for="edad">Tu edad</label>
-              <input type="number" id="edad" name="edad" min="0" max="110" required>
-            </div>
-            <div class="form-actions">
-              <span></span>
-              <button type="button" class="btn btn-primary" data-next>Siguiente →</button>
+          <div class="field">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="telefono">Teléfono / WhatsApp</label>
+            <input type="tel" id="telefono" name="telefono" required autocomplete="tel" placeholder="+56 9 ...">
+          </div>
+          <div class="field">
+            <label for="edad">Tu edad</label>
+            <input type="number" id="edad" name="edad" min="0" max="110" required>
+          </div>
+          <div class="field">
+            <label for="sexo">Sexo</label>
+            <select id="sexo" name="sexo" required>
+              <option value="">Selecciona</option>
+              <option value="Hombre">Hombre</option>
+              <option value="Mujer">Mujer</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="region">Región</label>
+            <select id="region" name="region" required>
+              <option value="">Selecciona tu región</option>
+              <option>Región Metropolitana</option>
+              <option>Valparaíso</option>
+              <option>Biobío</option>
+              <option>La Araucanía</option>
+              <option>Los Lagos</option>
+              <option>Antofagasta</option>
+              <option>Atacama</option>
+              <option>Coquimbo</option>
+              <option>O'Higgins</option>
+              <option>Maule</option>
+              <option>Ñuble</option>
+              <option>Los Ríos</option>
+              <option>Arica y Parinacota</option>
+              <option>Tarapacá</option>
+              <option>Aysén</option>
+              <option>Magallanes</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>¿Cotizas con cargas familiares?</label>
+            <div class="pill-group">
+              <input type="radio" id="cargas-no" name="cargas" value="no" required><label for="cargas-no">Solo yo</label>
+              <input type="radio" id="cargas-si" name="cargas" value="si"><label for="cargas-si">Sí, tengo cargas</label>
             </div>
           </div>
 
-          <div class="form-step">
-            <div class="field">
-              <label for="sexo">Sexo</label>
-              <select id="sexo" name="sexo" required>
-                <option value="">Selecciona</option>
-                <option value="Hombre">Hombre</option>
-                <option value="Mujer">Mujer</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="region">Región</label>
-              <select id="region" name="region" required>
-                <option value="">Selecciona tu región</option>
-                <option>Región Metropolitana</option>
-                <option>Valparaíso</option>
-                <option>Biobío</option>
-                <option>La Araucanía</option>
-                <option>Los Lagos</option>
-                <option>Antofagasta</option>
-                <option>Atacama</option>
-                <option>Coquimbo</option>
-                <option>O'Higgins</option>
-                <option>Maule</option>
-                <option>Ñuble</option>
-                <option>Los Ríos</option>
-                <option>Arica y Parinacota</option>
-                <option>Tarapacá</option>
-                <option>Aysén</option>
-                <option>Magallanes</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>¿Cotizas con cargas familiares?</label>
-              <div class="pill-group">
-                <input type="radio" id="cargas-no" name="cargas" value="no" required><label for="cargas-no">Solo yo</label>
-                <input type="radio" id="cargas-si" name="cargas" value="si"><label for="cargas-si">Sí, tengo cargas</label>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="button" class="btn btn-ghost" data-prev>← Atrás</button>
-              <button type="button" class="btn btn-primary" data-next>Siguiente →</button>
-            </div>
-          </div>
-
-          <div class="form-step">
-            <p style="font-size:var(--fs-sm); color:var(--ink-700); margin-bottom:1rem;">Último paso: confirmamos y te contactamos por WhatsApp con tu comparativa personalizada.</p>
-            <div class="form-note">Se preparará un mensaje de WhatsApp. Debes enviarlo allí para que recibamos tu consulta.</div>
-            <label class="consent-label"><input type="checkbox" name="consent" required> Autorizo el contacto para esta consulta y he leído la <a href="/politica-de-privacidad/">política de privacidad</a>.</label>
-            <div class="form-actions">
-              <button type="button" class="btn btn-ghost" data-prev>← Atrás</button>
-              <button type="submit" class="btn btn-primary">Enviar por WhatsApp ✓</button>
-            </div>
+          <div class="form-note">Se preparará un mensaje de WhatsApp. Debes enviarlo allí para que recibamos tu consulta.</div>
+          <label class="consent-label"><input type="checkbox" name="consent" required> Autorizo el contacto para esta consulta y he leído la <a href="/politica-de-privacidad/">política de privacidad</a>.</label>
+          <div class="form-actions">
+            <span></span>
+            <button type="submit" class="btn btn-primary">Enviar por WhatsApp ✓</button>
           </div>
         </form>
       </div>
