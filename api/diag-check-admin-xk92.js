@@ -38,6 +38,6 @@ module.exports = async (req, res) => {
         : null,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message, cause: err.cause ? String(err.cause) : null, stack: err.stack });
   }
 };
