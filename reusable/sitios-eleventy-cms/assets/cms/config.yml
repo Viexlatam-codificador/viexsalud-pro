@@ -1,0 +1,66 @@
+# PLANTILLA: configurar repositorio, dominio y proveedor OAuth antes de usar.
+backend:
+  name: github
+  repo: ORGANIZACION/REPOSITORIO
+  branch: main
+  base_url: https://example.com
+  auth_endpoint: api/auth
+publish_mode: editorial_workflow
+media_folder: src/assets/img/uploads
+public_folder: /assets/img/uploads
+collections:
+  - name: sitio
+    label: Sitio e identidad
+    files:
+      - name: site
+        label: Contenido general
+        file: src/_data/site.json
+        fields:
+          - {name: brandName, label: Marca, widget: string}
+          - {name: logo, label: Logo, widget: image, required: false}
+          - name: hero
+            label: Portada
+            widget: object
+            fields:
+              - {name: title, label: Título, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: image, label: Imagen, widget: image, required: false}
+          - {name: about, label: Nosotros, widget: text}
+          - {name: mission, label: Misión, widget: text, required: false}
+          - {name: values, label: Valores, widget: text, required: false}
+          - name: services
+            label: Servicios
+            widget: list
+            fields:
+              - {name: title, label: Título, widget: string}
+              - {name: description, label: Descripción, widget: text}
+              - {name: cta, label: Texto del botón, widget: string}
+          - name: contact
+            label: Contacto
+            widget: object
+            fields:
+              - {name: phone, label: Teléfono, widget: string, required: false}
+              - {name: email, label: Correo verificado, widget: string, required: false}
+              - {name: whatsapp, label: WhatsApp internacional solo dígitos, widget: string, required: false}
+          - name: social
+            label: Redes sociales
+            widget: list
+            required: false
+            fields:
+              - {name: name, label: Red, widget: string}
+              - {name: url, label: Enlace HTTPS, widget: string}
+  - name: blog
+    label: Blog
+    folder: src/content/blog
+    create: true
+    slug: '{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}-{{slug}}'
+    extension: md
+    sortable_fields: [date, title]
+    fields:
+      - {name: title, label: Título, widget: string}
+      - {name: description, label: Descripción SEO, widget: text}
+      - {name: date, label: Fecha, widget: datetime, format: YYYY-MM-DD}
+      - {name: updated, label: Actualizado, widget: datetime, format: YYYY-MM-DD, required: false}
+      - {name: cover, label: Portada, widget: image, required: false}
+      - {name: coverAlt, label: Texto alternativo, widget: string, required: false}
+      - {name: body, label: Contenido, widget: markdown}

@@ -92,13 +92,7 @@
   <nav class="nav container" aria-label="Navegación principal">
     <a href="/" class="brand"><img src="assets/img/logo-mark.svg" alt="" width="38" height="38" class="logo-mark-img"> Viex Salud</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="#como-funciona">Cómo funciona</a></li>
-      <li><a href="#isapres">Isapres</a></li>
-      <li><a href="#nosotros">Nosotros</a></li>
-      <li><a href="blog/">Blog</a></li>
-      <li><a href="ejecutivos/">Ejecutivos</a></li>
-      <li><a href="preguntas-isapre/">Preguntas sobre tu Isapre</a></li>
-      <li><a href="#faq">Preguntas frecuentes</a></li>
+      {% include "public-navigation.njk" %}
     </ul>
     <div class="nav-actions">
       <a href="#cotizar" class="btn btn-primary btn-sm"><span class="nav-cta-text">Cotizar gratis</span><span aria-hidden="true">→</span></a>
@@ -206,7 +200,8 @@
 
           <div class="form-step">
             <p style="font-size:var(--fs-sm); color:var(--ink-700); margin-bottom:1rem;">Último paso: confirmamos y te contactamos por WhatsApp con tu comparativa personalizada.</p>
-            <div class="form-note">🔒 <span>Tus datos solo se usan para contactarte. Nunca los compartimos con terceros ni se guardan en este sitio.</span></div>
+            <div class="form-note">Se preparará un mensaje de WhatsApp. Debes enviarlo allí para que recibamos tu consulta.</div>
+            <label class="consent-label"><input type="checkbox" name="consent" required> Autorizo el contacto para esta consulta y he leído la <a href="/politica-de-privacidad/">política de privacidad</a>.</label>
             <div class="form-actions">
               <button type="button" class="btn btn-ghost" data-prev>← Atrás</button>
               <button type="submit" class="btn btn-primary">Enviar por WhatsApp ✓</button>
@@ -254,13 +249,16 @@
     </div>
   </section>
 
+  {% include "service-sections.njk" %}
   <!-- NOSOTROS -->
   <section id="nosotros" class="section-dark">
     <div class="container">
       <div class="section-head center">
         <p class="eyebrow on-dark" style="justify-content:center;">Nuestro diferenciador</p>
         <h2 class="section-title on-dark">¿Por qué elegir Viex Salud?</h2>
-        <p class="section-lead on-dark" style="margin-inline:auto;">No somos una Isapre. Somos tu asesor independiente, y eso cambia todo.</p>
+        <p class="section-lead on-dark" style="margin-inline:auto;">{{ services.about | escape }}</p>
+        <p class="about-detail"><strong>Nuestra misión:</strong> {{ services.mission | escape }}</p>
+        <p class="about-detail"><strong>Nuestros valores:</strong> {{ services.values | escape }}</p>
       </div>
       <div class="grid-3">
         <div class="feature-card" data-reveal><span class="ic">🎯</span><h3>Completamente independientes</h3><p>Sin exclusividad con ninguna Isapre. Nuestro único compromiso es con tu bolsillo y tu salud.</p></div>
@@ -305,33 +303,19 @@
         <p class="section-lead" style="margin-inline:auto;">Guías claras sobre Isapres, coberturas y cómo cuidar tu bolsillo y tu salud.</p>
       </div>
       <div class="blog-grid">
-        <a class="blog-card" href="blog/5-senales-revisar-plan-isapre.html" data-reveal>
-          <div class="thumb"><span class="tag">Guía</span></div>
+        {% for post in collections.blog | reverse %}
+        {% if loop.index <= 3 %}
+        <a class="blog-card" href="{{ post.url }}">
+          <div class="thumb">{% if post.data.cover %}<img src="{{ post.data.cover }}" alt="{{ (post.data.coverAlt or post.data.title) | escape }}" loading="lazy" decoding="async" width="640" height="360">{% endif %}<span class="tag">{{ post.data.tag | escape }}</span></div>
           <div class="body">
-            <span class="meta">Isapres · 6 min de lectura</span>
-            <h3>5 señales de que tu plan de Isapre necesita una revisión</h3>
-            <p>Cómo saber si sigue ajustándose a tu vida y tu bolsillo.</p>
+            <span class="meta">{{ post.date | readableDate }} · {{ post.templateContent | readingTime }}</span>
+            <h3>{{ post.data.title | escape }}</h3>
+            <p>{{ post.data.description | escape }}</p>
             <span class="read-more">Leer artículo →</span>
           </div>
         </a>
-        <a class="blog-card" href="blog/como-cambiar-de-isapre-en-chile.html" data-reveal>
-          <div class="thumb"><span class="tag">Guía</span></div>
-          <div class="body">
-            <span class="meta">Isapres · 6 min de lectura</span>
-            <h3>¿Sabías que puedes cambiar de Isapre? Guía simple</h3>
-            <p>Mitos, proceso y qué tener a mano antes de cambiarte.</p>
-            <span class="read-more">Leer artículo →</span>
-          </div>
-        </a>
-        <a class="blog-card" href="blog/antes-de-una-cirugia-que-revisar.html" data-reveal>
-          <div class="thumb"><span class="tag">Preparación</span></div>
-          <div class="body">
-            <span class="meta">Cirugías · 5 min de lectura</span>
-            <h3>Antes de una cirugía: 5 cosas que revisar en tu plan</h3>
-            <p>Anticípate a los costos y evita sorpresas en la cuenta.</p>
-            <span class="read-more">Leer artículo →</span>
-          </div>
-        </a>
+        {% endif %}
+        {% endfor %}
       </div>
       <div style="text-align:center; margin-top:2.5rem;"><a href="blog/" class="btn btn-ghost">Ver todos los artículos →</a></div>
     </div>
@@ -389,6 +373,7 @@
     </div>
   </section>
 
+  {% include "contact-section.njk" %}
   <!-- CTA FINAL -->
   <section>
     <div class="container">
@@ -446,6 +431,13 @@
 
 <a class="wa-float" href="https://wa.me/56948627767" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">💬</a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  window.VIEX_SUPABASE = supabase.createClient(
+    "https://jniaoqcgpdryqrssntfp.supabase.co",
+    "sb_publishable_BCFzQF1HZw8EPsGsdNvXCQ_0ILWpQB6"
+  );
+</script>
 <script src="assets/script.js" defer></script>
 <!-- Tawk.to Live Chat -->
 <script src="/assets/tawk.js"></script>

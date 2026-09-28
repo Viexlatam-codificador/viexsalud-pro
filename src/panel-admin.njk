@@ -98,6 +98,10 @@ eleventyExcludeFromCollections: true
       <h2 class="section-h">Actividad de ejecutivos</h2>
       <div class="cards" id="supabase-cards"></div>
 
+      <h2 class="section-h">Cotizaciones recientes del sitio</h2>
+      <p class="section-lead" style="margin-bottom:1rem; color:var(--ink-soft);">Cada persona que llenó el formulario de cotización o contacto en viexsalud.cl, haya o no terminado de enviarlo por WhatsApp.</p>
+      <table id="tabla-cotizaciones"><thead><tr><th>Fecha</th><th>Nombre</th><th>Teléfono / Email</th><th>Detalle</th><th></th></tr></thead><tbody></tbody></table>
+
       <div id="ga4-notice" style="display:none; margin-top:20px;"></div>
     </div>
   </div>
@@ -119,11 +123,18 @@ eleventyExcludeFromCollections: true
       (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>';
   }
 
+  function escapeHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function render(data) {
     document.getElementById('visitas-cards').innerHTML =
       card('Visitas hoy', data.ga4.configured ? data.ga4.visitas.hoy : '—', data.ga4.configured ? (fmt(data.ga4.visitas.sesionesHoy) + ' sesiones') : null) +
       card('Visitas ayer', data.ga4.configured ? data.ga4.visitas.ayer : '—') +
       card('Últimos 7 días', data.ga4.configured ? data.ga4.visitas.ultimos7 : '—') +
+      card('Últimos 30 días', data.ga4.configured ? data.ga4.visitas.ultimos30 : '—') +
       card('Páginas vistas hoy', data.ga4.configured ? data.ga4.visitas.paginasVistasHoy : '—');
 
     var tbody = document.querySelector('#tabla-diaria tbody');
@@ -144,9 +155,25 @@ eleventyExcludeFromCollections: true
       : card('Clics a WhatsApp', '—') + card('Formularios enviados', '—');
 
     document.getElementById('supabase-cards').innerHTML =
+      card('Cotizaciones del formulario hoy', data.supabase.cotizaciones.hoy, fmt(data.supabase.cotizaciones.total) + ' en total') +
       card('Comparaciones hoy', data.supabase.comparaciones.hoy, fmt(data.supabase.comparaciones.total) + ' en total') +
       card('Suscriptores nuevos hoy', data.supabase.suscriptores.hoy, fmt(data.supabase.suscriptores.total) + ' en total') +
       card('Ejecutivos registrados', data.supabase.ejecutivos.total);
+
+    var cotizBody = document.querySelector('#tabla-cotizaciones tbody');
+    var cotizaciones = (data.supabase.cotizaciones && data.supabase.cotizaciones.recientes) || [];
+    if (!cotizaciones.length) {
+      cotizBody.innerHTML = '<tr><td colspan="5">Todavía no hay cotizaciones registradas.</td></tr>';
+    } else {
+      cotizBody.innerHTML = cotizaciones.map(function (c) {
+        var fecha = c.created_at ? new Date(c.created_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+        var contacto = c.telefono || c.email || '';
+        var detalle = [c.edad ? c.edad + ' años' : '', c.sexo, c.region, c.cargas === 'si' ? 'con cargas' : '', c.motivo].filter(Boolean).join(' · ');
+        var telLimpio = (c.telefono || '').replace(/[^0-9]/g, '');
+        var waLink = telLimpio ? '<a href="https://wa.me/' + telLimpio + '" target="_blank" rel="noopener" style="color:var(--blue); font-weight:700; text-decoration:none;">WhatsApp →</a>' : '';
+        return '<tr><td>' + fecha + '</td><td>' + escapeHtml(c.nombre) + '</td><td>' + escapeHtml(contacto) + '</td><td>' + escapeHtml(detalle) + '</td><td>' + waLink + '</td></tr>';
+      }).join('');
+    }
 
     var notice = document.getElementById('ga4-notice');
     if (!data.ga4.configured) {

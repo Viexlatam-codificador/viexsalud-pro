@@ -88,6 +88,7 @@ async function getGa4Summary() {
         { startDate: "today", endDate: "today", name: "hoy" },
         { startDate: "yesterday", endDate: "yesterday", name: "ayer" },
         { startDate: "7daysAgo", endDate: "today", name: "ultimos7" },
+        { startDate: "29daysAgo", endDate: "today", name: "ultimos30" },
       ],
       dimensions: [{ name: "dateRange" }],
       metrics: [{ name: "activeUsers" }, { name: "sessions" }, { name: "screenPageViews" }],
@@ -106,13 +107,15 @@ async function getGa4Summary() {
       dimensions: [{ name: "dateRange" }, { name: "eventName" }],
       metrics: [{ name: "eventCount" }],
       dimensionFilter: {
-        filter: { fieldName: "eventName", inListFilter: { values: ["generate_lead", "whatsapp_click"] } },
+        filter: { fieldName: "eventName", inListFilter: { values: ["whatsapp_click", "quote_whatsapp_open", "contact_whatsapp_open"] } },
       },
     }),
   ]);
 
   const ov = rowsToMap(overview, 1);
   const ev = rowsToMap(events, 2);
+  const formEventCount = (dateRangeName) =>
+    (ev[`${dateRangeName}|quote_whatsapp_open`] || [0])[0] + (ev[`${dateRangeName}|contact_whatsapp_open`] || [0])[0];
 
   return {
     configured: true,
@@ -120,6 +123,7 @@ async function getGa4Summary() {
       hoy: (ov["hoy"] || [0, 0, 0])[0],
       ayer: (ov["ayer"] || [0, 0, 0])[0],
       ultimos7: (ov["ultimos7"] || [0, 0, 0])[0],
+      ultimos30: (ov["ultimos30"] || [0, 0, 0])[0],
       sesionesHoy: (ov["hoy"] || [0, 0, 0])[1],
       paginasVistasHoy: (ov["hoy"] || [0, 0, 0])[2],
     },
@@ -130,8 +134,8 @@ async function getGa4Summary() {
     eventos: {
       whatsappHoy: (ev["hoy|whatsapp_click"] || [0])[0],
       whatsapp7dias: (ev["ultimos7|whatsapp_click"] || [0])[0],
-      formularioHoy: (ev["hoy|generate_lead"] || [0])[0],
-      formulario7dias: (ev["ultimos7|generate_lead"] || [0])[0],
+      formularioHoy: formEventCount("hoy"),
+      formulario7dias: formEventCount("ultimos7"),
     },
   };
 }
@@ -142,11 +146,14 @@ async function getSupabaseSummary(serviceKey) {
   todayIso.setHours(0, 0, 0, 0);
   const todayFilter = `created_at=gte.${todayIso.toISOString()}`;
 
-  const [compTotal, compHoy, subTotal, subHoy, users] = await Promise.all([
+  const [compTotal, compHoy, subTotal, subHoy, cotizTotal, cotizHoy, cotizRecientes, users] = await Promise.all([
     fetch(`${SUPABASE_URL}/rest/v1/comparaciones?select=id`, { headers: { ...headers, Prefer: "count=exact" } }),
     fetch(`${SUPABASE_URL}/rest/v1/comparaciones?select=id&${todayFilter}`, { headers: { ...headers, Prefer: "count=exact" } }),
     fetch(`${SUPABASE_URL}/rest/v1/suscriptores?select=id`, { headers: { ...headers, Prefer: "count=exact" } }),
     fetch(`${SUPABASE_URL}/rest/v1/suscriptores?select=id&${todayFilter}`, { headers: { ...headers, Prefer: "count=exact" } }),
+    fetch(`${SUPABASE_URL}/rest/v1/cotizaciones_web?select=id`, { headers: { ...headers, Prefer: "count=exact" } }),
+    fetch(`${SUPABASE_URL}/rest/v1/cotizaciones_web?select=id&${todayFilter}`, { headers: { ...headers, Prefer: "count=exact" } }),
+    fetch(`${SUPABASE_URL}/rest/v1/cotizaciones_web?select=*&order=created_at.desc&limit=50`, { headers }),
     fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, { headers }),
   ]);
 
@@ -157,10 +164,12 @@ async function getSupabaseSummary(serviceKey) {
   }
 
   const usersJson = users.ok ? await users.json() : { users: [] };
+  const cotizacionesLista = cotizRecientes.ok ? await cotizRecientes.json() : [];
 
   return {
     comparaciones: { total: countFrom(compTotal), hoy: countFrom(compHoy) },
     suscriptores: { total: countFrom(subTotal), hoy: countFrom(subHoy) },
+    cotizaciones: { total: countFrom(cotizTotal), hoy: countFrom(cotizHoy), recientes: cotizacionesLista },
     ejecutivos: { total: (usersJson.users || []).length },
   };
 }

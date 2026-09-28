@@ -1,0 +1,14 @@
+---
+permalink: sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.viexsalud.cl/</loc></url>
+  <url><loc>https://www.viexsalud.cl/blog/</loc></url>
+  <url><loc>https://www.viexsalud.cl/preguntas-isapre/</loc></url>
+  <url><loc>https://www.viexsalud.cl/politica-de-privacidad/</loc></url>
+  {% for post in collections.blog %}
+  <url><loc>https://www.viexsalud.cl{{ post.url | escape }}</loc><lastmod>{{ (post.data.updated or post.date) | isoDate }}</lastmod></url>
+  {% endfor %}
+</urlset>

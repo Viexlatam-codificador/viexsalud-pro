@@ -4,6 +4,7 @@
    del sitio (script-src 'self') sin necesitar 'unsafe-inline'. */
 
 (function () {
+  if (!/^(www\.)?viexsalud\.cl$/.test(location.hostname) || /^\/(admin|ejecutivos|recursos-ejecutivos)(\/|$)/.test(location.pathname)) return;
   // ---- Google Analytics 4 ----
   var GA_MEASUREMENT_ID = "G-C6J6SFWGD4";
 

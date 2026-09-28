@@ -1,0 +1,16 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const yaml = require('js-yaml');
+const html = fs.readFileSync('_site/index.html', 'utf8');
+for (const id of ['nosotros','planes-destacados','contacto','quote-form','contact-form','blog-preview']) assert(html.includes(`id="${id}"`), id);
+const blog = html.split('id="blog-preview"')[1].split('</section>')[0];
+assert.equal((blog.match(/class="blog-card"/g)||[]).length,3);
+for (const match of html.matchAll(/<img[^>]+src="(\/assets\/[^"?]+)"/g)) assert(fs.existsSync('_site'+match[1]),match[1]);
+assert(html.includes('type="email"'));
+assert(html.includes('type="checkbox" name="consent" required'));
+const cms = yaml.load(fs.readFileSync('admin/config.yml','utf8'));
+for (const name of ['sitio','blog','preexistencias','isapres']) assert(cms.collections.some(c=>c.name===name));
+assert(fs.readFileSync('_site/sitemap.xml','utf8').includes('adicional-salud-7-por-ciento'));
+assert(!fs.readFileSync('_site/sitemap.xml','utf8').includes('recursos-ejecutivos'));
+assert(fs.readFileSync('_site/recursos-ejecutivos/index.html','utf8').includes('content="noindex, nofollow"'));
+console.log('OK: secciones, 3 artículos recientes, imágenes existentes, CMS conservado y sitemap público.');

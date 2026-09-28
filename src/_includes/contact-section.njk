@@ -1,0 +1,28 @@
+<section id="contacto" class="section-cream">
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow">Conversemos</p>
+      <h2 class="section-title">Contacta a Viex Salud</h2>
+      <p class="section-lead">Atención en línea para personas en Chile. Para proteger tu privacidad, no ingreses diagnósticos, RUT ni documentos médicos en este formulario.</p>
+    </div>
+    <div class="grid-2 contact-grid">
+      <div class="service-card">
+        <h3>Elige cómo contactarnos</h3>
+        <p><a href="tel:+56948627767">Llamar al +56 9 4862 7767</a></p>
+        <p><a href="https://wa.me/56948627767" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a></p>
+        <p><a href="#redes">Ver nuestras redes sociales</a></p>
+        <p><a href="/preguntas-isapre/">Preguntas sobre tu Isapre</a></p>
+      </div>
+      <form id="contact-form" class="service-card" data-private>
+        <div class="field"><label for="contact-name">Tu nombre</label><input id="contact-name" name="nombre" autocomplete="given-name" required minlength="2" maxlength="80"></div>
+        <div class="field"><label for="contact-email">Correo electrónico (opcional)</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254"></div>
+        <div class="field"><label for="contact-subject">¿Cómo podemos ayudarte?</label><select id="contact-subject" name="motivo" required><option value="">Selecciona un motivo</option><option>Cotizar un plan</option><option>Revisar mi plan actual</option><option>Asesoría para mi familia</option><option>Otra consulta</option></select></div>
+        <label class="consent-label"><input type="checkbox" name="consent" required> Autorizo el uso de estos datos para responder mi consulta y he leído la <a href="/politica-de-privacidad/">política de privacidad</a>.</label>
+        <button type="submit" class="btn btn-primary">Continuar en WhatsApp →</button>
+        <p class="form-note">Se preparará un mensaje. Debes pulsar Enviar en WhatsApp para que recibamos tu consulta.</p>
+        <p id="contact-status" role="status" aria-live="polite"></p>
+        <noscript><p>Para contactarnos sin JavaScript, usa el enlace directo de WhatsApp o llama al número indicado.</p></noscript>
+      </form>
+    </div>
+  </div>
+</section>

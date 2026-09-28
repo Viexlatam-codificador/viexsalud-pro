@@ -1,0 +1,18 @@
+<section id="planes-destacados" class="section-cream">
+  <div class="container">
+    <div class="section-head center">
+      <p class="eyebrow">Asesoría personalizada</p>
+      <h2 class="section-title">Planes destacados según lo que buscas</h2>
+      <p class="section-lead">Estas son líneas de asesoría, no ofertas de planes específicos. Solicita una cotización para conocer alternativas, precios y condiciones vigentes.</p>
+    </div>
+    <div class="grid-3">
+      {% for plan in services.plans %}
+      <article class="service-card">
+        <h3>{{ plan.title | escape }}</h3>
+        <p>{{ plan.description | escape }}</p>
+        <a class="btn btn-primary" href="#cotizar">{{ plan.cta | escape }} →</a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

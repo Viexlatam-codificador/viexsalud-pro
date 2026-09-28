@@ -60,6 +60,12 @@ module.exports = async (req, res) => {
     );
     const suscriptores = subsRes.ok ? await subsRes.json() : [];
 
+    const cotizRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/cotizaciones_web?select=*&order=created_at.desc`,
+      { headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` } }
+    );
+    const cotizacionesWeb = cotizRes.ok ? await cotizRes.json() : [];
+
     const usersRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, {
       headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
     });
@@ -89,7 +95,9 @@ module.exports = async (req, res) => {
         "segunda_alternativa",
       ]) +
       "\n\nSUSCRIPTORES DEL BLOG\n" +
-      toCsv(suscriptores, ["created_at", "email", "fuente"]);
+      toCsv(suscriptores, ["created_at", "email", "fuente"]) +
+      "\n\nCOTIZACIONES DEL FORMULARIO WEB\n" +
+      toCsv(cotizacionesWeb, ["created_at", "nombre", "telefono", "edad", "sexo", "region", "cargas", "email", "motivo", "fuente"]);
 
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     res.setHeader("Content-Disposition", 'attachment; filename="viexsalud-comparaciones.csv"');

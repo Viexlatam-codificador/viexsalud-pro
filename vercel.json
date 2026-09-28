@@ -5,21 +5,39 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "geolocation=(), camera=(), microphone=(), payment=()" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), camera=(), microphone=(), payment=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://embed.tawk.to https://connect.facebook.net https://t.contentsquare.net; style-src 'self' 'unsafe-inline' https://embed.tawk.to; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.tawk.to https://www.google.com https://www.google.cl https://*.contentsquare.net; font-src 'self' https://*.tawk.to; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://*.tawk.to wss://*.tawk.to https://stats.g.doubleclick.net https://*.contentsquare.net; frame-src https://www.googletagmanager.com https://*.tawk.to; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://www.googletagmanager.com https://embed.tawk.to https://connect.facebook.net https://t.contentsquare.net; style-src 'self' 'unsafe-inline' https://embed.tawk.to; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.tawk.to https://www.google.com https://www.google.cl https://*.contentsquare.net; font-src 'self' https://*.tawk.to; connect-src 'self' https://jniaoqcgpdryqrssntfp.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://*.tawk.to wss://*.tawk.to https://stats.g.doubleclick.net https://*.contentsquare.net; frame-src https://www.googletagmanager.com https://*.tawk.to; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests"
         }
       ]
     },
     {
       "source": "/admin",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: blob: https:; font-src 'self' https://unpkg.com data:; connect-src 'self' blob: https://api.github.com https://github.com; frame-ancestors 'none'; base-uri 'self'"
@@ -29,7 +47,10 @@
     {
       "source": "/admin/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: blob: https:; font-src 'self' https://unpkg.com data:; connect-src 'self' blob: https://api.github.com https://github.com; frame-ancestors 'none'; base-uri 'self'"
@@ -39,7 +60,10 @@
     {
       "source": "/recursos-ejecutivos",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://embed.tawk.to https://connect.facebook.net https://cdn.jsdelivr.net https://t.contentsquare.net; style-src 'self' 'unsafe-inline' https://embed.tawk.to; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.tawk.to https://www.google.com https://www.google.cl https://*.contentsquare.net; font-src 'self' https://*.tawk.to; connect-src 'self' https://mindicador.cl https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://jniaoqcgpdryqrssntfp.supabase.co https://*.tawk.to wss://*.tawk.to https://stats.g.doubleclick.net https://*.contentsquare.net; frame-src https://www.googletagmanager.com https://*.tawk.to; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests"
@@ -49,7 +73,10 @@
     {
       "source": "/recursos-ejecutivos/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://embed.tawk.to https://connect.facebook.net https://cdn.jsdelivr.net https://t.contentsquare.net; style-src 'self' 'unsafe-inline' https://embed.tawk.to; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.tawk.to https://www.google.com https://www.google.cl https://*.contentsquare.net; font-src 'self' https://*.tawk.to; connect-src 'self' https://mindicador.cl https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://jniaoqcgpdryqrssntfp.supabase.co https://*.tawk.to wss://*.tawk.to https://stats.g.doubleclick.net https://*.contentsquare.net; frame-src https://www.googletagmanager.com https://*.tawk.to; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://wa.me; upgrade-insecure-requests"
@@ -59,43 +86,64 @@
     {
       "source": "/recursos-ejecutivos/preexistencias",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/recursos-ejecutivos/gestionar-preexistencias",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/recursos-ejecutivos/panel",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/api/dashboard-summary",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/api/delete-preexistencias",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/recursos-ejecutivos/preexistencias/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/ejecutivos",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://embed.tawk.to https://connect.facebook.net https://t.contentsquare.net; style-src 'self' 'unsafe-inline' https://embed.tawk.to; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.tawk.to https://www.google.com https://www.google.cl https://*.contentsquare.net; font-src 'self' https://*.tawk.to; connect-src 'self' https://jniaoqcgpdryqrssntfp.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://*.tawk.to wss://*.tawk.to https://stats.g.doubleclick.net https://*.contentsquare.net; frame-src https://www.googletagmanager.com https://*.tawk.to; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
@@ -105,7 +153,10 @@
     {
       "source": "/ejecutivos/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://embed.tawk.to https://connect.facebook.net https://t.contentsquare.net; style-src 'self' 'unsafe-inline' https://embed.tawk.to; img-src 'self' data: https://www.facebook.com https://www.google-analytics.com https://*.tawk.to https://www.google.com https://www.google.cl https://*.contentsquare.net; font-src 'self' https://*.tawk.to; connect-src 'self' https://jniaoqcgpdryqrssntfp.supabase.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://*.tawk.to wss://*.tawk.to https://stats.g.doubleclick.net https://*.contentsquare.net; frame-src https://www.googletagmanager.com https://*.tawk.to; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
@@ -142,13 +193,19 @@
     {
       "source": "/api/export-data",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/api/callback",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'; base-uri 'self'"
@@ -159,7 +216,12 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "viexsalud.cl" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "viexsalud.cl"
+        }
+      ],
       "destination": "https://www.viexsalud.cl/:path*",
       "permanent": true
     }

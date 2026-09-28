@@ -12,7 +12,11 @@
 <title>{{ title }}{% if not noBrandSuffix %} | Viex Salud{% endif %}</title>
 <meta name="description" content="{{ description }}">
 <link rel="canonical" href="{{ canonical }}">
+{% if '/recursos-ejecutivos/' in page.url or '/ejecutivos/' in page.url %}
+<meta name="robots" content="noindex, nofollow">
+{% else %}
 <meta name="robots" content="index, follow">
+{% endif %}
 <meta property="og:type" content="{{ ogType | default('article') }}">
 <meta property="og:site_name" content="Viex Salud">
 <meta property="og:title" content="{{ ogTitle | default(title) }}">
@@ -36,10 +40,6 @@
 <script src="/assets/analytics.js" defer></script>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T72HZJ28" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=844718715124934&amp;ev=PageView&amp;noscript=1" alt="" /></noscript>
 <a class="skip-link" href="#main">Saltar al contenido</a>
 
 <div class="topbar" aria-hidden="true">
@@ -53,13 +53,7 @@
   <nav class="nav container" aria-label="Navegación principal">
     <a href="/" class="brand"><img src="/assets/img/logo-mark.svg" alt="" width="38" height="38" class="logo-mark-img"> Viex Salud</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="/#como-funciona">Cómo funciona</a></li>
-      <li><a href="/#isapres">Isapres</a></li>
-      <li><a href="/#nosotros">Nosotros</a></li>
-      <li><a href="/blog/">Blog</a></li>
-      <li><a href="/ejecutivos/">Ejecutivos</a></li>
-      <li><a href="/preguntas-isapre/">Preguntas sobre tu Isapre</a></li>
-      <li><a href="/#faq">Preguntas frecuentes</a></li>
+      {% include "public-navigation.njk" %}
     </ul>
     <div class="nav-actions">
       <a href="/#cotizar" class="btn btn-primary btn-sm"><span class="nav-cta-text">Cotizar gratis</span><span aria-hidden="true">→</span></a>

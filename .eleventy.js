@@ -1,7 +1,9 @@
 module.exports = function (eleventyConfig) {
+  const images = require('./scripts/image-transform.cjs');
+  eleventyConfig.on('eleventy.before', images.reset);
+  eleventyConfig.addTransform('optimized-images', images.transform);
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy("src/robots.txt");
-  eleventyConfig.addPassthroughCopy("src/sitemap.xml");
   eleventyConfig.addPassthroughCopy("src/llms.txt");
   eleventyConfig.addPassthroughCopy("admin");
 

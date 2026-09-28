@@ -1,6 +1,7 @@
 var Tawk_API = Tawk_API || {};
 var Tawk_LoadStart = new Date();
 (function () {
+  if (!/^(www\.)?viexsalud\.cl$/.test(location.hostname) || /^\/(admin|ejecutivos|recursos-ejecutivos)(\/|$)/.test(location.pathname)) return;
   var s1 = document.createElement('script'),
     s0 = document.getElementsByTagName('script')[0];
   s1.async = true;

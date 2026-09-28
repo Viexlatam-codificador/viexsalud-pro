@@ -1,0 +1,11 @@
+{
+  "brandName": "Tu marca",
+  "logo": "",
+  "hero": {"title": "Presenta tu servicio", "description": "Explica a quién ayudas y cómo.", "image": ""},
+  "about": "Reseña verificada de la empresa.",
+  "mission": "",
+  "values": "",
+  "services": [{"title": "Servicio", "description": "Descripción verificable del servicio.", "cta": "Solicitar información"}],
+  "contact": {"phone": "", "email": "", "whatsapp": ""},
+  "social": []
+}

@@ -1,0 +1,10 @@
+{
+  "about": "Viex Salud es un servicio de asesoría de Isapres en Chile. Te acompañamos a comparar alternativas, entender las condiciones de un plan y solicitar una cotización acorde a tus prioridades. La decisión final siempre es tuya.",
+  "mission": "Hacer más comprensible la elección de un plan de salud, con orientación cercana e información clara.",
+  "values": "Claridad, trato respetuoso, confidencialidad y acompañamiento.",
+  "plans": [
+    {"title":"Para ti", "description":"Compara alternativas según tu presupuesto, prestadores preferidos y prioridades de atención.", "cta":"Solicitar cotización individual"},
+    {"title":"Para tu familia", "description":"Revisa alternativas para tu grupo familiar y compara precios, topes y condiciones antes de decidir.", "cta":"Cotizar para mi familia"},
+    {"title":"Revisar tu plan actual", "description":"Contrasta las condiciones de tu plan con otras propuestas y reconoce diferencias relevantes para ti.", "cta":"Solicitar revisión de mi plan"}
+  ]
+}

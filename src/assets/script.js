@@ -20,6 +20,24 @@
     }
   }
 
+  /* Guarda cada envío de formulario en la base de datos, sin importar si la
+     persona llega a apretar "enviar" en WhatsApp o no. Antes solo se abría
+     WhatsApp y, si la persona no confirmaba el envío ahí, el dato se perdía
+     para siempre sin dejar registro. Fire-and-forget: nunca bloquea ni
+     interrumpe el flujo del formulario. */
+  function saveLeadToDatabase(fields) {
+    try {
+      if (!window.VIEX_SUPABASE) return;
+      window.VIEX_SUPABASE.from("cotizaciones_web")
+        .insert(Object.assign({}, fields, { fuente: window.location.pathname }))
+        .then((res) => {
+          if (res.error) console.warn("No se pudo guardar la cotización:", res.error.message);
+        });
+    } catch (err) {
+      /* Nunca dejar que esto rompa el formulario. */
+    }
+  }
+
   /* Any click on a WhatsApp link anywhere on the site (header, hero, floating
      button, footer, social card, etc.) counts as a contact conversion. */
   document.addEventListener("click", (e) => {
@@ -40,16 +58,26 @@
     navToggle.addEventListener("click", () => {
       const isOpen = navLinks.classList.toggle("open");
       navToggle.setAttribute("aria-expanded", String(isOpen));
+      navToggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
+      if (window.Tawk_API) {
+        const action = isOpen ? "hideWidget" : "showWidget";
+        if (typeof window.Tawk_API[action] === "function") window.Tawk_API[action]();
+      }
     });
     navLinks.querySelectorAll("a").forEach((a) =>
       a.addEventListener("click", () => {
         navLinks.classList.remove("open");
         navToggle.setAttribute("aria-expanded", "false");
+        navToggle.setAttribute("aria-label", "Abrir menú");
+        if (typeof window.Tawk_API?.showWidget === "function") window.Tawk_API.showWidget();
       })
     );
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && navLinks.classList.contains("open")) navToggle.click();
+    });
   }
 
-  /* Multi-step quote form -> builds a prefilled WhatsApp message (no backend, no data stored) */
+  /* Multi-step quote form -> saves the lead (see saveLeadToDatabase) and opens a prefilled WhatsApp message */
   const form = document.getElementById("quote-form");
   if (form) {
     const steps = Array.from(form.querySelectorAll(".form-step"));
@@ -69,10 +97,12 @@
     function validateStep(index) {
       const fields = steps[index].querySelectorAll("[required]");
       for (const f of fields) {
+        if (f.name === "telefono") f.setCustomValidity(/^(?:\+?56)?9\d{8}$/.test(f.value.replace(/[\s()-]/g, "")) ? "" : "Ingresa un celular chileno válido, por ejemplo +56 9 1234 5678.");
         if (f.type === "radio") {
           const group = steps[index].querySelectorAll(`[name="${f.name}"]`);
           if (![...group].some((r) => r.checked)) return false;
-        } else if (!f.value.trim()) {
+        } else if (!f.checkValidity() || (f.type !== "checkbox" && !f.value.trim())) {
+          f.reportValidity();
           f.focus();
           return false;
         }
@@ -128,11 +158,13 @@
       const message = encodeURIComponent(lines.join("\n"));
 
       trackConversion(
-        "generate_lead",
+        "quote_whatsapp_open",
         { form_id: "quote-form" },
-        "Lead",
+        "Contact",
         { content_name: "Cotización Isapre" }
       );
+
+      saveLeadToDatabase({ nombre, telefono, edad, sexo, region, cargas });
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank", "noopener");
     });
@@ -141,6 +173,26 @@
   }
 
   /* Reveal-on-scroll (progressive enhancement, respects reduced motion) */
+  const contactForm = document.getElementById("contact-form");
+  if (contactForm) contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    const data = new FormData(contactForm);
+    const name = String(data.get("nombre") || "").trim();
+    if (name.length < 2) {
+      document.getElementById("contact-status").textContent = "Ingresa tu nombre, con al menos dos letras.";
+      document.getElementById("contact-name").focus();
+      return;
+    }
+    const email = String(data.get("email") || "").trim();
+    const motivo = String(data.get("motivo") || "").trim();
+    const message = ["Hola Viex Salud, quisiera asesoría.", `Nombre: ${name}`, `Motivo: ${motivo}`, email ? `Correo: ${email}` : ""].filter(Boolean).join("\n");
+    saveLeadToDatabase({ nombre: name, email, motivo });
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    document.getElementById("contact-status").textContent = "Continúa en WhatsApp y pulsa Enviar. Si no se abrió, permite las ventanas emergentes o utiliza el enlace de contacto directo.";
+    trackConversion("contact_whatsapp_open", {form_id:"contact-form"}, "Contact", {});
+  });
+
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!prefersReduced && "IntersectionObserver" in window) {
     const revealEls = document.querySelectorAll("[data-reveal]");

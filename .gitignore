@@ -4,3 +4,5 @@ _site
 
 # Contentsquare wizard (generated)
 .cs-wizard/
+.vercel
+.env*

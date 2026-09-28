@@ -11,6 +11,23 @@ media_folder: "src/assets/img/blog"
 public_folder: "/assets/img/blog"
 
 collections:
+  - name: "sitio"
+    label: "Nosotros y servicios"
+    files:
+      - name: "services"
+        label: "Nosotros y planes destacados"
+        file: "src/_data/services.json"
+        fields:
+          - { label: "Reseña", name: "about", widget: "text" }
+          - { label: "Misión", name: "mission", widget: "text" }
+          - { label: "Valores", name: "values", widget: "text" }
+          - label: "Líneas de asesoría destacadas"
+            name: "plans"
+            widget: "list"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Descripción", name: "description", widget: "text" }
+              - { label: "Texto del botón", name: "cta", widget: "string" }
   - name: "blog"
     label: "Blog y redes"
     label_singular: "Paquete editorial"
