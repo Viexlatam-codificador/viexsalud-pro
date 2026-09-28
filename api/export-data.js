@@ -97,7 +97,7 @@ module.exports = async (req, res) => {
       "\n\nSUSCRIPTORES DEL BLOG\n" +
       toCsv(suscriptores, ["created_at", "email", "fuente"]) +
       "\n\nCOTIZACIONES DEL FORMULARIO WEB\n" +
-      toCsv(cotizacionesWeb, ["created_at", "nombre", "telefono", "edad", "sexo", "region", "cargas", "email", "motivo", "fuente"]);
+      toCsv(cotizacionesWeb, ["created_at", "nombre", "telefono", "edad", "sexo", "region", "cargas", "cargas_edades", "email", "motivo", "fuente"]);
 
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     res.setHeader("Content-Disposition", 'attachment; filename="viexsalud-comparaciones.csv"');

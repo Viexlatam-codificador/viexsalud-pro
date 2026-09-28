@@ -168,7 +168,8 @@ eleventyExcludeFromCollections: true
       cotizBody.innerHTML = cotizaciones.map(function (c) {
         var fecha = c.created_at ? new Date(c.created_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
         var contacto = c.telefono || c.email || '';
-        var detalle = [c.edad ? c.edad + ' años' : '', c.sexo, c.region, c.cargas === 'si' ? 'con cargas' : '', c.motivo].filter(Boolean).join(' · ');
+        var cargasTxt = c.cargas === 'si' ? ('con cargas' + (c.cargas_edades ? ' (' + c.cargas_edades + ')' : '')) : '';
+        var detalle = [c.edad ? c.edad + ' años' : '', c.sexo, c.region, cargasTxt, c.motivo].filter(Boolean).join(' · ');
         var telLimpio = (c.telefono || '').replace(/[^0-9]/g, '');
         var waLink = telLimpio ? '<a href="https://wa.me/' + telLimpio + '" target="_blank" rel="noopener" style="color:var(--blue); font-weight:700; text-decoration:none;">WhatsApp →</a>' : '';
         return '<tr><td>' + fecha + '</td><td>' + escapeHtml(c.nombre) + '</td><td>' + escapeHtml(contacto) + '</td><td>' + escapeHtml(detalle) + '</td><td>' + waLink + '</td></tr>';

@@ -80,6 +80,24 @@
   /* Single-step quote form -> saves the lead (see saveLeadToDatabase) and opens a prefilled WhatsApp message */
   const form = document.getElementById("quote-form");
   if (form) {
+    const cargasEdadesField = document.getElementById("campo-cargas-edades");
+    const cargasEdadesInput = document.getElementById("cargas-edades");
+    if (cargasEdadesField && cargasEdadesInput) {
+      form.querySelectorAll('input[name="cargas"]').forEach((radio) =>
+        radio.addEventListener("change", () => {
+          const show = radio.value === "si" && radio.checked;
+          if (show) {
+            cargasEdadesField.style.display = "";
+            cargasEdadesInput.setAttribute("required", "");
+          } else if (document.querySelector('input[name="cargas"]:checked')?.value !== "si") {
+            cargasEdadesField.style.display = "none";
+            cargasEdadesInput.removeAttribute("required");
+            cargasEdadesInput.value = "";
+          }
+        })
+      );
+    }
+
     function validateForm() {
       const fields = form.querySelectorAll("[required]");
       for (const f of fields) {
@@ -110,6 +128,7 @@
       const sexo = (data.get("sexo") || "").toString().trim();
       const region = (data.get("region") || "").toString().trim();
       const cargas = (data.get("cargas") || "").toString().trim();
+      const cargasEdades = cargas === "si" ? (data.get("cargasEdades") || "").toString().trim() : "";
 
       const lines = [
         "Hola, quiero una evaluación gratuita de mi plan de Isapre.",
@@ -119,6 +138,7 @@
         sexo ? `Sexo: ${sexo}` : "",
         `Región: ${region}`,
         `Cargas familiares: ${cargas === "si" ? "Sí" : "Solo yo"}`,
+        cargasEdades ? `Edad de las cargas: ${cargasEdades}` : "",
       ].filter(Boolean);
 
       const message = encodeURIComponent(lines.join("\n"));
@@ -130,7 +150,7 @@
         { content_name: "Cotización Isapre" }
       );
 
-      saveLeadToDatabase({ nombre, telefono, edad, sexo, region, cargas });
+      saveLeadToDatabase({ nombre, telefono, edad, sexo, region, cargas, cargas_edades: cargasEdades });
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank", "noopener");
     });
