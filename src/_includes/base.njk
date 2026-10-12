@@ -2,16 +2,22 @@
 <html lang="es-CL">
 <head>
 <!-- Contentsquare -->
-<script src="/assets/contentsquare.js"></script>
+<script src="/assets/contentsquare.js" defer></script>
 <!-- End Contentsquare -->
 <!-- Google Tag Manager -->
-<script src="/assets/gtm.js"></script>
+<script src="/assets/gtm.js" defer></script>
 <!-- End Google Tag Manager -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ title }}{% if not noBrandSuffix %} | Viex Salud{% endif %}</title>
 <meta name="description" content="{{ description }}">
 <link rel="canonical" href="{{ canonical }}">
+<link rel="alternate" hreflang="es-CL" href="{{ canonical }}">
+<link rel="alternate" hreflang="x-default" href="{{ canonical }}">
+<meta name="geo.region" content="CL">
+<meta name="geo.placename" content="Chile">
+<meta name="language" content="es-CL">
+<meta http-equiv="content-language" content="es-CL">
 {% if '/recursos-ejecutivos/' in page.url or '/ejecutivos/' in page.url %}
 <meta name="robots" content="noindex, nofollow">
 {% else %}
@@ -56,7 +62,7 @@
       {% include "public-navigation.njk" %}
     </ul>
     <div class="nav-actions">
-      <a href="/#cotizar" class="btn btn-primary btn-sm"><span class="nav-cta-text">Cotizar gratis</span><span aria-hidden="true">→</span></a>
+      <a href="/#cotizar" class="btn btn-primary btn-sm" aria-label="Cotizar gratis"><span class="nav-cta-text">Cotizar gratis</span><span aria-hidden="true">→</span></a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-links">☰</button>
     </div>
   </nav>
@@ -69,17 +75,17 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-bottom" style="border-top:none; padding-top:0;">
-      <span>© <span id="year">{{ currentYear }}</span> Viex Salud · Asesoría independiente de Isapres en Chile</span>
+      <span>© <span id="year">{{ currentYear }}</span> Viex Salud · Asesoría de Isapres en todo Chile</span>
       <a href="/politica-de-privacidad/">Política de Privacidad</a>
       <a href="/">Volver al inicio</a>
     </div>
   </div>
 </footer>
 
-<a class="wa-float" href="https://wa.me/56948627767" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">💬</a>
+<a class="wa-float" href="https://wa.me/56948627767" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.9 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 8c0 3.5 3.5 7 7 7l1-2-2-1-1 1-3-3 1-1-1-2Z" fill="currentColor"/></svg></a>
 <script src="/assets/script.js" defer></script>
 <!-- Tawk.to Live Chat -->
-<script src="/assets/tawk.js"></script>
+<script src="/assets/tawk.js" defer></script>
 <!-- End Tawk.to Live Chat -->
 </body>
 </html>

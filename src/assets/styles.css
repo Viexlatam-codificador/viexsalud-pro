@@ -378,6 +378,16 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
   transition: transform .15s ease;
 }
 .wa-float:hover { transform: scale(1.08); }
+.wa-float svg { display:block; width:28px; height:28px; flex:none; }
+.wa-float { background:#087d3e; bottom:max(16px, env(safe-area-inset-bottom)); }
+@media (max-width:900px) {
+  .wa-float { width:52px; height:52px; left:auto; right:16px; }
+  .wa-float:hover { transform:none; }
+  body:has(.nav-links.open) .wa-float { visibility:hidden; }
+}
+.eyebrow:not(.on-dark) { color:#80631e; }
+.isapre-card p, .testimonial-card footer { color:#526259; }
+.footer-col h3 { color:var(--white); font-size:var(--fs-sm); text-transform:uppercase; letter-spacing:.08em; margin-bottom:1rem; }
 
 /* ---------- Reveal on scroll / form feedback ---------- */
 [data-reveal].reveal-armed { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }

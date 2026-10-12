@@ -7,12 +7,14 @@
   "@type": "Article",
   "headline": "{{ title }}",
   "description": "{{ description }}",
-  "author": {"@type": "Organization", "name": "Viex Salud"},
+  "author": {"@type": "Organization", "name": "Viex Salud", "url": "https://www.viexsalud.cl/", "description": "Asesoría de Isapres en Chile a cargo de un asesor de salud con más de 8 años de experiencia"},
   "publisher": {"@type": "Organization", "name": "Viex Salud", "logo": {"@type": "ImageObject", "url": "https://www.viexsalud.cl/assets/img/logo-mark.svg"}},
   "mainEntityOfPage": "{{ canonical }}",
   "datePublished": "{{ page.date | isoDate }}",
   "dateModified": "{% if updated %}{{ updated | isoDate }}{% else %}{{ page.date | isoDate }}{% endif %}",
-  "inLanguage": "es-CL"
+  "inLanguage": "es-CL",
+  "spatialCoverage": {"@type": "Country", "name": "Chile"},
+  "audience": {"@type": "Audience", "geographicArea": {"@type": "Country", "name": "Chile"}}
 }
 </script>
 <script type="application/ld+json">
@@ -67,7 +69,7 @@
   </aside>
   {% endif %}
 
-  <p class="editorial-note"><strong>Compromiso Viex Salud:</strong> informamos, educamos y acompañamos de manera independiente. Este contenido es informativo y no reemplaza la revisión individual del contrato, antecedentes de salud y condiciones de cada Isapre.</p>
+  <p class="editorial-note"><strong>Compromiso Viex Salud:</strong> informamos, educamos y acompañamos a personas de todo Chile. Este contenido es informativo y no reemplaza la revisión individual del contrato, antecedentes de salud y condiciones de cada Isapre.</p>
 
   <div class="article-cta">
     <img class="article-cta-logo" src="/assets/img/logo-mark.svg" alt="" width="54" height="54">
@@ -125,7 +127,7 @@
   <div class="related-grid">
     {% set related = collections.blog | relatedPosts(page.url) %}
     {% for post in related %}
-    <a class="blog-card" href="{{ post.url }}">
+    <a class="blog-card" href="{{ post.url | cleanUrl }}">
       <div class="thumb">{% if post.data.cover %}<img src="{{ post.data.cover }}" alt="{{ post.data.coverAlt | default(post.data.title) }}" loading="lazy">{% endif %}<span class="tag">{{ post.data.tag }}</span></div>
       <div class="body"><h3>{{ post.data.title }}</h3><span class="read-more">Leer →</span></div>
     </a>

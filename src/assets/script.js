@@ -60,7 +60,7 @@
       navToggle.setAttribute("aria-expanded", String(isOpen));
       navToggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
       if (window.Tawk_API) {
-        const action = isOpen ? "hideWidget" : "showWidget";
+        const action = isOpen || window.matchMedia('(max-width: 900px)').matches ? "hideWidget" : "showWidget";
         if (typeof window.Tawk_API[action] === "function") window.Tawk_API[action]();
       }
     });
@@ -69,7 +69,7 @@
         navLinks.classList.remove("open");
         navToggle.setAttribute("aria-expanded", "false");
         navToggle.setAttribute("aria-label", "Abrir menú");
-        if (typeof window.Tawk_API?.showWidget === "function") window.Tawk_API.showWidget();
+        if (!window.matchMedia('(max-width: 900px)').matches && typeof window.Tawk_API?.showWidget === "function") window.Tawk_API.showWidget();
       })
     );
     document.addEventListener("keydown", (event) => {

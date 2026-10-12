@@ -16,6 +16,8 @@ module.exports = function (eleventyConfig) {
       .slice(0, 3);
   });
 
+  eleventyConfig.addFilter("cleanUrl", (url) => String(url || "").replace(/\.html$/, ""));
+
   eleventyConfig.addFilter("isoDate", (dateObj) => new Date(dateObj).toISOString().slice(0, 10));
 
   eleventyConfig.addFilter("readingTime", (html) => {

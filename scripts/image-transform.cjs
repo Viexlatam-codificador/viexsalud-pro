@@ -12,7 +12,8 @@ module.exports = { reset: () => cache.clear(), transform: async function (html) 
       const input = path.resolve('src', relative);
       const output = path.join('_site/assets/optimized', relative.slice('assets/img/'.length) + '.webp');
       await fs.mkdir(path.dirname(output), {recursive:true});
-      const info = await sharp(input).rotate().resize({width:1200, withoutEnlargement:true}).webp({quality:82}).toFile(output);
+      const width = relative.startsWith('assets/img/isapres/') ? 360 : 1200;
+      const info = await sharp(input).rotate().resize({width, withoutEnlargement:true}).webp({quality:82}).toFile(output);
       return {url: '/' + output.replace(/^_site\//, ''), width:info.width, height:info.height};
     })());
     const image = await cache.get(relative);
