@@ -1,4 +1,5 @@
 module.exports = function (eleventyConfig) {
+  eleventyConfig.ignores.add("src/sitemap.xml");
   const images = require('./scripts/image-transform.cjs');
   eleventyConfig.on('eleventy.before', images.reset);
   eleventyConfig.addTransform('optimized-images', images.transform);
@@ -16,7 +17,7 @@ module.exports = function (eleventyConfig) {
       .slice(0, 3);
   });
 
-  eleventyConfig.addFilter("cleanUrl", (url) => String(url || "").replace(/\.html$/, ""));
+  eleventyConfig.addFilter("cleanUrl", (url) => String(url || "").replace(/\.html$/, "").replace(/\/$/, "") || "/");
 
   eleventyConfig.addFilter("isoDate", (dateObj) => new Date(dateObj).toISOString().slice(0, 10));
 

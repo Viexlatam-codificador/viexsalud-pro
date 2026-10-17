@@ -14,3 +14,18 @@ assert(fs.readFileSync('_site/sitemap.xml','utf8').includes('adicional-salud-7-p
 assert(!fs.readFileSync('_site/sitemap.xml','utf8').includes('recursos-ejecutivos'));
 assert(fs.readFileSync('_site/recursos-ejecutivos/index.html','utf8').includes('content="noindex, nofollow"'));
 console.log('OK: secciones, 3 artículos recientes, imágenes existentes, CMS conservado y sitemap público.');
+const sitemap = fs.readFileSync('_site/sitemap.xml', 'utf8');
+const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+assert.equal(new Set(urls).size, urls.length, 'URLs repetidas en sitemap');
+for (const url of urls) {
+  const route = new URL(url).pathname;
+  assert(route === '/' || !route.endsWith('/') && !route.endsWith('.html'), url);
+  const file = ['_site' + route + '.html', '_site' + (route === '/' ? '' : route) + '/index.html'].find(f => fs.existsSync(f));
+  assert(file, url);
+  const page = fs.readFileSync(file, 'utf8');
+  assert(page.includes(`<link rel="canonical" href="${url}">`), url);
+  assert.equal((page.match(/<h1(?:\s[^>]*)?>/g) || []).length, 1, url);
+  for (const match of page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) JSON.parse(match[1]);
+}
+assert(html.includes('href="/asesoria-isapre"'));
+console.log(`OK SEO: ${urls.length} URLs públicas, canónicas y JSON-LD válidos.`);
