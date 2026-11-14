@@ -1,4 +1,6 @@
-// Aviso por WhatsApp al cliente por cada formulario enviado, sin que la persona apriete nada.
+// Cada formulario enviado: 1) se guarda en la planilla de Google del cliente (LEADS_SHEET_URL,
+// que además le manda un correo) y 2) se avisa por WhatsApp, sin que la persona apriete nada.
+// Código de la planilla: v3rtice-agencia/herramientas/planilla-leads/Codigo.gs
 // Envía por el número oficial "V3RTICE Leads" (API de WhatsApp de Meta) si está configurado;
 // si no, usa CallMeBot como respaldo. Las claves van SOLO en variables de entorno de Vercel:
 //   Meta:      WHATSAPP_TOKEN, WHATSAPP_PHONE_ID (opcional WHATSAPP_PLANTILLA, WHATSAPP_IDIOMA)
@@ -39,6 +41,20 @@ async function enviarMeta(lead) {
   const texto = (await r.text()).slice(0, 300);
   if (!r.ok) console.warn("WhatsApp Meta respondió:", r.status, texto);
   return r.ok;
+}
+
+async function guardarPlanilla(lead) {
+  const r = await fetch(process.env.LEADS_SHEET_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    signal: AbortSignal.timeout(15000),
+    body: JSON.stringify({ origen: lead.origen, nombre: lead.nombre, telefono: lead.digitos, datos: lead.campos }),
+  });
+  const texto = (await r.text()).slice(0, 300);
+  let ok = false;
+  try { ok = r.ok && JSON.parse(texto).ok === true; } catch (e) { ok = false; }
+  if (!ok) console.warn("Planilla respondió:", r.status, texto.slice(0, 160));
+  return ok;
 }
 
 async function enviarCallMeBot(lead) {
@@ -82,18 +98,22 @@ module.exports = async (req, res) => {
     origen: limpio(d.origen, 60) || "sitio web",
     nombre,
     digitos,
+    campos,
     detalle: campos.map(([k, v]) => k + ": " + v),
     resumen: limpio(campos.map(([k, v]) => k + ": " + v).join(" · "), 700),
   };
 
   const meta = process.env.WHATSAPP_TOKEN && process.env.WHATSAPP_PHONE_ID;
-  if (!meta && !process.env.CALLMEBOT_APIKEY) return res.status(503).json({ ok: false, motivo: "falta-clave" });
+  const tareas = [];
+  if (process.env.LEADS_SHEET_URL) tareas.push(guardarPlanilla(lead));
+  if (meta) tareas.push(enviarMeta(lead));
+  else if (process.env.CALLMEBOT_APIKEY) tareas.push(enviarCallMeBot(lead));
+  if (!tareas.length) return res.status(503).json({ ok: false, motivo: "falta-clave" });
 
-  try {
-    const ok = meta ? await enviarMeta(lead) : await enviarCallMeBot(lead);
-    return res.status(ok ? 200 : 502).json({ ok });
-  } catch (e) {
+  const resultados = await Promise.all(tareas.map((t) => t.catch((e) => {
     console.warn("El aviso no salió:", e && e.message);
-    return res.status(502).json({ ok: false });
-  }
+    return false;
+  })));
+  const ok = resultados.some(Boolean);
+  return res.status(ok ? 200 : 502).json({ ok });
 };
