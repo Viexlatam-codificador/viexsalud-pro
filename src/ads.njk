@@ -1,0 +1,146 @@
+---
+permalink: ads.html
+eleventyExcludeFromCollections: true
+title: "Cotiza tu plan de salud | Viex Salud"
+description: "Completa tus datos y recibe una comparativa clara de planes de salud. Asesoría gratuita por WhatsApp."
+# Video de presentación: deja el archivo en src/assets/video/ y escribe aquí su ruta,
+# por ejemplo /assets/video/presentacion.mp4 (y una portada .jpg en videoPortada).
+video: ""
+videoPortada: ""
+---
+<!doctype html>
+<html lang="es-CL">
+<head>
+<script src="/assets/gtm.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.viexsalud.cl/ads">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cotiza tu plan de salud con Viex Salud">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:image" content="https://www.viexsalud.cl/assets/img/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%230e2b25'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='30' font-weight='900' fill='%23cba63f' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/ads.css">
+<script src="/assets/analytics.js" defer></script>
+</head>
+<body class="ads-page">
+<main id="main" class="ads-wrap">
+  <header class="ads-brand">
+    <img src="/assets/img/logo-mark.svg" alt="" width="34" height="34">
+    <span>Viex Salud</span>
+  </header>
+
+  <section class="quote-card ads-card" aria-labelledby="ads-titulo">
+    <div id="ads-formulario">
+      <p class="quote-kicker">Asesoría gratuita</p>
+      <h1 id="ads-titulo">Completa tus datos y recibe una comparativa clara.</h1>
+      <p class="quote-lead">Solo pedimos lo necesario para sugerirte planes según tu cobertura y tu familia. Te contactamos por WhatsApp.</p>
+
+      <form id="ads-form" novalidate>
+        <div class="ads-grid">
+          <div class="field">
+            <label for="ads-nombre">Nombre *</label>
+            <input id="ads-nombre" name="nombre" required minlength="2" maxlength="80" autocomplete="name" placeholder="Ej: Ana Pérez">
+          </div>
+          <div class="field">
+            <label for="ads-telefono">Teléfono / WhatsApp *</label>
+            <input id="ads-telefono" name="telefono" type="tel" required autocomplete="tel" inputmode="tel" placeholder="+56 9 8765 4321">
+          </div>
+          <div class="field">
+            <label for="ads-edad">Tu edad *</label>
+            <input id="ads-edad" name="edad" type="number" min="18" max="110" required inputmode="numeric" placeholder="Ej: 34">
+          </div>
+          <div class="field">
+            <label for="ads-region">Región *</label>
+            <select id="ads-region" name="region" required>
+              <option value="">Selecciona tu región</option>
+              <option>Región Metropolitana</option><option>Valparaíso</option><option>Biobío</option>
+              <option>La Araucanía</option><option>Los Lagos</option><option>Los Ríos</option>
+              <option>Antofagasta</option><option>Atacama</option><option>Coquimbo</option>
+              <option>O'Higgins</option><option>Maule</option><option>Ñuble</option>
+              <option>Arica y Parinacota</option><option>Tarapacá</option><option>Aysén</option><option>Magallanes</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="ads-sistema">Hoy estás en</label>
+            <select id="ads-sistema" name="sistema">
+              <option value="">Selecciona</option>
+              <option>Isapre</option>
+              <option>Fonasa</option>
+              <option>Sin plan de salud</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="ads-paga">¿Cuánto pagas hoy por tu plan?</label>
+            <input id="ads-paga" name="paga" maxlength="40" inputmode="numeric" placeholder="Ej: $185.000">
+          </div>
+          <div class="field">
+            <label for="ads-clinica">Clínica de preferencia (opcional)</label>
+            <input id="ads-clinica" name="clinica" maxlength="80" placeholder="Ej: la más cercana a tu casa">
+          </div>
+          <div class="field">
+            <label>¿Tienes cargas? *</label>
+            <div class="pill-group">
+              <input type="radio" id="ads-cargas-no" name="cargas" value="no" required><label for="ads-cargas-no">Solo yo</label>
+              <input type="radio" id="ads-cargas-si" name="cargas" value="si"><label for="ads-cargas-si">Sí, tengo cargas</label>
+            </div>
+          </div>
+          <div class="field ads-full" id="ads-campo-cargas" hidden>
+            <label for="ads-cargas-edades">Edad de cada carga *</label>
+            <input id="ads-cargas-edades" name="cargasEdades" maxlength="60" placeholder="Ej: 5 y 8 años">
+          </div>
+          <div class="field ads-full">
+            <label for="ads-mensaje">Mensaje adicional (opcional)</label>
+            <textarea id="ads-mensaje" name="mensaje" rows="2" maxlength="400" placeholder="Cuéntanos qué buscas. No incluyas diagnósticos ni RUT."></textarea>
+          </div>
+          <div class="ads-trampa" aria-hidden="true">
+            <label for="ads-web">No llenar</label><input id="ads-web" name="web" tabindex="-1" autocomplete="off">
+          </div>
+        </div>
+
+        <label class="consent-label"><input type="checkbox" name="consent" required> Autorizo el contacto para esta consulta y he leído la <a href="/politica-de-privacidad" target="_blank" rel="noopener">política de privacidad</a>.</label>
+        <button type="submit" class="btn btn-primary btn-block" id="ads-enviar">Quiero que me contacten</button>
+        <p class="form-note">Los campos con * son obligatorios. Tus datos se usan solo para esta asesoría.</p>
+        <p id="ads-estado" class="ads-estado" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div id="ads-gracias" class="ads-gracias" hidden tabindex="-1">
+      <p class="quote-kicker">Solicitud recibida</p>
+      <h2>¡Gracias, <span id="ads-gracias-nombre"></span>!</h2>
+      <p>Recibimos tus datos. Un asesor te escribirá por WhatsApp para revisar tu plan.</p>
+      <p>Si quieres adelantar la conversación, escríbenos ahora:</p>
+      <a id="ads-gracias-wa" class="btn btn-primary btn-block" href="https://wa.me/56948627767" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="ads-confianza" aria-labelledby="ads-conoce">
+    <p class="quote-kicker">Conoce más</p>
+    <h2 id="ads-conoce">Te acompañamos a elegir con tranquilidad.</h2>
+    {% if video %}
+    <video class="ads-video" controls playsinline preload="none"{% if videoPortada %} poster="{{ videoPortada }}"{% endif %}>
+      <source src="{{ video }}" type="video/mp4">
+    </video>
+    {% endif %}
+    <ul class="ads-puntos">
+      <li><strong>Asesor de salud con más de 8 años de experiencia.</strong></li>
+      <li><strong>Sin costo para ti:</strong> la asesoría es gratuita.</li>
+      <li><strong>Te explicamos todo claro</strong> y la decisión final es siempre tuya.</li>
+    </ul>
+  </section>
+
+  <footer class="ads-pie">
+    <span>viexsalud.cl · Asesoría de planes de salud</span>
+    <a href="/politica-de-privacidad">Política de privacidad</a>
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/supabase-init.js"></script>
+<script src="/assets/ads.js" defer></script>
+</body>
+</html>

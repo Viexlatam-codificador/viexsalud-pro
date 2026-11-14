@@ -1,0 +1,28 @@
+/* Página /ads: landing solo para anuncios (sin menú ni salidas). */
+.ads-page { background: linear-gradient(180deg, var(--cream-100) 0%, var(--cream-50) 40%); min-height: 100vh; }
+.ads-wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 2.5rem; }
+.ads-brand { display: flex; align-items: center; justify-content: center; gap: .55rem; font-weight: 800; color: var(--teal-900); font-size: 1.15rem; margin-bottom: 1.25rem; }
+.ads-card h1 { font-size: clamp(1.45rem, 4.5vw, 1.9rem); line-height: 1.2; margin-top: .4rem; font-weight: 800; color: var(--teal-900); }
+.ads-card .quote-lead { margin-bottom: 1.4rem; }
+.ads-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.ads-full { grid-column: 1 / -1; }
+.ads-grid textarea { width: 100%; padding: .8rem 1rem; border-radius: var(--radius-sm); border: 1.5px solid var(--line); background: var(--cream-50); color: var(--ink-900); font: inherit; resize: vertical; }
+.ads-grid textarea:focus { border-color: var(--gold-500); background: var(--white); outline: none; }
+.ads-trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.ads-estado { margin-top: .8rem; font-size: var(--fs-sm); color: var(--danger); }
+.ads-estado:empty { display: none; }
+.ads-gracias { text-align: center; padding: 1rem 0; }
+.ads-gracias h2 { font-size: var(--fs-xl); color: var(--teal-900); margin: .4rem 0 .8rem; }
+.ads-gracias p { color: var(--ink-700); margin-bottom: .6rem; }
+.ads-gracias .btn { margin-top: .8rem; }
+.ads-gracias:focus { outline: none; }
+.ads-confianza { margin-top: 2.25rem; }
+.ads-confianza h2 { font-size: clamp(1.3rem, 4vw, 1.6rem); color: var(--teal-900); margin: .3rem 0 1rem; }
+.ads-confianza .quote-kicker { font-size: var(--fs-xs); font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--gold-600); }
+.ads-video { width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); background: var(--teal-900); margin-bottom: 1.2rem; display: block; }
+.ads-puntos { list-style: none; padding: 0; display: grid; gap: .6rem; }
+.ads-puntos li { background: var(--white); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); padding: .9rem 1.1rem .9rem 2.6rem; position: relative; color: var(--ink-700); }
+.ads-puntos li::before { content: "✓"; position: absolute; left: 1rem; top: .85rem; color: var(--gold-600); font-weight: 800; }
+.ads-pie { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.2rem; margin-top: 2rem; font-size: var(--fs-xs); color: var(--ink-500); }
+.ads-pie a { color: var(--ink-500); }
+@media (max-width: 560px) { .ads-grid { grid-template-columns: 1fr; } }
