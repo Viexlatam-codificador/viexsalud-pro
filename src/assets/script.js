@@ -156,8 +156,8 @@
       try {
         fetch("/api/aviso", {
           method: "POST", headers: { "Content-Type": "application/json" }, keepalive: true,
-          body: JSON.stringify({ origen: "Formulario portada", nombre, telefono, edad, region,
-            cargas: cargas === "si" ? `Sí (${cargasEdades})` : "Solo yo" }),
+          body: JSON.stringify({ origen: "Formulario portada", nombre, telefono, datos: [
+            ["Edad", edad], ["Sexo", sexo], ["Región", region], ["Cargas", cargas === "si" ? `Sí (${cargasEdades})` : "Solo yo"]] }),
         }).catch(() => {});
       } catch (err) { /* nunca romper el formulario */ }
 

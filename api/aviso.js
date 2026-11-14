@@ -3,7 +3,7 @@
 // si no, usa CallMeBot como respaldo. Las claves van SOLO en variables de entorno de Vercel:
 //   Meta:      WHATSAPP_TOKEN, WHATSAPP_PHONE_ID (opcional WHATSAPP_PLANTILLA, WHATSAPP_IDIOMA)
 //   CallMeBot: CALLMEBOT_APIKEY
-// Se envían solo datos de contacto básicos: nada de salud.
+// Llegan todos los datos que la persona escribió en el formulario (campo "datos": lista de [etiqueta, valor]).
 
 const CLIENTE = "Viex Salud";
 const DESTINO = "+56948627767";
@@ -31,7 +31,7 @@ async function enviarMeta(lead) {
         components: [{
           type: "body",
           parameters: [CLIENTE + " · " + lead.origen, lead.nombre, "+56 " + lead.digitos, lead.resumen || "Sin más datos", "56" + lead.digitos]
-            .map((t) => ({ type: "text", text: limpio(t, 300) })),
+            .map((t) => ({ type: "text", text: limpio(t, 700) })),
         }],
       },
     }),
@@ -74,14 +74,16 @@ module.exports = async (req, res) => {
   const digitos = limpio(d.telefono, 20).replace(/\D/g, "").replace(/^56/, "");
   if (nombre.length < 2 || !/^9\d{8}$/.test(digitos)) return res.status(400).json({ ok: false });
 
-  const campos = [["Edad", d.edad, 10], ["Región", d.region, 40], ["Cargas", d.cargas, 60], ["Hoy en", d.sistema, 30], ["Paga hoy", d.pago, 30]]
-    .filter(([, v]) => v).map(([k, v, max]) => [k, limpio(v, max)]);
+  const base = [["Edad", d.edad], ["Región", d.region], ["Cargas", d.cargas], ["Hoy en", d.sistema], ["Paga hoy", d.pago]];
+  const campos = (Array.isArray(d.datos) ? d.datos.slice(0, 20) : base)
+    .filter((c) => Array.isArray(c) && limpio(c[1], 1))
+    .map(([k, v]) => [limpio(k, 30), limpio(v, 300)]);
   const lead = {
     origen: limpio(d.origen, 60) || "sitio web",
     nombre,
     digitos,
     detalle: campos.map(([k, v]) => k + ": " + v),
-    resumen: campos.map(([k, v]) => k + " " + v).join(" · "),
+    resumen: limpio(campos.map(([k, v]) => k + ": " + v).join(" · "), 700),
   };
 
   const meta = process.env.WHATSAPP_TOKEN && process.env.WHATSAPP_PHONE_ID;

@@ -110,9 +110,9 @@
     try {
       const r = await fetch("/api/aviso", {
         method: "POST", headers: { "Content-Type": "application/json" }, keepalive: true,
-        body: JSON.stringify({ origen: "Anuncios /ads", nombre: datos.nombre, telefono: datos.telefono, edad: datos.edad,
-          region: datos.region, cargas: cargas === "si" ? "Sí (" + datos.cargas_edades + ")" : "Solo yo",
-          sistema: v("sistema"), pago: v("paga") }),
+        body: JSON.stringify({ origen: "Anuncios /ads", nombre: datos.nombre, telefono: datos.telefono, datos: [
+          ["Edad", datos.edad], ["Región", datos.region], ["Cargas", cargas === "si" ? "Sí (" + datos.cargas_edades + ")" : "Solo yo"],
+          ["Hoy en", v("sistema")], ["Paga hoy", v("paga")], ["Clínica", v("clinica")], ["Mensaje", v("mensaje")], ["Campaña", utm]] }),
       });
       avisado = r.ok;
     } catch (err) { avisado = false; }
