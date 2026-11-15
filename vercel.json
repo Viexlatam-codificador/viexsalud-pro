@@ -227,5 +227,11 @@
     }
   ],
   "trailingSlash": false,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "crons": [
+    {
+      "path": "/api/mantener-activo",
+      "schedule": "0 12 * * *"
+    }
+  ]
 }
