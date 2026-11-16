@@ -5,6 +5,10 @@ tag: "Guía · Sistema de salud"
 date: 2026-07-28
 cover: /assets/img/blog/fonasa-vs-isapre.svg
 coverAlt: "Comparación visual entre Fonasa e Isapre para elegir un sistema de salud"
+videos:
+  - titulo: "¿Fonasa o Isapre? No es solo el precio"
+    archivo: "15. Fonasa o Isapre.mp4"
+    youtube: ""
 ---
 Elegir entre Fonasa e Isapre es una de las decisiones financieras y de salud más importantes que toma una familia chilena, y sin embargo muchas personas la resuelven casi por inercia: porque "así lo tenía mi trabajo anterior" o porque un amigo le dijo que tal Isapre "es buena". La verdad es que no existe una respuesta única para todos. Lo que le conviene a una familia joven con hijos pequeños puede ser muy distinto de lo que le conviene a una persona soltera de 30 años, o a un matrimonio mayor con enfermedades preexistentes. Entender bien la diferencia entre Fonasa e Isapre —y hacerte las preguntas correctas antes de decidir— puede significar ahorrar dinero, tener mejor acceso a atención médica, o evitar dolores de cabeza cuando más necesitas cobertura.
 

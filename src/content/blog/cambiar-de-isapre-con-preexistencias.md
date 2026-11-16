@@ -19,6 +19,10 @@ sources:
   - name: "Superintendencia de Salud"
     title: "Contrato de salud — Materias Isapres"
     url: "https://www.superdesalud.gob.cl/tax-materias-isapres/contrato-de-salud-3464/"
+videos:
+  - titulo: "¿Preexistencia? ¿No puedes cambiarte de plan?"
+    archivo: "27. Preexistencias- No puedes cambiarte de plan.mp4"
+    youtube: ""
 ---
 
 **Respuesta corta:** sí, puedes postular a otra Isapre aunque tengas preexistencias, pero **debes declararlas todas** en la Declaración de Salud, tuyas y de tus cargas. La nueva Isapre evalúa tu caso y puede aceptarte, aceptarte con una **cobertura reducida para esa condición por un máximo de 18 meses**, o no aceptarte. Lo que nunca conviene es ocultarlas.

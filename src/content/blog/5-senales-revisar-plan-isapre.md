@@ -5,6 +5,13 @@ description: Revisar tu plan Isapre a tiempo cuida tu bolsillo y tu salud.
 tag: Guía · Isapres
 date: 2026-07-28
 cover: /assets/img/blog/3.png
+videos:
+  - titulo: "Mito de la semana: «mi plan me sirve igual que el día que lo firmé»"
+    archivo: "19. Mito de La semana.mp4"
+    youtube: ""
+  - titulo: "¿Cada cuánto revisar tu plan de salud?"
+    archivo: "35. Una pregunta que me hacen mucho.mp4"
+    youtube: ""
 ---
 Cotizar en una Isapre no es como comprar un seguro y olvidarse de él. Cada mes destinas un 7% de tu renta imponible (como mínimo) a un plan de salud que debería adaptarse a tu vida, no al revés. El problema es que la mayoría de las personas contrata un plan una vez y no vuelve a mirarlo nunca más, aunque su situación familiar, laboral o de salud cambie por completo con los años.
 

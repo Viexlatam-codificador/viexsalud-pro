@@ -5,6 +5,10 @@ tag: "Guía · Coberturas"
 date: 2026-07-28
 cover: /assets/img/blog/que-es-el-ges.svg
 coverAlt: "Guía Viex Salud sobre las cuatro garantías GES"
+videos:
+  - titulo: "90 enfermedades con atención garantizada"
+    archivo: "3. 90 enfermedades con atencion garantizada.mp4"
+    youtube: ""
 ---
 Si alguna vez pagaste una consulta o un examen de tu bolsillo sin preguntar antes si existía alguna cobertura especial, no estás solo. Muchas personas en Chile terminan asumiendo gastos de salud importantes, o viven con la angustia de no saber cuánto tiempo más deberán esperar por una atención, sin saber que existe una protección legal pensada justamente para eso: el GES. Conocerlo puede ahorrarte plata, tiempo y, sobre todo, mucha incertidumbre en un momento en que lo último que necesitas es otro dolor de cabeza administrativo.
 

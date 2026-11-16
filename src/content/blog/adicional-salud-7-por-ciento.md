@@ -21,6 +21,10 @@ social:
   facebook: "El 7% es la cotización legal, pero no siempre cubre el precio completo del plan. Aprende qué puede generar un adicional y cuándo conviene revisarlo."
   linkedin: "Comprender la diferencia entre cotización legal, precio base, GES y beneficios adicionales permite tomar mejores decisiones de salud previsional."
   tiktok: "Gancho: ¿Te descuentan más del 7% en salud? Explicación: tu plan puede costar más que tu cotización legal. Cierre: revisa cada componente antes de cambiarte. CTA: Viex Salud te ayuda gratis."
+videos:
+  - titulo: "El famoso 7% en 20 segundos"
+    archivo: "11. El Famoso 7%.mp4"
+    youtube: ""
 ---
 
 El **7% de tu remuneración imponible** es la cotización legal destinada a salud. Sin embargo, eso no significa que todos los planes deban costar exactamente ese monto.
