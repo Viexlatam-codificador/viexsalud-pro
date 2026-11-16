@@ -10,7 +10,7 @@
 const CLIENTE = "Viex Salud";
 const DESTINO = "+56948627767";
 const ORIGENES = ["https://www.viexsalud.cl", "https://viexsalud.cl", "http://localhost:8091"];
-const PREVIEW = /^https:\/\/viexsalud-pro-[a-z0-9-]+\.vercel\.app$/;
+const PREVIEW = /^(https:\/\/viexsalud-pro-[a-z0-9-]+\.vercel\.app|http:\/\/localhost:\d+)$/;
 const recientes = new Map(); // límite simple por IP (por instancia)
 
 function limpio(v, max) {
@@ -48,7 +48,7 @@ async function guardarPlanilla(lead) {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     signal: AbortSignal.timeout(15000),
-    body: JSON.stringify({ origen: lead.origen, nombre: lead.nombre, telefono: lead.digitos, datos: lead.campos }),
+    body: JSON.stringify({ origen: lead.origen, nombre: lead.nombre, telefono: lead.digitos, email: lead.email, datos: lead.campos }),
   });
   const texto = (await r.text()).slice(0, 300);
   let ok = false;
@@ -88,7 +88,10 @@ module.exports = async (req, res) => {
 
   const nombre = limpio(d.nombre, 80);
   const digitos = limpio(d.telefono, 20).replace(/\D/g, "").replace(/^56/, "");
-  if (nombre.length < 2 || !/^9\d{8}$/.test(digitos)) return res.status(400).json({ ok: false });
+  const email = limpio(d.email, 120).toLowerCase();
+  const telOk = /^9\d{8}$/.test(digitos);
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  if (nombre.length < 2 || (!telOk && !emailOk)) return res.status(400).json({ ok: false });
 
   const base = [["Edad", d.edad], ["Región", d.region], ["Cargas", d.cargas], ["Hoy en", d.sistema], ["Paga hoy", d.pago]];
   const campos = (Array.isArray(d.datos) ? d.datos.slice(0, 20) : base)
@@ -97,7 +100,8 @@ module.exports = async (req, res) => {
   const lead = {
     origen: limpio(d.origen, 60) || "sitio web",
     nombre,
-    digitos,
+    digitos: telOk ? digitos : "",
+    email: emailOk ? email : "",
     campos,
     detalle: campos.map(([k, v]) => k + ": " + v),
     resumen: limpio(campos.map(([k, v]) => k + ": " + v).join(" · "), 700),
@@ -106,8 +110,8 @@ module.exports = async (req, res) => {
   const meta = process.env.WHATSAPP_TOKEN && process.env.WHATSAPP_PHONE_ID;
   const tareas = [];
   if (process.env.LEADS_SHEET_URL) tareas.push(guardarPlanilla(lead));
-  if (meta) tareas.push(enviarMeta(lead));
-  else if (process.env.CALLMEBOT_APIKEY) tareas.push(enviarCallMeBot(lead));
+  if (telOk && meta) tareas.push(enviarMeta(lead));
+  else if (telOk && process.env.CALLMEBOT_APIKEY) tareas.push(enviarCallMeBot(lead));
   if (!tareas.length) return res.status(503).json({ ok: false, motivo: "falta-clave" });
 
   const resultados = await Promise.all(tareas.map((t) => t.catch((e) => {

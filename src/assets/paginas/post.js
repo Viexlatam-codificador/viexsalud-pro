@@ -1,9 +1,6 @@
 (function () {
   "use strict";
-  var sb = supabase.createClient(
-    "https://jniaoqcgpdryqrssntfp.supabase.co",
-    "sb_publishable_BCFzQF1HZw8EPsGsdNvXCQ_0ILWpQB6"
-  );
+  var sb = window.VIEX_SUPABASE;
   document.getElementById('subscribe-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = document.getElementById('subscribe-btn');
