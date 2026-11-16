@@ -1,10 +1,8 @@
 // Elimina uno o varios archivos de preexistencias directamente del
 // repositorio de GitHub. Solo funciona para el correo administrador
-// (verificado contra Supabase) y usa un token de GitHub con permiso
+// (con la sesión de ejecutivos de Viex) y usa un token de GitHub con permiso
 // de escritura, guardado como variable de entorno (nunca en el navegador).
-const SUPABASE_URL = "https://jniaoqcgpdryqrssntfp.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_BCFzQF1HZw8EPsGsdNvXCQ_0ILWpQB6";
-const ADMIN_EMAIL = "viexlatam@gmail.com";
+const { leerSesion } = require("./_lib/sesion");
 const REPO = "Viexlatam-codificador/viexsalud-pro";
 const BRANCH = "main";
 
@@ -20,11 +18,10 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const authHeader = req.headers.authorization || "";
-  const accessToken = authHeader.replace(/^Bearer\s+/i, "");
+  const sesion = leerSesion(req);
   const { paths } = req.body || {};
 
-  if (!accessToken) {
+  if (!sesion) {
     res.status(401).json({ error: "Sesión no encontrada." });
     return;
   }
@@ -40,11 +37,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const meRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
-    });
-    const me = await meRes.json();
-    if (!meRes.ok || !me.email || me.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    if (!sesion.admin) {
       res.status(403).json({ error: "Solo el administrador puede borrar preexistencias." });
       return;
     }

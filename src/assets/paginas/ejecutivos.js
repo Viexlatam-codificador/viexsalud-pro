@@ -35,7 +35,7 @@
     var m = (err && err.message) || '';
     if (m.indexOf('Invalid login credentials') !== -1) return 'Correo o contraseña incorrectos.';
     if (m.indexOf('already registered') !== -1 || m.indexOf('already exists') !== -1) return 'Ese correo ya tiene una cuenta. Prueba iniciar sesión.';
-    if (m.indexOf('Password should be at least') !== -1) return 'La contraseña debe tener al menos 6 caracteres.';
+    if (m.indexOf('Password should be at least') !== -1) return 'La contraseña debe tener al menos 8 caracteres.';
     if (m.indexOf('Unable to validate email') !== -1 || m.indexOf('invalid') !== -1) return 'Revisa que el correo esté bien escrito.';
     return m || 'Ocurrió un error. Intenta de nuevo.';
   }

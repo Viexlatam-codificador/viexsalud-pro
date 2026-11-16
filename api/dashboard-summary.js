@@ -1,10 +1,9 @@
 // Resumen para el panel de administración: visitas (Google Analytics 4) +
-// actividad del sitio (Supabase). Solo responde al correo administrador.
+// actividad del sitio (planilla de Drive). Solo responde al correo administrador.
 const crypto = require("crypto");
 
-const SUPABASE_URL = "https://jniaoqcgpdryqrssntfp.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_BCFzQF1HZw8EPsGsdNvXCQ_0ILWpQB6";
-const ADMIN_EMAIL = "viexlatam@gmail.com";
+const { drive } = require("./_lib/drive");
+const { leerSesion } = require("./_lib/sesion");
 
 function base64url(input) {
   return Buffer.from(input)
@@ -140,70 +139,51 @@ async function getGa4Summary() {
   };
 }
 
-async function getSupabaseSummary(serviceKey) {
-  const headers = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` };
-  const todayIso = new Date();
-  todayIso.setHours(0, 0, 0, 0);
-  const todayFilter = `created_at=gte.${todayIso.toISOString()}`;
-
-  const [compTotal, compHoy, subTotal, subHoy, cotizTotal, cotizHoy, cotizRecientes, users] = await Promise.all([
-    fetch(`${SUPABASE_URL}/rest/v1/comparaciones?select=id`, { headers: { ...headers, Prefer: "count=exact" } }),
-    fetch(`${SUPABASE_URL}/rest/v1/comparaciones?select=id&${todayFilter}`, { headers: { ...headers, Prefer: "count=exact" } }),
-    fetch(`${SUPABASE_URL}/rest/v1/suscriptores?select=id`, { headers: { ...headers, Prefer: "count=exact" } }),
-    fetch(`${SUPABASE_URL}/rest/v1/suscriptores?select=id&${todayFilter}`, { headers: { ...headers, Prefer: "count=exact" } }),
-    fetch(`${SUPABASE_URL}/rest/v1/cotizaciones_web?select=id`, { headers: { ...headers, Prefer: "count=exact" } }),
-    fetch(`${SUPABASE_URL}/rest/v1/cotizaciones_web?select=id&${todayFilter}`, { headers: { ...headers, Prefer: "count=exact" } }),
-    fetch(`${SUPABASE_URL}/rest/v1/cotizaciones_web?select=*&order=created_at.desc&limit=50`, { headers }),
-    fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, { headers }),
+async function getDriveSummary() {
+  const [comp, subs, leads, ejec, recientes] = await Promise.all([
+    drive("contar", { hoja: "Comparaciones", campoFecha: "created_at" }),
+    drive("contar", { hoja: "Suscriptores", campoFecha: "created_at" }),
+    drive("contar", { hoja: "Leads", campoFecha: "Fecha" }),
+    drive("contar", { hoja: "Ejecutivos", campoFecha: "creado" }),
+    drive("listar", { hoja: "Leads", ultimas: 50 }),
   ]);
-
-  function countFrom(res) {
-    const range = res.headers.get("content-range") || "";
-    const total = range.split("/")[1];
-    return total && total !== "*" ? Number(total) : 0;
-  }
-
-  const usersJson = users.ok ? await users.json() : { users: [] };
-  const cotizacionesLista = cotizRecientes.ok ? await cotizRecientes.json() : [];
-
+  // Mismo formato que usaba el panel con Supabase.
+  const lista = (recientes.filas || []).reverse().map((f) => ({
+    created_at: f["Fecha"],
+    nombre: f["Nombre"],
+    telefono: f["Teléfono"],
+    email: f["Correo"] || "",
+    edad: f["Edad"] || "",
+    sexo: f["Sexo"] || "",
+    region: f["Región"] || "",
+    cargas: "",
+    motivo: [f["Origen"], f["Cargas"] && "Cargas: " + f["Cargas"], f["Hoy en"] && "Hoy en: " + f["Hoy en"], f["Paga hoy"] && "Paga: " + f["Paga hoy"], f["Motivo"], f["Mensaje"]].filter(Boolean).join(" · "),
+  }));
   return {
-    comparaciones: { total: countFrom(compTotal), hoy: countFrom(compHoy) },
-    suscriptores: { total: countFrom(subTotal), hoy: countFrom(subHoy) },
-    cotizaciones: { total: countFrom(cotizTotal), hoy: countFrom(cotizHoy), recientes: cotizacionesLista },
-    ejecutivos: { total: (usersJson.users || []).length },
+    comparaciones: comp.conteo,
+    suscriptores: subs.conteo,
+    cotizaciones: Object.assign({}, leads.conteo, { recientes: lista }),
+    ejecutivos: { total: ejec.conteo.total },
   };
 }
 
 module.exports = async (req, res) => {
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!serviceKey) {
-    res.status(500).json({ error: "Falta configurar SUPABASE_SERVICE_ROLE_KEY en Vercel." });
-    return;
-  }
-
-  const authHeader = req.headers.authorization || "";
-  const accessToken = authHeader.replace(/^Bearer\s+/i, "");
-  if (!accessToken) {
+  const sesion = leerSesion(req);
+  if (!sesion) {
     res.status(401).json({ error: "Sesión no encontrada." });
     return;
   }
-
+  if (!sesion.admin) {
+    res.status(403).json({ error: "Solo el administrador puede ver este panel." });
+    return;
+  }
   try {
-    const meRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
-    });
-    const me = await meRes.json();
-    if (!meRes.ok || !me.email || me.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
-      res.status(403).json({ error: "Solo el administrador puede ver este panel." });
-      return;
-    }
-
-    const [supabaseSummary, ga4Summary] = await Promise.all([
-      getSupabaseSummary(serviceKey),
+    const [driveSummary, ga4Summary] = await Promise.all([
+      getDriveSummary(),
       getGa4Summary().catch((err) => ({ configured: true, error: err.message })),
     ]);
-
-    res.status(200).json({ supabase: supabaseSummary, ga4: ga4Summary });
+    // "supabase" se mantiene como nombre del campo para no cambiar el panel.
+    res.status(200).json({ supabase: driveSummary, ga4: ga4Summary });
   } catch (err) {
     res.status(500).json({ error: "Error inesperado generando el panel.", detail: err.message });
   }

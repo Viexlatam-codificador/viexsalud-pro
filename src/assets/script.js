@@ -20,24 +20,6 @@
     }
   }
 
-  /* Guarda cada envío de formulario en la base de datos, sin importar si la
-     persona llega a apretar "enviar" en WhatsApp o no. Antes solo se abría
-     WhatsApp y, si la persona no confirmaba el envío ahí, el dato se perdía
-     para siempre sin dejar registro. Fire-and-forget: nunca bloquea ni
-     interrumpe el flujo del formulario. */
-  function saveLeadToDatabase(fields) {
-    try {
-      if (!window.VIEX_SUPABASE) return;
-      window.VIEX_SUPABASE.from("cotizaciones_web")
-        .insert(Object.assign({}, fields, { fuente: window.location.pathname }))
-        .then((res) => {
-          if (res.error) console.warn("No se pudo guardar la cotización:", res.error.message);
-        });
-    } catch (err) {
-      /* Nunca dejar que esto rompa el formulario. */
-    }
-  }
-
   /* Any click on a WhatsApp link anywhere on the site (header, hero, floating
      button, footer, social card, etc.) counts as a contact conversion. */
   document.addEventListener("click", (e) => {
@@ -77,7 +59,7 @@
     });
   }
 
-  /* Single-step quote form -> saves the lead (see saveLeadToDatabase) and opens a prefilled WhatsApp message */
+  /* Single-step quote form -> guarda el lead en la planilla (api/aviso) y abre un WhatsApp prellenado */
   const form = document.getElementById("quote-form");
   if (form) {
     const cargasEdadesField = document.getElementById("campo-cargas-edades");
@@ -150,9 +132,8 @@
         { content_name: "Cotización Isapre" }
       );
 
-      saveLeadToDatabase({ nombre, telefono, edad, sexo, region, cargas, cargas_edades: cargasEdades });
 
-      /* Aviso inmediato al WhatsApp de Viex (api/aviso.js), aunque la persona no envíe el mensaje. */
+      /* Guarda el lead en la planilla de Drive y avisa (api/aviso.js), aunque la persona no envíe el WhatsApp. */
       try {
         fetch("/api/aviso", {
           method: "POST", headers: { "Content-Type": "application/json" }, keepalive: true,
@@ -180,7 +161,10 @@
     const email = String(data.get("email") || "").trim();
     const motivo = String(data.get("motivo") || "").trim();
     const message = ["Hola Viex Salud, quisiera asesoría.", `Nombre: ${name}`, `Motivo: ${motivo}`, email ? `Correo: ${email}` : ""].filter(Boolean).join("\n");
-    saveLeadToDatabase({ nombre: name, email, motivo });
+    fetch("/api/aviso", {
+      method: "POST", headers: { "Content-Type": "application/json" }, keepalive: true,
+      body: JSON.stringify({ origen: "Formulario de contacto", nombre: name, email, datos: [["Correo", email], ["Motivo", motivo]] }),
+    }).catch(() => {});
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     document.getElementById("contact-status").textContent = "Continúa en WhatsApp y pulsa Enviar. Si no se abrió, permite las ventanas emergentes o utiliza el enlace de contacto directo.";
     trackConversion("contact_whatsapp_open", {form_id:"contact-form"}, "Contact", {});

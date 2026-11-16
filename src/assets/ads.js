@@ -1,6 +1,5 @@
-/* Formulario de /ads: valida, guarda la solicitud en Supabase (cotizaciones_web),
-   avisa al WhatsApp de Viex y solo muestra "gracias" si quedó guardada o avisada. Si no se puede guardar,
-   ofrece WhatsApp con los datos para no perder el contacto. */
+/* Formulario de /ads: valida, guarda la solicitud en la planilla de Drive (api/aviso.js)
+   y solo muestra "gracias" si quedó guardada. Si no, ofrece WhatsApp con los datos. */
 (() => {
   "use strict";
   const WHATSAPP = "56948627767";
@@ -96,16 +95,7 @@
 
     boton.disabled = true;
     boton.textContent = "Enviando…";
-    let guardado = false;
-    try {
-      if (window.VIEX_SUPABASE) {
-        const res = await window.VIEX_SUPABASE.from("cotizaciones_web").insert(datos);
-        guardado = !res.error;
-        if (res.error) console.warn("No se pudo guardar la solicitud:", res.error.message);
-      }
-    } catch (err) { guardado = false; }
-
-    // Aviso inmediato al WhatsApp de Viex (api/aviso.js), sin que la persona apriete nada.
+    // Guarda en la planilla de Drive y avisa (api/aviso.js), sin que la persona apriete nada.
     let avisado = false;
     try {
       const r = await fetch("/api/aviso", {
@@ -118,7 +108,7 @@
     } catch (err) { avisado = false; }
 
     const wa = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensajeWhatsApp(datos))}`;
-    if (guardado || avisado) {
+    if (avisado) {
       track("generate_lead", "Lead");
       document.getElementById("ads-gracias-nombre").textContent = datos.nombre.split(" ")[0];
       document.getElementById("ads-gracias-wa").href = wa;
