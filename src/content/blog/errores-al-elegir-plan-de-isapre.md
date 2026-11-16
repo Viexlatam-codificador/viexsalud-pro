@@ -11,7 +11,7 @@ ctaText: "Te ayudamos gratis a comparar alternativas con un asesor de salud con 
 videos:
   - titulo: "5 errores que conviene evitar"
     archivo: "2. 5 Errores que conviene Evitar.mp4"
-    youtube: ""
+    youtube: "RLUN5_hi0ss"
 ---
 
 Elegir un plan de salud es una decisión que te acompaña por años. Estos son los **5 errores** que más vemos en nuestras asesorías, y cómo evitarlos.

@@ -17,7 +17,7 @@ videos:
     youtube: ""
   - titulo: "Así de fácil es revisar tu plan"
     archivo: "5. Asi de facil es revisar tu plan.mp4"
-    youtube: ""
+    youtube: "YjjhDvU4nM8"
   - titulo: "No te queremos apurar: solo una respuesta"
     archivo: "22. No te Queremos apurar- Solo una Respuesta.mp4"
     youtube: ""
