@@ -36,6 +36,7 @@
     try {
       if (typeof gtag === "function") gtag("event", gaName, { form_id: "ads-form" });
       if (typeof fbq === "function") fbq("track", metaName, { content_name: "Formulario ads" });
+      if (window._uxa) window._uxa.push(["trackPageEvent", "Conversión: " + gaName + " (ads)"]);
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: gaName, form_id: "ads-form" });
     } catch (e) { /* la medición nunca rompe el formulario */ }
