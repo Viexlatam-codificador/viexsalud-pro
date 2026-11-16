@@ -13,6 +13,7 @@
     try {
       if (typeof gtag === "function") gtag("event", gaName, gaParams || {});
       if (typeof fbq === "function") fbq("track", metaName, metaParams || {});
+      if (window._uxa) window._uxa.push(["trackPageEvent", "Conversión: " + gaName]);
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push(Object.assign({ event: gaName }, gaParams || {}));
     } catch (err) {

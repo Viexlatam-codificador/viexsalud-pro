@@ -39,6 +39,7 @@
       try {
         if (typeof gtag === "function") gtag("event", "generate_lead", { form_id: "guia-form" });
         if (typeof fbq === "function") fbq("track", "Lead", { content_name: "Guía 5 errores" });
+        if (window._uxa) window._uxa.push(["trackPageEvent", "Conversión: pidió la guía"]);
       } catch (err) {}
       document.getElementById("guia-gracias-nombre").textContent = v("nombre").split(" ")[0];
       document.getElementById("guia-formulario").hidden = true;

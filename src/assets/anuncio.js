@@ -43,7 +43,7 @@
 
   fondo.querySelector(".anuncio-cerrar").addEventListener("click", cerrar);
   fondo.querySelector(".anuncio-boton").addEventListener("click", function () {
-    try { if (typeof gtag === "function") gtag("event", "anuncio_contrata_click"); } catch (e) {}
+    try { if (typeof gtag === "function") gtag("event", "anuncio_contrata_click"); if (window._uxa) window._uxa.push(["trackPageEvent", "Clic: anuncio Contrata ahora"]); } catch (e) {}
     cerrar();
   });
   fondo.addEventListener("click", function (e) { if (e.target === fondo) cerrar(); });
