@@ -26,3 +26,7 @@
 .ads-pie { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.2rem; margin-top: 2rem; font-size: var(--fs-xs); color: var(--ink-500); }
 .ads-pie a { color: var(--ink-500); }
 @media (max-width: 560px) { .ads-grid { grid-template-columns: 1fr; } }
+.guia-puntos { margin: 0 0 1.2rem; }
+.guia-puntos li { box-shadow: none; background: var(--cream-50); }
+.guia-wa { background: var(--teal-900); color: var(--white); }
+.guia-wa:hover { background: var(--teal-800, #143a32); color: var(--white); }

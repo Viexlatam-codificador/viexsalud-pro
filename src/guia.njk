@@ -1,0 +1,86 @@
+---
+permalink: guia.html
+eleventyExcludeFromCollections: true
+title: "Guía gratis: 5 errores al elegir tu plan de salud | Viex Salud"
+description: "Descarga gratis la guía con los 5 errores que conviene evitar al elegir tu plan de salud, y una lista para revisar tu plan en 10 minutos."
+---
+<!doctype html>
+<html lang="es-CL">
+<head>
+<script src="/assets/gtm.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.viexsalud.cl/guia">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Guía gratis: 5 errores al elegir tu plan de salud">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:image" content="https://www.viexsalud.cl/assets/img/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%230e2b25'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='30' font-weight='900' fill='%23cba63f' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/ads.css">
+<script src="/assets/analytics.js" defer></script>
+</head>
+<body class="ads-page">
+<main id="main" class="ads-wrap">
+  <header class="ads-brand">
+    <img src="/assets/img/logo-mark.svg" alt="" width="34" height="34">
+    <span>Viex Salud</span>
+  </header>
+
+  <section class="quote-card ads-card" aria-labelledby="guia-titulo">
+    <div id="guia-formulario">
+      <p class="quote-kicker">Guía gratuita en PDF</p>
+      <h1 id="guia-titulo">5 errores que conviene evitar al elegir tu plan de salud</h1>
+      <p class="quote-lead">Déjanos tu nombre y tu correo y descárgala al instante. Incluye una lista para revisar tu plan actual en 10 minutos.</p>
+      <ul class="ads-puntos guia-puntos">
+        <li>Por qué mirar solo el precio puede salir caro.</li>
+        <li>Qué revisar de tu clínica, tus topes y tus preexistencias.</li>
+        <li>Los 3 datos que necesitas para cotizar en 1 minuto.</li>
+      </ul>
+      <form id="guia-form" novalidate>
+        <div class="ads-grid">
+          <div class="field">
+            <label for="guia-nombre">Nombre *</label>
+            <input id="guia-nombre" name="nombre" required minlength="2" maxlength="80" autocomplete="name" placeholder="Ej: Ana Pérez">
+          </div>
+          <div class="field">
+            <label for="guia-email">Correo *</label>
+            <input id="guia-email" name="email" type="email" required maxlength="120" autocomplete="email" placeholder="tu@correo.cl">
+          </div>
+          <div class="field ads-full">
+            <label for="guia-telefono">WhatsApp (opcional, si quieres que revisemos tu plan)</label>
+            <input id="guia-telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" placeholder="+56 9 8765 4321">
+          </div>
+          <div class="ads-trampa" aria-hidden="true">
+            <label for="guia-web">No llenar</label><input id="guia-web" name="web" tabindex="-1" autocomplete="off">
+          </div>
+        </div>
+        <label class="consent-label"><input type="checkbox" name="consent" required> Acepto recibir la guía y que Viex Salud me contacte sobre planes de salud. He leído la <a href="/politica-de-privacidad" target="_blank" rel="noopener">política de privacidad</a>.</label>
+        <button type="submit" class="btn btn-primary btn-block" id="guia-enviar">Descargar la guía gratis</button>
+        <p class="form-note">Puedes pedir que borremos tus datos cuando quieras.</p>
+        <p id="guia-estado" class="ads-estado" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div id="guia-gracias" class="ads-gracias" hidden tabindex="-1">
+      <p class="quote-kicker">Lista para descargar</p>
+      <h2>¡Gracias, <span id="guia-gracias-nombre"></span>!</h2>
+      <p>Tu guía está lista. Guárdala para cuando la necesites.</p>
+      <a class="btn btn-primary btn-block" href="/assets/guias/5-errores-plan-de-salud.pdf" download>Descargar la guía (PDF)</a>
+      <p style="margin-top:1rem">¿Quieres que revisemos tu plan contigo? Es gratis:</p>
+      <a class="btn btn-block guia-wa" href="https://wa.me/56948627767?text=Hola%2C%20descargu%C3%A9%20la%20gu%C3%ADa%20de%20los%205%20errores%20y%20quiero%20revisar%20mi%20plan." target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </section>
+
+  <footer class="ads-pie">
+    <span>viexsalud.cl · Asesoría de planes de salud</span>
+    <a href="/politica-de-privacidad">Política de privacidad</a>
+  </footer>
+</main>
+
+<script src="/assets/guia.js" defer></script>
+</body>
+</html>
