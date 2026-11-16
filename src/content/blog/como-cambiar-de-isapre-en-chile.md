@@ -14,6 +14,10 @@ sources:
   - name: Superintendencia de Salud
     title: Evaluación de ingreso y declaración de salud
     url: https://www.superdesalud.gob.cl/orientacion-en-salud/fonasa-o-isapre/
+videos:
+  - titulo: "Cambiarte de plan en 4 pasos"
+    archivo: "7. Cambiarte de Plan en 4 pasos.mp4"
+    youtube: ""
 ---
 
 **Para cambiar de Isapre necesitas revisar las condiciones de término de tu contrato, comparar alternativas y confirmar la aceptación y el inicio de beneficios en la nueva institución.** Cotizar y desafiliarte son etapas distintas: una propuesta de precio no confirma tu incorporación.

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">¿Cuánto cobra un asesor?</title>
+<desc id="desc">Portada editorial Viex Salud: Te explicamos por qué es gratis.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#faf8f3"/><stop offset="1" stop-color="#f3ede0"/></linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#163a32"/><stop offset="1" stop-color="#0a201c"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e3c876"/><stop offset="1" stop-color="#96731f"/></linearGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<path d="M1110 0H1600V900H1325C1210 745 1175 570 1205 385C1226 250 1195 120 1110 0Z" fill="url(#green)"/>
+<path d="M1180 0C1260 170 1280 315 1248 455C1214 604 1250 753 1370 900" fill="none" stroke="#cba63f" stroke-width="6"/>
+<g transform="translate(1385 450)"><circle r="92" fill="none" stroke="#e3c876" stroke-width="6"/><path d="M-26 -42L46 0L-26 42Z" fill="#e3c876"/></g>
+<rect x="110" y="112" width="300" height="58" rx="29" fill="none" stroke="#b3902f" stroke-width="3"/>
+<text x="260" y="150" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="25" letter-spacing="5" fill="#163a32">ASESORÍA</text>
+<text x="110" y="315" font-family="Georgia,serif" font-size="96" font-weight="700" fill="#0a201c">¿Cuánto cobra</text>
+<text x="110" y="430" font-family="Georgia,serif" font-size="104" font-weight="700" fill="#b3902f">un asesor?</text>
+<text x="115" y="515" font-family="Arial,Helvetica,sans-serif" font-size="43" fill="#163a32">Te explicamos por qué es gratis</text>
+<g transform="translate(115 725)">
+  <circle cx="55" cy="55" r="53" fill="url(#gold)"/><circle cx="55" cy="55" r="44" fill="url(#green)"/>
+  <path d="M34 39L55 72L77 39" fill="none" stroke="#e3c876" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="55" cy="32" r="4" fill="#e3c876"/>
+  <text x="130" y="48" font-family="Arial,Helvetica,sans-serif" font-size="31" font-weight="700" fill="#0a201c">Asesoría 100% gratuita</text>
+  <text x="130" y="86" font-family="Arial,Helvetica,sans-serif" font-size="27" fill="#3d4a44">viexsalud.cl · +56 9 4862 7767</text>
+</g>
+</svg>

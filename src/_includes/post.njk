@@ -52,6 +52,18 @@
 <div class="article-cover"><img src="{{ cover }}" alt="{{ coverAlt | default(title) }}"></div>
 {% endif %}
 
+{% set videosListos = (videos or []) | selectattr("youtube") %}
+{% if videosListos | length %}
+<section class="article-videos" aria-label="Video del artículo">
+  {% for v in videosListos %}
+  <figure class="article-video">
+    <iframe src="https://www.youtube-nocookie.com/embed/{{ v.youtube }}" title="{{ v.titulo }}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <figcaption>{{ v.titulo }}</figcaption>
+  </figure>
+  {% endfor %}
+</section>
+{% endif %}
+
 <article class="article-body">
 {{ content | safe }}
 
