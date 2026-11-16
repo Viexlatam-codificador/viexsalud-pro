@@ -5,8 +5,8 @@
   "use strict";
   if (/^\/(ejecutivos|recursos-ejecutivos|ads|admin)(\/|$)/.test(location.pathname)) return;
 
-  var esPortada = location.pathname === "/" || location.pathname === "/index.html";
-  var destino = esPortada ? "#cotizar" : "/#cotizar";
+  var MENSAJE = "Hola, quiero contratar un plan de salud. ¿Me ayudan a cotizar?";
+  var destino = "https://wa.me/56948627767?text=" + encodeURIComponent(MENSAJE);
   var DURACION = 5000;
 
   var fondo = document.createElement("div");
@@ -16,8 +16,8 @@
       '<button type="button" class="anuncio-cerrar" aria-label="Cerrar anuncio">×</button>' +
       '<p class="anuncio-kicker">Asesoría gratuita</p>' +
       '<h2 id="anuncio-titulo">Contrata ahora tu plan de salud</h2>' +
-      '<p id="anuncio-texto">Te ayudamos a comparar planes según tu cobertura y tu familia. Sin costo para ti.</p>' +
-      '<a class="btn btn-primary anuncio-boton" href="' + destino + '">Quiero cotizar</a>' +
+      '<p id="anuncio-texto">Te ayudamos a comparar planes según tu cobertura y tu familia. Escríbenos y te respondemos por WhatsApp, sin costo para ti.</p>' +
+      '<a class="btn btn-primary anuncio-boton" href="' + destino + '" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>' +
       '<div class="anuncio-barra" aria-hidden="true"><span></span></div>' +
     '</div>';
 
