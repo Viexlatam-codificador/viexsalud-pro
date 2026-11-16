@@ -17,7 +17,7 @@ sources:
 videos:
   - titulo: "Cambiarte de plan en 4 pasos"
     archivo: "7. Cambiarte de Plan en 4 pasos.mp4"
-    youtube: ""
+    youtube: "6-AxZZ_dWO8"
 ---
 
 **Para cambiar de Isapre necesitas revisar las condiciones de término de tu contrato, comparar alternativas y confirmar la aceptación y el inicio de beneficios en la nueva institución.** Cotizar y desafiliarte son etapas distintas: una propuesta de precio no confirma tu incorporación.

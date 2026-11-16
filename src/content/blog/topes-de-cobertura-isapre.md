@@ -11,7 +11,7 @@ ctaText: "Envíanos tu plan por WhatsApp y te explicamos gratis qué cubre y has
 videos:
   - titulo: "¿90% de cobertura? ¿Hasta cuánto?"
     archivo: "4. 90% de cobertura - hasta cuanto.mp4"
-    youtube: ""
+    youtube: "1xSDGTP1GA8"
   - titulo: "¿Sabes qué cubre tu plan en una urgencia?"
     archivo: "29. Sabes que cubre tu plan.mp4"
     youtube: ""

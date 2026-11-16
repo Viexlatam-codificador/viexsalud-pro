@@ -11,7 +11,7 @@ ctaText: "Escríbenos por WhatsApp y te asesoramos gratis, sin compromiso."
 videos:
   - titulo: "¿Cuánto te cobramos? $0"
     archivo: "1 Cuanto Cobramos .mp4"
-    youtube: ""
+    youtube: "veVGfbTFT3U"
   - titulo: "No somos un centro de salud: somos asesores"
     archivo: "21. No somos un centro de salud somos Asesores.mp4"
     youtube: ""

@@ -11,7 +11,7 @@ ctaText: "Escríbenos hoy y te asesoramos gratis para que tu plan parta cuanto a
 videos:
   - titulo: "Date un momento antes del 30 de noviembre"
     archivo: "10. Date un momento antes del 30 de Nov.mp4"
-    youtube: ""
+    youtube: "1YHo9KV64PE"
   - titulo: "Empieza el 2027 con plan nuevo"
     archivo: "12. Empieza el 2027 con plan nuevo.mp4"
     youtube: ""

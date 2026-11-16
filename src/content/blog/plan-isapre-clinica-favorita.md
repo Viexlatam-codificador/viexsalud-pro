@@ -11,7 +11,7 @@ ctaText: "Dínosla por WhatsApp y revisamos gratis tus opciones para atenderte a
 videos:
   - titulo: "¿Cuánto cuesta tu clínica favorita en un plan?"
     archivo: "8. cuanto cuesta tu clinica favorita.mp4"
-    youtube: ""
+    youtube: "m9Nm19zphwM"
   - titulo: "¿En qué clínica te gustaría atenderte?"
     archivo: "16. Hagamos algo distinto.mp4"
     youtube: ""

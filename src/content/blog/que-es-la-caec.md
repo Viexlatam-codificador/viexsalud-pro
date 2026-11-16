@@ -11,7 +11,7 @@ ctaText: "Escríbenos y te explicamos gratis cómo funciona con tu plan."
 videos:
   - titulo: "¿Enfermedad muy cara? Para eso existe la CAEC"
     archivo: "6. CAEC.mp4"
-    youtube: ""
+    youtube: "wavPaVCeIf0"
 sources:
   - name: "Superintendencia de Salud"
     title: "Deducible CAEC"
