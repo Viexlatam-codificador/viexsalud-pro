@@ -478,3 +478,20 @@ section { padding: clamp(3.5rem, 3rem + 3vw, 6.5rem) 0; }
 
 .editorial-badges { display:flex; justify-content:center; flex-wrap:wrap; gap:.65rem; margin-top:1.5rem; }
 .editorial-badges span { padding:.45rem .85rem; border:1px solid rgba(227,200,118,.45); border-radius:var(--radius-pill); color:var(--gold-100); background:rgba(255,255,255,.06); font-size:var(--fs-xs); font-weight:700; }
+
+/* Anuncio "Contrata ahora" (assets/anuncio.js) */
+.anuncio-fondo { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(14, 43, 37, .55); opacity: 0; transition: opacity .25s ease; }
+.anuncio-fondo.visible { opacity: 1; }
+.anuncio { position: relative; width: 100%; max-width: 420px; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2rem 1.5rem 1.5rem; text-align: center; overflow: hidden; transform: translateY(12px); transition: transform .25s ease; }
+.anuncio-fondo.visible .anuncio { transform: none; }
+.anuncio-kicker { font-size: var(--fs-xs); font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--gold-600); margin: 0 0 .4rem; }
+.anuncio h2 { color: var(--teal-900); font-size: clamp(1.35rem, 4.5vw, 1.7rem); line-height: 1.2; margin: 0 0 .7rem; }
+.anuncio p { color: var(--ink-700); margin: 0 0 1.2rem; }
+.anuncio-boton { width: 100%; }
+.anuncio-cerrar { position: absolute; top: .5rem; right: .6rem; width: 2.5rem; height: 2.5rem; border: 0; border-radius: 50%; background: transparent; color: var(--ink-500); font-size: 1.8rem; line-height: 1; cursor: pointer; }
+.anuncio-cerrar:hover { background: var(--cream-100); color: var(--teal-900); }
+.anuncio-barra { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--cream-100); }
+.anuncio-barra span { display: block; height: 100%; background: var(--gold-500); transform-origin: left; animation: anuncio-tiempo 5s linear forwards; }
+.anuncio-fondo.pausado .anuncio-barra span { animation-play-state: paused; }
+@keyframes anuncio-tiempo { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .anuncio-fondo, .anuncio { transition: none; } }
